@@ -18,7 +18,7 @@ export class Seo {
   @Column()
   page: string;
 
-  @OneToOne((type) => Admin, (admin) => admin.u_id)
+  @OneToOne((type) => Admin, (admin) => admin.id)
   created_By: Admin;
 
   @Column()

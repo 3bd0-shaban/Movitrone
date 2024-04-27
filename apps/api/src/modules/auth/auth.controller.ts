@@ -10,11 +10,22 @@ import {
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { UserService } from '../user/user.service';
+import { CreateUserDTO } from 'src/shared/dto/create-user.dto';
 
+@ApiTags('Website Auth - website registeration')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
+  @Post('register')
+  async Signup(@Body() createUserDTO: CreateUserDTO) {
+    return this.userService.create(createUserDTO);
+  }
   @Post()
   create(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.create(createAuthDto);

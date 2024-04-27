@@ -1,5 +1,5 @@
-import { UserShared } from '@common/utilities';
+import { UserShared } from 'src/shared/entities/user.entity';
 import { Entity } from 'typeorm';
 
-@Entity()
-export class User extends UserShared {}
+@Entity({ name: 'website_users' })
+export class UserEntity extends UserShared {}

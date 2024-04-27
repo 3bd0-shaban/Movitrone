@@ -13,7 +13,7 @@ import { NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { useContainer } from 'class-validator';
 
-import { AppModule } from './modules/app.module';
+import { AppModule } from './app.module';
 
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import type { ConfigKeyPaths } from './config';

@@ -14,7 +14,6 @@ export function setupSwagger(
 ): void {
   const { name, port } = configService.get<IAppConfig>('app')!;
   const { enable, path } = configService.get<ISwaggerConfig>('swagger')!;
-
   if (!enable) return;
 
   const documentBuilder = new DocumentBuilder()
@@ -24,7 +23,7 @@ export function setupSwagger(
 
   // auth security
   documentBuilder.addSecurity(API_SECURITY_AUTH, {
-    description: '输入令牌（Enter the token）',
+    description: 'Enter the token with ( Bearer token )',
     type: 'http',
     scheme: 'bearer',
     bearerFormat: 'JWT',
@@ -37,11 +36,10 @@ export function setupSwagger(
 
   SwaggerModule.setup(path, app, document, {
     swaggerOptions: {
-      persistAuthorization: true, // 保持登录
+      persistAuthorization: true, // Keep me logged in
     },
   });
 
-  // started log
   const logger = new Logger('SwaggerModule');
-  logger.log(`Document running on http://127.0.0.1:${port}/${path}`);
+  logger.log(`Document running on http://localhost:${port}/${path}`);
 }

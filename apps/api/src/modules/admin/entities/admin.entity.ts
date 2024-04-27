@@ -1,6 +1,6 @@
-import { UserShared } from '@common/utilities';
 import { Episode } from 'src/modules/episode/entities/episode.entity';
 import { Log } from 'src/modules/log/entities/log.entity';
+import { UserShared } from 'src/shared/entities/user.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 
 @Entity()
