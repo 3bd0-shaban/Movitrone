@@ -2,17 +2,19 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, Inject, ForbiddenException } from '@nestjs/common';
 import { Request } from 'express';
-import { AuthService } from '../auth.service';
-
-import { ConfigService } from '@nestjs/config';
 import { UserJwtPayload } from '../auth';
 import { ISecurityConfig, SecurityConfig } from 'src/config';
+import { AuthStrategy } from '../auth.constant';
+import { AuthService } from '../auth.service';
 
 @Injectable()
-export class RTJwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
+export class RTJwtStrategy extends PassportStrategy(
+  Strategy,
+  AuthStrategy.Refresh_JWT,
+) {
   constructor(
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
-    configService: ConfigService,
+    private authService: AuthService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -31,7 +33,6 @@ export class RTJwtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
   }
 
   async validate(payload: UserJwtPayload) {
-    // return this.authService.getAuthUser(payload.sub);
-    return payload;
+    return this.authService.getAuthUser(payload.sub);
   }
 }

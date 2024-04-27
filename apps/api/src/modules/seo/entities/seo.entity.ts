@@ -1,4 +1,4 @@
-import { Admin } from 'src/modules/admin/entities/admin.entity';
+import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -18,8 +18,8 @@ export class Seo {
   @Column()
   page: string;
 
-  @OneToOne((type) => Admin, (admin) => admin.id)
-  created_By: Admin;
+  @OneToOne((type) => AdminEntity, (admin) => admin.id)
+  created_By: AdminEntity;
 
   @Column()
   canonical_Url: number;

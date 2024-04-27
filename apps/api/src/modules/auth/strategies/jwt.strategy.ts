@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserJwtPayload } from '../auth';
@@ -22,7 +21,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, AuthStrategy.JWT) {
 
   async validate(payload: UserJwtPayload) {
     // This is called to validate the user in the token exists
-    // return this.authService.getAuthUser(payload.sub);
-    return payload;
+    return this.authService.getAuthUser(payload.sub);
   }
 }

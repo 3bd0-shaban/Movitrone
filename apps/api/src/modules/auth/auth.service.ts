@@ -1,31 +1,178 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+  Res,
+  Inject,
+} from '@nestjs/common';
+import { SignInDto } from './dto/SignIn.dto';
 import * as bcrypt from 'bcrypt';
 import { PhoneValidationService } from '@common/services';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from '../user/entities/user.entity';
+import { Repository } from 'typeorm';
+import { ErrorEnum } from 'src/constants/error-code.constant';
+import { Response } from 'express';
+import { RefreshREsult, UserJwtPayload } from './auth';
+import { AdminEntity } from '../admin/entities/admin.entity';
+import { JwtService } from '@nestjs/jwt';
+import { ISecurityConfig, SecurityConfig } from 'src/config';
+import { addDurationFromNow } from '@common/utilities';
+import { ACCESS_TOKEN_DURATION } from './auth.constant';
 
 @Injectable()
 export class AuthService {
-  constructor(private phoneValidationService: PhoneValidationService) {}
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private jwtService: JwtService,
+    private phoneValidationService: PhoneValidationService,
+    @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(AdminEntity)
+    private readonly adminRepository: Repository<AdminEntity>,
+  ) {}
+
+  async ValidateWebsiteUser(
+    inputs: SignInDto,
+  ): Promise<{ id: number; email: string }> {
+    const { email, password } = inputs;
+
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .select(['user.id', 'user.email', 'user.password'])
+      .where('user.email = :email', { email })
+      .getOne();
+
+    if (!user) {
+      throw new NotFoundException(ErrorEnum.USER_NOT_FOUND);
+    }
+
+    const isMatch = await this.comparePassword(password, user.password);
+
+    if (!isMatch) {
+      throw new UnauthorizedException(ErrorEnum.PASSWORD_MISMATCH);
+    }
+
+    return { id: user.id, email: user.email };
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async ValidateAdminUser(inputs: SignInDto) {
+    const { email, password } = inputs;
+    const user = await this.adminRepository.findOneBy({ email });
+    if (!user) {
+      throw new NotFoundException(ErrorEnum.USER_NOT_FOUND);
+    }
+    const isMatch = this.comparePassword(password, user.password);
+    if (!isMatch) {
+      throw new UnauthorizedException(ErrorEnum.PASSWORD_MISMATCH);
+    }
+    return user;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async getAuthUser(id: number): Promise<UserEntity> {
+    const user = await this.userRepository.findOneBy({ id });
+
+    if (user) {
+      return user;
+    }
+
+    throw new NotFoundException('The authenticated user does not exist');
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
+  /**
+   * Refresh the access token using the provided refresh token
+   *
+   * @param {string} refreshToken - Refresh token
+   * @returns {Promise<RefreshREsult>} - Result containing the new access token and its expiration date
+   * @memberof AuthService
+   */
+  async refreshToken(refreshToken: string): Promise<RefreshREsult> {
+    if (!refreshToken) {
+      throw new UnauthorizedException(
+        'Could not log-in with the provided credentials',
+      );
+    }
+
+    const payload = await this.VerifyToken(
+      this.securityConfig.refreshSecret,
+      refreshToken,
+    );
+
+    if (!payload) {
+      throw new UnauthorizedException(
+        'Could not log-in with the provided credentials',
+      );
+    }
+
+    const jwtPayload: UserJwtPayload = { sub: payload.sub };
+    const access_token = await this.generateToken(
+      this.securityConfig.refreshSecret,
+      '15m',
+      jwtPayload,
+    );
+
+    return {
+      access_token: access_token,
+      expires_at: addDurationFromNow(ACCESS_TOKEN_DURATION),
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  /**
+   * Set refresh token in cookies
+   *
+   * @param {Response} res - Express response object
+   * @param {string} refreshToken - Refresh token
+   * @param {string} cookiesName - access token
+   * @param {number} expiresInMilliseconds - Token expiration time in milliseconds
+   * @memberof AuthService
+   */
+  async setRefreshTokenCookie(
+    @Res() res: Response,
+    cookiesName: string,
+    refreshToken: string,
+    expiresInMilliseconds: number,
+  ) {
+    res.cookie(cookiesName, refreshToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: expiresInMilliseconds,
+      sameSite: 'none',
+      path: '/',
+    });
   }
+
+  /**
+   * Generate a token for authentication
+   *
+   * @param {string} secretKey - Secret key used to sign the token
+   * @param {string} expireIn - Expiration time of the token (e.g., '1d' for 1 day)
+   * @param {UserJwtPayload} payload - JWT payload
+   * @returns {Promise<string>} - Generated JWT token
+   * @memberof AuthService
+   */
+  async generateToken(
+    secretKey: string,
+    expireIn: string,
+    payload: UserJwtPayload,
+  ): Promise<string> {
+    return await this.jwtService.signAsync(payload, {
+      secret: secretKey,
+      expiresIn: expireIn,
+    });
+  }
+
+  /**
+   * Verify the provided token
+   *
+   * @param {string} secretKey secret key from env
+   * @param {string} token - Token to verify
+   * @returns {Promise<UserJwtPayload>} - Decoded JWT payload
+   * @memberof AuthService
+   */
+  async VerifyToken(secretKey: string, token: string): Promise<UserJwtPayload> {
+    return await this.jwtService.verifyAsync(token, { secret: secretKey });
+  }
+
   /**
    * Compare entered and database passwords
    *

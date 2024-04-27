@@ -1,4 +1,4 @@
-import { Admin } from 'src/modules/admin/entities/admin.entity';
+import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -9,8 +9,8 @@ export class Log {
   @Column()
   content: string;
 
-  @ManyToOne((type) => Admin, (admin) => admin.logs)
-  admin: Admin;
+  @ManyToOne((type) => AdminEntity, (admin) => admin.logs)
+  admin: AdminEntity;
 
   @Column({ default: Date.now() })
   created_At: string;

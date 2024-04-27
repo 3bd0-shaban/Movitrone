@@ -4,24 +4,17 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { GqlExecutionContext } from '@nestjs/graphql';
-import { Admin } from 'src/modules/admin/entities/admin.entity';
+import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
 
 @Injectable()
 export class DashboardGuard implements CanActivate {
-  constructor() {}
-
   canActivate(context: ExecutionContext): boolean {
-    const ctx = GqlExecutionContext.create(context);
-    const request = ctx.getContext().req;
+    const request = context.switchToHttp().getRequest();
     if (request.user) {
-      const user = <Admin>request.user;
-      if (
-        user.role === 'Admin' ||
-        user.role === 'Operation' ||
-        user.role === 'Sales'
-      )
+      const user = request.user as AdminEntity;
+      if (user.role === 'Admin' || user.role === 'Super Admin') {
         return true;
+      }
     }
     throw new UnauthorizedException(
       'Could not authenticate dashboard with token or user does not have permissions',

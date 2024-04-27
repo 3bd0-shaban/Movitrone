@@ -4,7 +4,7 @@ import { UserShared } from 'src/shared/entities/user.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 
 @Entity()
-export class Admin extends UserShared {
+export class AdminEntity extends UserShared {
   @Column({
     type: 'enum',
     enum: ['Super Admin', 'Admin'],
