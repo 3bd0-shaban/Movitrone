@@ -13,7 +13,7 @@ import { NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { useContainer } from 'class-validator';
 
-import { AppModule } from './app.module';
+import { AppModule } from './modules/app.module';
 
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import type { ConfigKeyPaths } from './config';
@@ -68,15 +68,15 @@ async function bootstrap() {
   await app.listen(5000, '0.0.0.0', async () => {
     const url = await app.getUrl();
     const { pid } = process;
-    const env = cluster.isPrimary;
-    const prefix = env ? 'P' : 'W';
+    // const env = cluster.isPrimary;
+    // const prefix = env ? 'P' : 'W';
 
     // if (!isMainProcess) return;
 
     const logger = new Logger('NestApplication');
-    logger.log(`[${prefix + pid}] Server running on ${url}`);
+    logger.log(`[${'p' + pid}] Server running on ${url}`);
 
-    if (isDev) logger.log(`[${prefix + pid}] OpenAPI: ${url}/api-docs`);
+    if (isDev) logger.log(`[${'p' + pid}] OpenAPI: ${url}/api-docs`);
   });
 
   if (module.hot) {

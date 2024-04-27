@@ -24,6 +24,9 @@ export class Seo {
   @Column()
   canonical_Url: number;
 
+  @Column('simple-array')
+  keywoprds: string[];
+
   @Column({
     type: 'enum',
     enum: ['Optimized', 'Not Optimized'],

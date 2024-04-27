@@ -1,25 +1,26 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SessionModule } from './modules/session/session.module';
-import { GenreModule } from './modules/genre/genre.module';
-import { WhitelistModule } from './modules/whitelist/whitelist.module';
-import { LogModule } from './modules/log/log.module';
-import { SeoModule } from './modules/seo/seo.module';
-import { MovieModule } from './modules/movie/movie.module';
-import { EpisodeModule } from './modules/episode/episode.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { AdminModule } from './modules/admin/admin.module';
-import { UserModule } from './modules/user/user.module';
-import { BannerModule } from './modules/banner/banner.module';
-import { CommentModule } from './modules/comment/comment.module';
+import { SessionModule } from './session/session.module';
+import { GenreModule } from './genre/genre.module';
+import { WhitelistModule } from './whitelist/whitelist.module';
+import { LogModule } from './log/log.module';
+import { SeoModule } from './seo/seo.module';
+import { MovieModule } from './movie/movie.module';
+import { EpisodeModule } from './episode/episode.module';
+import { AuthModule } from './auth/auth.module';
+import { AdminModule } from './admin/admin.module';
+import { UserModule } from './user/user.module';
+import { BannerModule } from './banner/banner.module';
+import { CommentModule } from './comment/comment.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ThrottlerModule, seconds } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { isDev } from './global/env';
-import config from './config';
+import { isDev } from '../global/env';
+import config from '../config';
+import { CorsAnywhereMiddleware } from './Cors';
 
 @Module({
   imports: [
@@ -72,3 +73,9 @@ import config from './config';
   providers: [AppService],
 })
 export class AppModule {}
+//  implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     // Apply the CorsAnywhereMiddleware to all routes
+//     consumer.apply(CorsAnywhereMiddleware).forRoutes('*');
+//   }
+// }
