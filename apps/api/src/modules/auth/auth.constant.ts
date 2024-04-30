@@ -5,6 +5,8 @@ export const AuthStrategy = {
 
   JWT: 'jwt',
   Refresh_JWT: 'jwt-refresh',
+  RTCookies_WEBSITE: 'refresh_token',
+  RTCookies_ADMIN: 'refresh_token_admin',
 
   GITHUB: 'github',
   GOOGLE: 'google',

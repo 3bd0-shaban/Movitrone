@@ -40,13 +40,13 @@ export class CreateUserDTO {
   @IsNotEmpty()
   @IsString()
   @MinLength(2)
-  @MaxLength(11)
+  @MaxLength(20)
   firstname: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @MinLength(2)
-  @MaxLength(11)
+  @MaxLength(20)
   lastname: string;
 }

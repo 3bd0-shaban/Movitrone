@@ -4,7 +4,7 @@ export enum ErrorEnum {
 
   SYSTEM_USER_EXISTS = '1001: System user already exists',
   INVALID_VERIFICATION_CODE = '1002: Invalid verification code',
-  INVALID_USERNAME_PASSWORD = '1003: Invalid username or password',
+  INVALID_EMAIL_PASSWORD = '1003: Invalid email or password',
   NODE_ROUTE_EXISTS = '1004: Node route already exists',
   PERMISSION_REQUIRES_PARENT = '1005: Permission must include parent node',
   ILLEGAL_OPERATION_DIRECTORY_PARENT = '1006: Illegal operation: This node only supports directory type parent node',

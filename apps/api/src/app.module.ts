@@ -20,19 +20,11 @@ import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { isDev } from './global/env';
 import config from './config';
+import { DatabaseModule } from './shared/database/database.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'movie_database',
-      entities: ['dist/**/*.entity.js'],
-      synchronize: true,
-    }),
+    DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
       expandVariables: true,

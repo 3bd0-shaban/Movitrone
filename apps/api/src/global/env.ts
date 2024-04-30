@@ -1,25 +1,24 @@
-import cluster from 'node:cluster';
+// import dotenv from 'dotenv';
 
-export const isMainCluster =
-  process.env.NODE_APP_INSTANCE &&
-  Number.parseInt(process.env.NODE_APP_INSTANCE) === 0;
-// export const isMainProcess = cluster.isPrimary || isMainCluster;
-
-export const isDev = process.env.NODE_ENV === 'development';
+// dotenv?.config({ path: `.env.${process.env.NODE_ENV}` });
+const dev = process.env.NODE_ENV;
+console.log(dev);
+export const isDev = dev === 'development';
+console.log(dev === 'development');
 
 export const isTest = !!process.env.TEST;
 export const cwd = process.cwd();
 
 /**
- * 基础类型接口
+ * Basic type interface
  */
 export type BaseType = boolean | number | string | undefined | null;
 
 /**
- * 格式化环境变量
- * @param key 环境变量的键值
- * @param defaultValue 默认值
- * @param callback 格式化函数
+ * Format environment variables
+ * @param key The key-value pair of environment variables
+ * @param defaultValue Default value
+ * @param callback Formatting function
  */
 function fromatValue<T extends BaseType = string>(
   key: string,

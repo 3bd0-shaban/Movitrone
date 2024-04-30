@@ -27,13 +27,13 @@ const adminEntityModule = TypeOrmModule.forFeature([AdminEntity]);
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<ConfigKeyPaths>) => {
-        const { jwtSecret, jwtExprire } =
+        const { jwtSecret, jwtExpire } =
           configService.get<ISecurityConfig>('security');
 
         return {
           secret: jwtSecret,
           signOptions: {
-            expiresIn: `${jwtExprire}s`,
+            expiresIn: `${jwtExpire}s`,
           },
           ignoreExpiration: isDev,
         };

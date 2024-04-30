@@ -32,6 +32,13 @@ export class AuthService {
     private readonly adminRepository: Repository<AdminEntity>,
   ) {}
 
+  /**
+   * sign in for users by website
+   *
+   * @param {SignInDto} inputs - sign in inputs dtos
+   * @returns {Promise<{ id: number; email: string }>} - Result ( ID, email ) of admin
+   * @memberof AuthService
+   */
   async ValidateWebsiteUser(
     inputs: SignInDto,
   ): Promise<{ id: number; email: string }> {
@@ -50,25 +57,50 @@ export class AuthService {
     const isMatch = await this.comparePassword(password, user.password);
 
     if (!isMatch) {
-      throw new UnauthorizedException(ErrorEnum.PASSWORD_MISMATCH);
+      throw new UnauthorizedException(ErrorEnum.INVALID_EMAIL_PASSWORD);
     }
 
     return { id: user.id, email: user.email };
   }
 
-  async ValidateAdminUser(inputs: SignInDto) {
+  /**
+   * sign in for admins by dashboard
+   *
+   * @param {SignInDto} inputs - sign in inputs dtos
+   * @returns {Promise<{ id: number; email: string }>} - Result ( ID, email ) of admin
+   * @memberof AuthService
+   */
+  async ValidateAdminUser(
+    inputs: SignInDto,
+  ): Promise<{ id: number; email: string }> {
     const { email, password } = inputs;
-    const user = await this.adminRepository.findOneBy({ email });
+
+    const user = await this.adminRepository
+      .createQueryBuilder('user')
+      .select(['user.id', 'user.email', 'user.password'])
+      .where('user.email = :email', { email })
+      .getOne();
+
     if (!user) {
       throw new NotFoundException(ErrorEnum.USER_NOT_FOUND);
     }
-    const isMatch = this.comparePassword(password, user.password);
+
+    const isMatch = await this.comparePassword(password, user.password);
+
     if (!isMatch) {
-      throw new UnauthorizedException(ErrorEnum.PASSWORD_MISMATCH);
+      throw new UnauthorizedException(ErrorEnum.INVALID_EMAIL_PASSWORD);
     }
-    return user;
+
+    return { id: user.id, email: user.email };
   }
 
+  /**
+   * get user who is authenticated
+   *
+   * @param {number} id - user ID
+   * @returns {Promise<UserEntity>} - Result UserEntity
+   * @memberof AuthService
+   */
   async getAuthUser(id: number): Promise<UserEntity> {
     const user = await this.userRepository.findOneBy({ id });
 
@@ -201,6 +233,13 @@ export class AuthService {
     return await bcrypt.hash(password, salt);
   }
 
+  /**
+   * validate phone number by libphone liberery from google
+   *
+   * @param {{number: string;code: string}} phone -phone number ( code , number )
+   * @returns {Promise<string>} - formatted phone number
+   * @memberof AuthService
+   */
   validateAndFormatPhoneNumber(phone: {
     number: string;
     code: string;

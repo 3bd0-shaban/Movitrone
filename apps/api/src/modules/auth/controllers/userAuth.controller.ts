@@ -6,9 +6,9 @@ import { CreateUserDTO } from 'src/shared/dto/create-user.dto';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from 'src/config';
 import { Response } from 'express';
-import { REFRESH_TOKEN_DURATION } from '../auth.constant';
+import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
 import { RefreshREsult } from '../auth';
-import { RTCookie } from '../decorator/rt-Cookies.decorator';
+import { HttpCookies } from '../decorator/http-Cookies.decorator';
 import { addDurationFromNow } from '@common/utilities';
 
 @ApiTags('Website Auth - website registeration')
@@ -55,7 +55,7 @@ export class UserAuthController {
 
   @Get('refreshToken')
   async refreshToken(
-    @RTCookie() refresh_token: string,
+    @HttpCookies(AuthStrategy.RTCookies_WEBSITE) refresh_token: string,
   ): Promise<RefreshREsult> {
     return this.authService.refreshToken(refresh_token);
   }
@@ -63,7 +63,7 @@ export class UserAuthController {
   @Post('logout')
   async logout(@Res() res: Response) {
     res.clearCookie('access_token');
-    res.clearCookie('refresh_token');
+    res.clearCookie(AuthStrategy.RTCookies_WEBSITE);
     return res.status(200).send();
   }
 }

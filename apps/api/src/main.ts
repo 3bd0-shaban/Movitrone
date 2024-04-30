@@ -53,7 +53,7 @@ async function bootstrap() {
       transform: true,
       whitelist: true,
       transformOptions: { enableImplicitConversion: true },
-      // forbidNonWhitelisted: true, // 禁止 无装饰器验证的数据通过
+      forbidNonWhitelisted: true,
       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
       stopAtFirstError: true,
       exceptionFactory: (errors) =>
@@ -71,16 +71,11 @@ async function bootstrap() {
 
   await app.listen(5000, '0.0.0.0', async () => {
     const url = await app.getUrl();
-    const { pid } = process;
-    // const env = cluster.isPrimary;
-    // const prefix = env ? 'P' : 'W';
-
-    // if (!isMainProcess) return;
 
     const logger = new Logger('NestApplication');
-    logger.log(`[${'p' + pid}] Server running on ${url}`);
+    logger.log(` Server running on ${url}`);
 
-    if (isDev) logger.log(`[${'p' + pid}] OpenAPI: ${url}/api-docs`);
+    if (isDev) logger.log(` OpenAPI: ${url}/api-docs`);
   });
 
   if (module.hot) {

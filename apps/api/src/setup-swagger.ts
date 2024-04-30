@@ -1,4 +1,4 @@
-import { INestApplication, Logger } from '@nestjs/common';
+import { INestApplication, Logger, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
@@ -7,6 +7,7 @@ import { CommonEntity } from './common/entity/common.entity';
 import { ResOp, TreeResult } from './common/model/response.model';
 import { ConfigKeyPaths, IAppConfig, ISwaggerConfig } from './config';
 import { Pagination } from './helper/paginate/pagination';
+import { NextFunction } from 'express';
 
 export function setupSwagger(
   app: INestApplication,
