@@ -13,7 +13,7 @@ export class JwtUserGuard extends AuthGuard(AuthStrategy.JWT) {
     return request;
   }
 
-  errorHandler(err: any, user: any, info: any, context: ExecutionContext) {
+  handleRequest(err: any, user: any, info: any, context: ExecutionContext) {
     if (err || !user) {
       throw new UnauthorizedException('Unauthorized: Invalid or expired token');
     }
@@ -28,7 +28,7 @@ export class JwtAdminGuard extends AuthGuard(AuthStrategy.ADMIN_JWT) {
     return request;
   }
 
-  errorHandler(err: any, user: any, info: any, context: ExecutionContext) {
+  handleRequest(err: any, user: any, info: any, context: ExecutionContext) {
     // If authentication fails, replace the UnauthorizedException with a custom error message
     if (err || !user) {
       throw new UnauthorizedException('Unauthorized: Invalid or expired token');

@@ -2,16 +2,18 @@ import {
   Injectable,
   ConflictException,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDTO } from 'src/shared/dto/create-user.dto';
 import { ErrorEnum } from 'src/constants/error-code.constant';
 import { isEmpty } from 'lodash';
 import { AuthService } from '../auth/auth.service';
 import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
 import { updateUserDTO } from 'src/shared/dto/update-user.dto';
+import { PasswordUpdateDto } from 'src/shared/dto/password.dto';
 
 @Injectable()
 export class UserService {
@@ -88,25 +90,44 @@ export class UserService {
   }
 
   /**
-   * Update a user by ID
+   * Update a user password by ID
    *
    * @param {number} id - User ID
-   * @param {UpdateUserDTO} updateUserDto - Updated user data
-   * @returns {Promise<UserEntity>} - The updated user
+   * @param {PasswordUpdateDto} inputs - Updated user data
+   * @returns {Promise<boolean>} - Indicates whether the password update was successful
    * @throws {NotFoundException} - If the user with the provided ID is not found
+   * @throws {UnprocessableEntityException} - If the old password doesn't match
    */
-  async updateById(
+  async updatePasswordById(
     id: number,
-    updateUserDto: updateUserDTO,
-  ): Promise<UserEntity> {
-    // Find the user by ID
-    const user = await this.findOne(id);
+    inputs: PasswordUpdateDto,
+  ): Promise<boolean> {
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .select(['user.id', 'user.email', 'user.password'])
+      .where('id = :id', { id })
+      .getOne();
 
-    // Update user data
-    Object.assign(user, updateUserDto);
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
 
-    // Save the updated user
-    return await this.userRepository.save(user);
+    const isMatch = await this.authService.comparePassword(
+      inputs.oldPassword,
+      user.password,
+    );
+
+    if (!isMatch) {
+      throw new UnprocessableEntityException(ErrorEnum.PASSWORD_MISMATCH);
+    }
+
+    const hashedPassword = await this.authService.hashPassword(
+      inputs.newPassword,
+    );
+
+    await this.userRepository.update(id, { password: hashedPassword });
+
+    return true;
   }
 
   /**
@@ -116,10 +137,7 @@ export class UserService {
    * @throws {NotFoundException} - If the user with the provided ID is not found
    */
   async removeById(id: number): Promise<void> {
-    // Find the user by ID
     const user = await this.findOne(id);
-
-    // Remove the user
     await this.userRepository.remove(user);
   }
 
@@ -130,10 +148,10 @@ export class UserService {
    * @param {UpdateUserDTO} updateUserDto - Updated user data
    * @returns {Promise<UserEntity>} - The updated user
    */
-  async updateSelf(
+  async update(
     userId: number,
     updateUserDto: updateUserDTO,
-  ): Promise<UserEntity> {
-    return this.updateById(userId, updateUserDto);
+  ): Promise<UpdateResult> {
+    return await this.userRepository.update(userId, updateUserDto);
   }
 }

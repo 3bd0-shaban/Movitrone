@@ -14,7 +14,7 @@ import {
 
 export class CreateUserDTO {
   @ApiProperty({ description: '登录密码', example: '123-456*' })
-  @IsOptional()
+  @IsNotEmpty()
   @Matches(/^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Za-z])\S*$/, {
     message:
       'The password must contain numbers and letters, and be 6-16 characters in length',
