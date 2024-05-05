@@ -8,10 +8,10 @@ import { ISecurityConfig, SecurityConfig } from 'src/config';
 import { Response } from 'express';
 import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
 import { RefreshREsult } from '../auth';
-import { HttpCookies } from '../decorator/http-Cookies.decorator';
+import { RTWebsiteCookie } from '../decorator/http-Cookies.decorator';
 import { addDurationFromNow } from '@common/utilities';
 
-@ApiTags('Website Auth - website registeration')
+@ApiTags('Authentication - Website')
 @Controller('auth')
 export class UserAuthController {
   constructor(
@@ -55,7 +55,7 @@ export class UserAuthController {
 
   @Get('refreshToken')
   async refreshToken(
-    @HttpCookies(AuthStrategy.RTCookies_WEBSITE) refresh_token: string,
+    @RTWebsiteCookie() refresh_token: string,
   ): Promise<RefreshREsult> {
     return this.authService.refreshToken(refresh_token);
   }

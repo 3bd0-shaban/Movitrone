@@ -3,7 +3,7 @@ import { Log } from 'src/modules/log/entities/log.entity';
 import { UserShared } from 'src/shared/entities/user.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'dashboard_user' })
 export class AdminEntity extends UserShared {
   @Column({
     type: 'enum',

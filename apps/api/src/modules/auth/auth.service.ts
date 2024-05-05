@@ -108,7 +108,28 @@ export class AuthService {
       return user;
     }
 
-    throw new NotFoundException('The authenticated user does not exist');
+    throw new NotFoundException(
+      'No authentication user founded, please logging in first',
+    );
+  }
+
+  /**
+   * get admin who is authenticated
+   *
+   * @param {number} id - user ID
+   * @returns {Promise<AdminEntity>} - Result Admin Entity
+   * @memberof AuthService
+   */
+  async getAuthAdmin(id: number): Promise<AdminEntity> {
+    const user = await this.adminRepository.findOneBy({ id });
+
+    if (user) {
+      return user;
+    }
+
+    throw new NotFoundException(
+      'No authentication admin founded, please logging in first',
+    );
   }
 
   /**

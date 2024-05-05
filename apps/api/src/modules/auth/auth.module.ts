@@ -12,18 +12,23 @@ import { AdminAuthController } from './controllers/adminAuth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../user/entities/user.entity';
 import { AdminEntity } from '../admin/entities/admin.entity';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { RTJwtStrategy } from './strategies/rt-jwt.strategy';
-
-const userEntityModule = TypeOrmModule.forFeature([UserEntity]);
-const adminEntityModule = TypeOrmModule.forFeature([AdminEntity]);
+import {
+  JwtDashboardStrategy,
+  JwtAdminStrategy,
+} from './strategies/jwt.strategy';
+import { RTJwtWebsiteStrategy } from './strategies/rt-jwt.strategy';
+import { AdminModule } from '../admin/admin.module';
+import { AuthStrategy } from './auth.constant';
 
 @Module({
   imports: [
-    userEntityModule,
-    adminEntityModule,
     forwardRef(() => UserModule),
-    PassportModule.register({ defaultStrategy: 'jwt', session: false }),
+    forwardRef(() => AdminModule),
+    TypeOrmModule.forFeature([UserEntity, AdminEntity]),
+    PassportModule.register({
+      defaultStrategy: AuthStrategy.JWT,
+      session: false,
+    }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<ConfigKeyPaths>) => {
@@ -43,7 +48,13 @@ const adminEntityModule = TypeOrmModule.forFeature([AdminEntity]);
     }),
   ],
   controllers: [UserAuthController, AdminAuthController],
-  providers: [AuthService, PhoneValidationService, JwtStrategy, RTJwtStrategy],
+  providers: [
+    AuthService,
+    PhoneValidationService,
+    JwtDashboardStrategy,
+    JwtAdminStrategy,
+    RTJwtWebsiteStrategy,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

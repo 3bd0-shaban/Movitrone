@@ -2,12 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserJwtPayload } from '../auth';
-import { AuthService } from '../auth.service';
 import { ISecurityConfig, SecurityConfig } from 'src/config';
 import { AuthStrategy } from '../auth.constant';
+import { UserService } from 'src/modules/user/user.service';
+import { AdminService } from 'src/modules/admin/admin.service';
+import { AuthService } from '../auth.service';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, AuthStrategy.JWT) {
+export class JwtAdminStrategy extends PassportStrategy(
+  Strategy,
+  AuthStrategy.JWT,
+) {
   constructor(
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
     private authService: AuthService,
@@ -20,7 +25,27 @@ export class JwtStrategy extends PassportStrategy(Strategy, AuthStrategy.JWT) {
   }
 
   async validate(payload: UserJwtPayload) {
-    // This is called to validate the user in the token exists
     return this.authService.getAuthUser(payload.sub);
+  }
+}
+
+@Injectable()
+export class JwtDashboardStrategy extends PassportStrategy(
+  Strategy,
+  AuthStrategy.ADMIN_JWT,
+) {
+  constructor(
+    @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
+    private authService: AuthService,
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: securityConfig.jwtSecret,
+    });
+  }
+
+  async validate(payload: UserJwtPayload) {
+    return this.authService.getAuthAdmin(payload.sub);
   }
 }

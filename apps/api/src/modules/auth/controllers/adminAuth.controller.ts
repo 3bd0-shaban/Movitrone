@@ -1,23 +1,30 @@
 import { Controller, Post, Body, Res, Inject, Get } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { ApiTags } from '@nestjs/swagger';
-import { UserService } from '../../user/user.service';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from 'src/config';
 import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
 import { addDurationFromNow } from '@common/utilities';
 import { Response } from 'express';
 import { RefreshREsult } from '../auth';
-import { HttpCookies } from '../decorator/http-Cookies.decorator';
+import { RTDashboardCookie } from '../decorator/http-Cookies.decorator';
+import { AdminService } from 'src/modules/admin/admin.service';
+import { CreateAdminDto } from 'src/modules/admin/dto/create-admin.dto';
 
-@ApiTags('Website Auth - website registeration')
+@ApiTags('Authentication - Dashboard')
 @Controller('auth-admin')
 export class AdminAuthController {
   constructor(
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
     private readonly authService: AuthService,
-    private readonly userService: UserService,
+    private readonly adminService: AdminService,
   ) {}
+
+  @Post('register')
+  async Signup(@Body() createUserDTO: CreateAdminDto) {
+    return this.adminService.create(createUserDTO);
+  }
+
   @Post('signin')
   async Signin(@Body() inputs: SignInDto, @Res() res: Response) {
     const user = await this.authService.ValidateAdminUser(inputs);
@@ -36,7 +43,7 @@ export class AdminAuthController {
     );
     this.authService.setRefreshTokenCookie(
       res,
-      'refresh_token_Admin',
+      AuthStrategy.RTCookies_ADMIN,
       refreshToken,
       REFRESH_TOKEN_DURATION,
     );
@@ -48,7 +55,7 @@ export class AdminAuthController {
 
   @Get('refreshToken')
   async refreshToken(
-    @HttpCookies(AuthStrategy.RTCookies_ADMIN) refresh_token: string,
+    @RTDashboardCookie() refresh_token: string,
   ): Promise<RefreshREsult> {
     return this.authService.refreshToken(refresh_token);
   }

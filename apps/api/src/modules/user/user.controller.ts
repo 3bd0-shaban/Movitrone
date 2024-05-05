@@ -14,12 +14,12 @@ import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from 'src/shared/dto/create-user.dto';
 import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
 import { UserEntity } from './entities/user.entity';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAdminGuard, JwtUserGuard } from '../auth/guards/jwt-auth.guard';
 import { updateUserDTO } from 'src/shared/dto/update-user.dto';
 import { DashboardGuard } from '../auth/guards/dashboard.guard';
 import { CurrentUser } from '../auth/decorator/auth-user.decorator';
 
-@ApiTags('User - website registeration')
+@ApiTags('Website Users - Website Manpulation')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -31,13 +31,13 @@ export class UserController {
 
   //Self Users API methods ( for website )
   @Get('get/self')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtUserGuard)
   findSelf(@CurrentUser() user: UserEntity): Promise<UserEntity> {
     return this.userService.findOne(+user.id);
   }
 
   @Patch('update/self')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtUserGuard)
   updateSelf(
     @CurrentUser() user: UserEntity,
     @Body() updateUserDto: updateUserDTO,
@@ -47,7 +47,7 @@ export class UserController {
 
   //admin API methods to control users ( for dashbaord )
   @Get('all-users')
-  @UseGuards(JwtAuthGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard, DashboardGuard)
   async findAll(
     @Query() query: PaginationArgs,
   ): Promise<{ users: UserEntity[]; total: number }> {
@@ -55,13 +55,13 @@ export class UserController {
   }
 
   @Get('get/:id')
-  @UseGuards(JwtAuthGuard, DashboardGuard)
+  @UseGuards(JwtUserGuard, DashboardGuard)
   findOne(@Param('id') id: string): Promise<UserEntity> {
     return this.userService.findOne(+id);
   }
 
   @Patch('update/:id')
-  @UseGuards(JwtAuthGuard, DashboardGuard)
+  @UseGuards(JwtUserGuard, DashboardGuard)
   update(
     @Param('id') id: string,
     @Body() updateUserDto: updateUserDTO,
@@ -70,7 +70,7 @@ export class UserController {
   }
 
   @Delete('delete/:id')
-  @UseGuards(JwtAuthGuard, DashboardGuard)
+  @UseGuards(JwtUserGuard, DashboardGuard)
   remove(@Param('id') id: string): Promise<void> {
     return this.userService.removeById(+id);
   }

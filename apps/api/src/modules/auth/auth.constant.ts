@@ -4,7 +4,10 @@ export const AuthStrategy = {
   LOCAL_PHONE: 'local_phone',
 
   JWT: 'jwt',
+  ADMIN_JWT: 'admin-jwt',
   Refresh_JWT: 'jwt-refresh',
+  REFRESH_JWT_Dashboard: 'jwt-refresh-dashboard',
+  REFRESH_JWT_WEBSITE: 'jwt-refresh-website',
   RTCookies_WEBSITE: 'refresh_token',
   RTCookies_ADMIN: 'refresh_token_admin',
 
