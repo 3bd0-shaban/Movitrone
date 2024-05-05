@@ -1,1 +1,4 @@
-export class CreateLogDto {}
+export class CreateLogDto {
+  content: string;
+  admin: string;
+}

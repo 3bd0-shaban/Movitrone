@@ -19,12 +19,17 @@ import { updateUserDTO } from 'src/shared/dto/update-user.dto';
 import { DashboardGuard } from '../auth/guards/dashboard.guard';
 import { CurrentUser } from '../auth/decorator/auth-user.decorator';
 import { PasswordUpdateDto } from 'src/shared/dto/password.dto';
+import { LogService } from '../log/log.service';
+import { AdminEntity } from '../admin/entities/admin.entity';
 
 @ApiTags('Website Users - Website Manpulation')
 @ApiBearerAuth()
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly logService: LogService,
+  ) {}
 
   //Self Users API methods ( for website )
   @Get('get/self')

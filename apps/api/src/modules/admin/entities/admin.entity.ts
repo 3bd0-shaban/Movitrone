@@ -1,9 +1,9 @@
 import { Episode } from 'src/modules/episode/entities/episode.entity';
-import { Log } from 'src/modules/log/entities/log.entity';
+import { LogEntity } from 'src/modules/log/entities/log.entity';
 import { UserShared } from 'src/shared/entities/user.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 
-@Entity({ name: 'dashboard_user' })
+@Entity({ name: 'dashboard_users' })
 export class AdminEntity extends UserShared {
   @Column({
     type: 'enum',
@@ -12,8 +12,8 @@ export class AdminEntity extends UserShared {
   })
   role: string;
 
-  @OneToMany((type) => Log, (log) => log.admin)
-  logs: Log[];
+  @OneToMany((type) => LogEntity, (log) => log.admin)
+  logs: LogEntity[];
 
   @OneToMany((type) => Episode, (episode) => episode.created_By)
   episodes: Episode[];

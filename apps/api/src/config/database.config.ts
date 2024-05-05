@@ -26,6 +26,7 @@ const dataSourceOptions: DataSourceOptions = {
   database: 'movie_database',
   // entities: ['dist/**/*.entity.js'],
   synchronize: true,
+  migrationsRun: true,
 
   // To resolve the error encountered when initializing data through 'pnpm migration:run', such as the error with statements like 'SET FOREIGN_KEY_CHECKS = 0;', set this to true only during the execution of data migration operations.  multipleStatements: currentScript === 'typeorm',
   entities: ['dist/modules/**/*.entity{.ts,.js}'],

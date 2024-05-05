@@ -1,26 +1,47 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLogDto } from './dto/create-log.dto';
-import { UpdateLogDto } from './dto/update-log.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LogEntity } from './entities/log.entity';
+import { Repository } from 'typeorm';
+import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
+import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
 
 @Injectable()
 export class LogService {
-  create(createLogDto: CreateLogDto) {
-    return 'This action adds a new log';
+  constructor(
+    @InjectRepository(LogEntity)
+    private readonly logRepository: Repository<LogEntity>,
+  ) {}
+
+  /**
+   * Create a new log action
+   *
+   * @param {string} content - Log content
+   * @param {AdminEntity} admin - Admin entity
+   * @returns {Promise<LogEntity>} - The created log entity
+   */
+  async create(content: string, admin: AdminEntity): Promise<LogEntity> {
+    const log = this.logRepository.create({ content, admin });
+    console.log(log);
+    return await log.save();
   }
 
-  findAll() {
-    return `This action returns all log`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} log`;
-  }
-
-  update(id: number, updateLogDto: UpdateLogDto) {
-    return `This action updates a #${id} log`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} log`;
+  /**
+   * find all logs action
+   *
+   * @param {PaginationArgs} pagination - pagination inputs
+   * @returns {Promise<{ users: LogEntity[]; results: number; total: number }>} - Paginated Logs
+   * @memberof LogService
+   */
+  async findAll(
+    pagination: PaginationArgs,
+  ): Promise<{ logs: LogEntity[]; results: number; total: number }> {
+    const { page = 1, limit = 10 } = pagination;
+    const skip = (page - 1) * limit;
+    const [logs, total] = await this.logRepository.findAndCount({
+      relations: ['admin'],
+      take: limit,
+      skip,
+    });
+    return { total, results: logs.length, logs };
   }
 }

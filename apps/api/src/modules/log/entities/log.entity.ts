@@ -1,17 +1,13 @@
+import { CommonEntity } from 'src/common/entity/common.entity';
 import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()
-export class Log {
-  @PrimaryGeneratedColumn()
-  id: string;
-
+export class LogEntity extends CommonEntity {
   @Column()
   content: string;
 
-  @ManyToOne((type) => AdminEntity, (admin) => admin.logs)
+  @OneToOne(() => AdminEntity)
+  @JoinColumn()
   admin: AdminEntity;
-
-  @Column({ default: Date.now() })
-  created_At: string;
 }
