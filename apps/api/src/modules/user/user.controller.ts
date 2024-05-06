@@ -20,7 +20,6 @@ import { DashboardGuard } from '../auth/guards/dashboard.guard';
 import { CurrentUser } from '../auth/decorator/auth-user.decorator';
 import { PasswordUpdateDto } from 'src/shared/dto/password.dto';
 import { LogService } from '../log/log.service';
-import { AdminEntity } from '../admin/entities/admin.entity';
 
 @ApiTags('Website Users - Website Manpulation')
 @ApiBearerAuth()
@@ -75,14 +74,14 @@ export class UserController {
 
   @Get('get-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
-  findOne(@Param('id') id: string): Promise<UserEntity> {
+  findOne(@Param('id') id: number): Promise<UserEntity> {
     return this.userService.findOne(id);
   }
 
   @Patch('update-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateUserDto: updateUserDTO,
   ): Promise<string> {
     await this.userService.update(id, updateUserDto);
@@ -92,7 +91,7 @@ export class UserController {
   @Patch('update-by-id/:id/password')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async updatePassword(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() inputs: PasswordUpdateDto,
   ): Promise<string> {
     await this.userService.updatePasswordById(id, inputs);
@@ -101,7 +100,7 @@ export class UserController {
 
   @Delete('delete-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
-  remove(@Param('id') id: string): Promise<void> {
+  remove(@Param('id') id: number): Promise<void> {
     return this.userService.removeById(id);
   }
 }

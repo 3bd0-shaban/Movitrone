@@ -46,4 +46,8 @@ export enum ErrorEnum {
   OSS_FILE_OR_DIR_EXIST = '1401: The file or directory being created already exists',
   OSS_NO_OPERATION_REQUIRED = '1402: No operation required',
   OSS_EXCEE_MAXIMUM_QUANTITY = '1403: Exceeded the maximum quantity supported',
+
+  //Genre
+  GENRE_ALREADY_EXIST = '1403: Genre already exists',
+  GENRE_NOT_EXIST = '1404: Genre is not exist',
 }

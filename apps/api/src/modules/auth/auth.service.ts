@@ -41,7 +41,7 @@ export class AuthService {
    */
   async ValidateWebsiteUser(
     inputs: SignInDto,
-  ): Promise<{ id: string; email: string }> {
+  ): Promise<{ id: number; email: string }> {
     const { email, password } = inputs;
 
     const user = await this.userRepository
@@ -72,7 +72,7 @@ export class AuthService {
    */
   async ValidateAdminUser(
     inputs: SignInDto,
-  ): Promise<{ id: string; email: string }> {
+  ): Promise<{ id: number; email: string }> {
     const { email, password } = inputs;
 
     const user = await this.adminRepository
@@ -101,7 +101,7 @@ export class AuthService {
    * @returns {Promise<UserEntity>} - Result UserEntity
    * @memberof AuthService
    */
-  async getAuthUser(id: string): Promise<UserEntity> {
+  async getAuthUser(id: number): Promise<UserEntity> {
     const user = await this.userRepository.findOneBy({ id });
 
     if (user) {
@@ -120,7 +120,7 @@ export class AuthService {
    * @returns {Promise<AdminEntity>} - Result Admin Entity
    * @memberof AuthService
    */
-  async getAuthAdmin(id: string): Promise<AdminEntity> {
+  async getAuthAdmin(id: number): Promise<AdminEntity> {
     const user = await this.adminRepository.findOneBy({ id });
 
     if (user) {

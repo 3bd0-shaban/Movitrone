@@ -84,14 +84,14 @@ export class AdminController {
 
   @Get('get-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
-  findOne(@Param('id') id: string): Promise<AdminEntity> {
+  findOne(@Param('id') id: number): Promise<AdminEntity> {
     return this.adminService.findOne(id);
   }
 
   @Patch('update-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @CurrentUser() user: AdminEntity,
     @Body() updateUserDto: updateUserDTO,
   ): Promise<string> {
@@ -103,7 +103,7 @@ export class AdminController {
   @Patch('update-by-id/:id/password')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async updatePassword(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @CurrentUser() user: AdminEntity,
     @Body() inputs: PasswordUpdateDto,
   ): Promise<string> {
@@ -116,7 +116,7 @@ export class AdminController {
   @Delete('delete-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async remove(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @CurrentUser() user: AdminEntity,
   ): Promise<void> {
     const removed = await this.adminService.removeById(id);

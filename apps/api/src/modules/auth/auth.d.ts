@@ -1,6 +1,6 @@
 export type TokenType = 'ACCESS' | 'REFRESH';
 export interface UserJwtPayload {
-  sub: string;
+  sub: number;
 }
 export interface access_token {
   access_token: string;

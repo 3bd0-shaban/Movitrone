@@ -1,6 +1,6 @@
 import { videoShared } from '@common/utilities';
 import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
-import { Genre } from 'src/modules/genre/entities/genre.entity';
+import { GenreEntity } from 'src/modules/genre/entities/genre.entity';
 
 import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 
@@ -9,9 +9,9 @@ export class Episode extends videoShared {
   @Column()
   movie_Title: string;
 
-  @ManyToMany((type) => Genre, (genre) => genre.movies)
+  @ManyToMany((type) => GenreEntity, (genre) => genre.movies)
   @JoinTable()
-  genres: Genre[];
+  genres: GenreEntity[];
 
   @OneToOne((type) => AdminEntity, (genre) => genre.episodes, {
     nullable: true,

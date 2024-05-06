@@ -21,7 +21,6 @@ export class LogService {
    */
   async create(content: string, admin: AdminEntity): Promise<LogEntity> {
     const log = this.logRepository.create({ content, admin });
-    console.log(log);
     return await log.save();
   }
 

@@ -1,9 +1,9 @@
 import { CommonEntity } from 'src/common/entity/common.entity';
 import { Movie } from 'src/modules/movie/entities/movie.entity';
-import { Entity, Column, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, ManyToMany } from 'typeorm';
 
 @Entity({ name: 'genres' })
-export class Genre extends CommonEntity {
+export class GenreEntity extends CommonEntity {
   @Column()
   genre: string;
 
