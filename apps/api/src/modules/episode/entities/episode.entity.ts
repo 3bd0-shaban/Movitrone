@@ -4,7 +4,7 @@ import { Genre } from 'src/modules/genre/entities/genre.entity';
 
 import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'episodes' })
 export class Episode extends videoShared {
   @Column()
   movie_Title: string;

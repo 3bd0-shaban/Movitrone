@@ -35,7 +35,7 @@ export class UserController {
   @Get('get/self')
   @UseGuards(JwtUserGuard)
   findSelf(@CurrentUser() user: UserEntity): Promise<UserEntity> {
-    return this.userService.findOne(+user.id);
+    return this.userService.findOne(user.id);
   }
 
   @Patch('update/self')
@@ -44,7 +44,7 @@ export class UserController {
     @CurrentUser() user: UserEntity,
     @Body() updateUserDto: updateUserDTO,
   ): Promise<string> {
-    await this.userService.update(+user.id, updateUserDto);
+    await this.userService.update(user.id, updateUserDto);
     return 'ok';
   }
 
@@ -54,7 +54,7 @@ export class UserController {
     @CurrentUser() user: UserEntity,
     @Body() inputs: PasswordUpdateDto,
   ): Promise<string> {
-    await this.userService.updatePasswordById(+user.id, inputs);
+    await this.userService.updatePasswordById(user.id, inputs);
     return 'ok';
   }
 
@@ -76,7 +76,7 @@ export class UserController {
   @Get('get-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   findOne(@Param('id') id: string): Promise<UserEntity> {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
   @Patch('update-by-id/:id')
@@ -85,7 +85,7 @@ export class UserController {
     @Param('id') id: string,
     @Body() updateUserDto: updateUserDTO,
   ): Promise<string> {
-    await this.userService.update(+id, updateUserDto);
+    await this.userService.update(id, updateUserDto);
     return 'ok';
   }
 
@@ -95,13 +95,13 @@ export class UserController {
     @Param('id') id: string,
     @Body() inputs: PasswordUpdateDto,
   ): Promise<string> {
-    await this.userService.updatePasswordById(+id, inputs);
+    await this.userService.updatePasswordById(id, inputs);
     return 'ok';
   }
 
   @Delete('delete-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   remove(@Param('id') id: string): Promise<void> {
-    return this.userService.removeById(+id);
+    return this.userService.removeById(id);
   }
 }

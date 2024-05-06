@@ -1,8 +1,8 @@
 import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
-import { videoShared } from '@common/utilities';
 import { Genre } from 'src/modules/genre/entities/genre.entity';
+import { videoShared } from 'src/common/entity/video.entity';
 
-@Entity()
+@Entity({ name: 'movies' })
 export class Movie extends videoShared {
   @Column()
   movie_Title: string;

@@ -75,11 +75,11 @@ export class AdminService {
   /**
    * Find admin by ID
    *
-   * @param {number} id - admin ID
+   * @param {string} id - admin ID
    * @returns {Promise<AdminEntity>} - The found user
    * @throws {NotFoundException} - If the user with the provided ID is not found
    */
-  async findOne(id: number): Promise<AdminEntity> {
+  async findOne(id: string): Promise<AdminEntity> {
     const user = await this.adminRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(`dasboard user with ID ${id} not found`);
@@ -90,14 +90,14 @@ export class AdminService {
   /**
    * Update a user password by ID
    *
-   * @param {number} id - User ID
+   * @param {string} id - User ID
    * @param {PasswordUpdateDto} inputs - Updated user data
    * @returns {Promise<boolean>} - Indicates whether the password update was successful
    * @throws {NotFoundException} - If the user with the provided ID is not found
    * @throws {UnprocessableEntityException} - If the old password doesn't match
    */
   async updatePasswordById(
-    id: number,
+    id: string,
     inputs: PasswordUpdateDto,
   ): Promise<boolean> {
     const user = await this.adminRepository
@@ -131,10 +131,10 @@ export class AdminService {
   /**
    * Remove a user by ID
    *
-   * @param {number} id - User ID
+   * @param {string} id - User ID
    * @throws {NotFoundException} - If the user with the provided ID is not found
    */
-  async removeById(id: number): Promise<void> {
+  async removeById(id: string): Promise<void> {
     const user = await this.findOne(id);
     await this.adminRepository.remove(user);
   }
@@ -142,12 +142,12 @@ export class AdminService {
   /**
    * Update the currently authenticated user
    *
-   * @param {number} userId - User ID (assuming it's the authenticated user's ID)
+   * @param {string} userId - User ID (assuming it's the authenticated user's ID)
    * @param {UpdateUserDTO} updateUserDto - Updated user data
    * @returns {Promise<AdminEntity>} - The updated user
    */
   async update(
-    userId: number,
+    userId: string,
     updateUserDto: updateUserDTO,
   ): Promise<UpdateResult> {
     return await this.adminRepository.update(userId, updateUserDto);

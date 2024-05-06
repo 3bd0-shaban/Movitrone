@@ -36,12 +36,12 @@ export class AuthService {
    * sign in for users by website
    *
    * @param {SignInDto} inputs - sign in inputs dtos
-   * @returns {Promise<{ id: number; email: string }>} - Result ( ID, email ) of admin
+   * @returns {Promise<{ id: string; email: string }>} - Result ( ID, email ) of admin
    * @memberof AuthService
    */
   async ValidateWebsiteUser(
     inputs: SignInDto,
-  ): Promise<{ id: number; email: string }> {
+  ): Promise<{ id: string; email: string }> {
     const { email, password } = inputs;
 
     const user = await this.userRepository
@@ -67,12 +67,12 @@ export class AuthService {
    * sign in for admins by dashboard
    *
    * @param {SignInDto} inputs - sign in inputs dtos
-   * @returns {Promise<{ id: number; email: string }>} - Result ( ID, email ) of admin
+   * @returns {Promise<{ id: string; email: string }>} - Result ( ID, email ) of admin
    * @memberof AuthService
    */
   async ValidateAdminUser(
     inputs: SignInDto,
-  ): Promise<{ id: number; email: string }> {
+  ): Promise<{ id: string; email: string }> {
     const { email, password } = inputs;
 
     const user = await this.adminRepository
@@ -97,11 +97,11 @@ export class AuthService {
   /**
    * get user who is authenticated
    *
-   * @param {number} id - user ID
+   * @param {string} id - user ID
    * @returns {Promise<UserEntity>} - Result UserEntity
    * @memberof AuthService
    */
-  async getAuthUser(id: number): Promise<UserEntity> {
+  async getAuthUser(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOneBy({ id });
 
     if (user) {
@@ -116,11 +116,11 @@ export class AuthService {
   /**
    * get admin who is authenticated
    *
-   * @param {number} id - user ID
+   * @param {string} id - user ID
    * @returns {Promise<AdminEntity>} - Result Admin Entity
    * @memberof AuthService
    */
-  async getAuthAdmin(id: number): Promise<AdminEntity> {
+  async getAuthAdmin(id: string): Promise<AdminEntity> {
     const user = await this.adminRepository.findOneBy({ id });
 
     if (user) {

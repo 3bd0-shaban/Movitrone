@@ -34,7 +34,7 @@ export class AdminController {
   @Get('get/self')
   @UseGuards(JwtAdminGuard)
   findSelf(@CurrentUser() user: AdminEntity): Promise<AdminEntity> {
-    return this.adminService.findOne(+user.id);
+    return this.adminService.findOne(user.id);
   }
 
   @Patch('update/self')
@@ -43,7 +43,7 @@ export class AdminController {
     @CurrentUser() user: AdminEntity,
     @Body() updateUserDto: updateUserDTO,
   ): Promise<string> {
-    await this.adminService.update(+user.id, updateUserDto);
+    await this.adminService.update(user.id, updateUserDto);
     await this.logService.create('updated his account details', user);
     return 'ok';
   }
@@ -54,7 +54,7 @@ export class AdminController {
     @CurrentUser() user: AdminEntity,
     @Body() inputs: PasswordUpdateDto,
   ): Promise<string> {
-    await this.adminService.updatePasswordById(+user.id, inputs);
+    await this.adminService.updatePasswordById(user.id, inputs);
     await this.logService.create('updated his account password', user);
     return 'ok';
   }
@@ -67,7 +67,10 @@ export class AdminController {
     @Body() inputs: CreateAdminDto,
   ) {
     const admin = await this.adminService.create(inputs);
-    await this.logService.create('updated his account details', user);
+    await this.logService.create(
+      `created new dashboard user account with email ${inputs.email}`,
+      user,
+    );
     return admin;
   }
 
@@ -82,7 +85,7 @@ export class AdminController {
   @Get('get-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   findOne(@Param('id') id: string): Promise<AdminEntity> {
-    return this.adminService.findOne(+id);
+    return this.adminService.findOne(id);
   }
 
   @Patch('update-by-id/:id')
@@ -92,7 +95,7 @@ export class AdminController {
     @CurrentUser() user: AdminEntity,
     @Body() updateUserDto: updateUserDTO,
   ): Promise<string> {
-    const updatedUser = await this.adminService.update(+id, updateUserDto);
+    const updatedUser = await this.adminService.update(id, updateUserDto);
     await this.logService.create(`updated his account`, user);
     return 'ok';
   }
@@ -104,7 +107,7 @@ export class AdminController {
     @CurrentUser() user: AdminEntity,
     @Body() inputs: PasswordUpdateDto,
   ): Promise<string> {
-    await this.adminService.updatePasswordById(+id, inputs);
+    await this.adminService.updatePasswordById(id, inputs);
     await this.logService.create('updated his account details', user);
 
     return 'ok';
@@ -116,7 +119,7 @@ export class AdminController {
     @Param('id') id: string,
     @CurrentUser() user: AdminEntity,
   ): Promise<void> {
-    const removed = await this.adminService.removeById(+id);
+    const removed = await this.adminService.removeById(id);
     await this.logService.create('updated his account details', user);
     return removed;
   }

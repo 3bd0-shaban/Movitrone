@@ -23,15 +23,15 @@ const dataSourceOptions: DataSourceOptions = {
   port: 3306,
   username: 'root',
   password: 'root',
-  database: 'movie_database',
-  // entities: ['dist/**/*.entity.js'],
+  database: 'movitrone',
+  entities: ['dist/**/*.entity.js'],
   synchronize: true,
-  migrationsRun: true,
+  logging: false,
 
   // To resolve the error encountered when initializing data through 'pnpm migration:run', such as the error with statements like 'SET FOREIGN_KEY_CHECKS = 0;', set this to true only during the execution of data migration operations.  multipleStatements: currentScript === 'typeorm',
-  entities: ['dist/modules/**/*.entity{.ts,.js}'],
-  migrations: ['dist/migrations/*{.ts,.js}'],
-  subscribers: ['dist/modules/**/*.subscriber{.ts,.js}'],
+  // entities: ['dist/modules/**/*.entity{.ts,.js}'],
+  // migrations: ['dist/migrations/*{.ts,.js}'],
+  // subscribers: ['dist/modules/**/*.subscriber{.ts,.js}'],
 };
 export const dbRegToken = 'database';
 

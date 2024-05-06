@@ -77,11 +77,11 @@ export class UserService {
   /**
    * Find a user by ID
    *
-   * @param {number} id - User ID
+   * @param {string} id - User ID
    * @returns {Promise<UserEntity>} - The found user
    * @throws {NotFoundException} - If the user with the provided ID is not found
    */
-  async findOne(id: number): Promise<UserEntity> {
+  async findOne(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -92,14 +92,14 @@ export class UserService {
   /**
    * Update a user password by ID
    *
-   * @param {number} id - User ID
+   * @param {string} id - User ID
    * @param {PasswordUpdateDto} inputs - Updated user data
    * @returns {Promise<boolean>} - Indicates whether the password update was successful
    * @throws {NotFoundException} - If the user with the provided ID is not found
    * @throws {UnprocessableEntityException} - If the old password doesn't match
    */
   async updatePasswordById(
-    id: number,
+    id: string,
     inputs: PasswordUpdateDto,
   ): Promise<boolean> {
     const user = await this.userRepository
@@ -133,10 +133,10 @@ export class UserService {
   /**
    * Remove a user by ID
    *
-   * @param {number} id - User ID
+   * @param {string} id - User ID
    * @throws {NotFoundException} - If the user with the provided ID is not found
    */
-  async removeById(id: number): Promise<void> {
+  async removeById(id: string): Promise<void> {
     const user = await this.findOne(id);
     await this.userRepository.remove(user);
   }
@@ -144,12 +144,12 @@ export class UserService {
   /**
    * Update the currently authenticated user
    *
-   * @param {number} userId - User ID (assuming it's the authenticated user's ID)
+   * @param {string} userId - User ID (assuming it's the authenticated user's ID)
    * @param {UpdateUserDTO} updateUserDto - Updated user data
    * @returns {Promise<UserEntity>} - The updated user
    */
   async update(
-    userId: number,
+    userId: string,
     updateUserDto: updateUserDTO,
   ): Promise<UpdateResult> {
     return await this.userRepository.update(userId, updateUserDto);
