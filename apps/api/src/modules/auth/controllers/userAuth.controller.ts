@@ -10,6 +10,7 @@ import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
 import { RefreshREsult } from '../auth';
 import { RTWebsiteCookie } from '../decorator/http-Cookies.decorator';
 import { addDurationFromNow } from '@common/utilities';
+import { MailerService } from 'src/shared/mailer/mailer.service';
 
 @ApiTags('Authentication - Website')
 @Controller('auth')
@@ -18,11 +19,14 @@ export class UserAuthController {
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly mailerService: MailerService,
   ) {}
 
   @Post('register')
   async Signup(@Body() createUserDTO: CreateUserDTO) {
-    return this.userService.create(createUserDTO);
+    const user = await this.userService.create(createUserDTO);
+    this.mailerService.sendVerificationCode(user.email);
+    return user;
   }
 
   @Post('signin')

@@ -50,4 +50,8 @@ export enum ErrorEnum {
   //Genre
   GENRE_ALREADY_EXIST = '1403: Genre already exists',
   GENRE_NOT_EXIST = '1404: Genre is not exist',
+
+  //movie
+  MOVIE_ALREADY_EXIST = '1405: movie already exists',
+  MOVIE_NOT_EXIST = '1406: movie is not exist',
 }

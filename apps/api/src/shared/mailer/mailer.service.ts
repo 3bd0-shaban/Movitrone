@@ -4,13 +4,12 @@ import { MailerService as NestMailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { AppConfig, IAppConfig } from 'src/config';
 import { ErrorEnum } from 'src/constants/error-code.constant';
-import { randomValue } from 'src/utils/tool.util';
+import { randomValue } from '~/utils/tool.util';
 
 @Injectable()
 export class MailerService {
   constructor(
     @Inject(AppConfig.KEY) private appConfig: IAppConfig,
-    // @InjectRedis() private redis: Redis,
     private mailerService: NestMailerService,
   ) {}
 

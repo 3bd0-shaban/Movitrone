@@ -6,31 +6,31 @@ export class videoShared extends CommonEntity {
   description: string;
 
   @Column()
-  imdb_Id: number;
+  imdb_Id: string;
 
-  @Column()
-  imdb_Rate: string;
+  @Column('int')
+  imdb_Rate: number;
 
-  @Column()
-  imdb_vots: string;
+  @Column('int')
+  imdb_vots: number;
 
   @Column()
   country: string;
 
-  @Column()
-  duration: string;
+  @Column('int')
+  duration: number;
 
   @Column()
   release: string;
 
-  @Column()
-  likes: string;
+  @Column('int', { default: 0 })
+  likes?: string;
 
-  @Column()
-  dislikes: string;
+  @Column('int', { default: 0 })
+  dislikes?: string;
 
-  @Column()
-  director: string;
+  @Column({ nullable: true })
+  director?: string;
 
   @Column()
   poster_Url: string;
@@ -38,11 +38,11 @@ export class videoShared extends CommonEntity {
   @Column()
   trailer_Url: string;
 
-  @Column()
-  is_Active: string;
+  @Column('boolean', { default: true })
+  is_Active?: string;
 
-  @Column()
-  is_Commenting: string;
+  @Column('boolean', { default: true })
+  is_Commenting?: string;
 
   @Column()
   language: string;

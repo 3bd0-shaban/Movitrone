@@ -14,13 +14,13 @@ import { AdminModule } from './modules/admin/admin.module';
 import { UserModule } from './modules/user/user.module';
 import { BannerModule } from './modules/banner/banner.module';
 import { CommentModule } from './modules/comment/comment.module';
-import { MailerModule } from '@nestjs-modules/mailer';
 import { ThrottlerModule, seconds } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { isDev } from './global/env';
 import config from './config';
 import { DatabaseModule } from './shared/database/database.module';
+import { MailerModule } from './shared/mailer/mailer.module';
 
 @Module({
   imports: [

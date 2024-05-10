@@ -49,6 +49,7 @@
     "cors-anywhere": "^0.4.4",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
+    "handlebars": "^4.7.8",
     "ioredis": "^5.4.1",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",

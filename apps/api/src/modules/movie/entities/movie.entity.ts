@@ -3,7 +3,7 @@ import { GenreEntity } from 'src/modules/genre/entities/genre.entity';
 import { videoShared } from 'src/common/entity/video.entity';
 
 @Entity({ name: 'movies' })
-export class Movie extends videoShared {
+export class MovieEntity extends videoShared {
   @Column()
   movie_Title: string;
 
