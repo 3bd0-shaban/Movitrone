@@ -2,14 +2,14 @@ import { Controller, Post, Body, Res, Inject, Get } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { ApiTags } from '@nestjs/swagger';
 import { SignInDto } from '../dto/SignIn.dto';
-import { ISecurityConfig, SecurityConfig } from 'src/config';
+import { ISecurityConfig, SecurityConfig } from '~/config';
 import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
 import { addDurationFromNow } from '@common/utilities';
 import { Response } from 'express';
 import { RefreshREsult } from '../auth';
 import { RTDashboardCookie } from '../decorator/http-Cookies.decorator';
-import { AdminService } from 'src/modules/admin/admin.service';
-import { CreateAdminDto } from 'src/modules/admin/dto/create-admin.dto';
+import { AdminService } from '~/modules/admin/admin.service';
+import { CreateAdminDto } from '~/modules/admin/dto/create-admin.dto';
 
 @ApiTags('Authentication - Dashboard')
 @Controller('auth-admin')

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LogEntity } from './entities/log.entity';
 import { Repository } from 'typeorm';
-import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
-import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
+import { AdminEntity } from '~/modules/admin/entities/admin.entity';
+import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 
 @Injectable()
 export class LogService {

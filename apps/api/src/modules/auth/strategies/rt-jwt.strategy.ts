@@ -3,10 +3,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, Inject, ForbiddenException } from '@nestjs/common';
 import { Request } from 'express';
 import { UserJwtPayload } from '../auth';
-import { ISecurityConfig, SecurityConfig } from 'src/config';
+import { ISecurityConfig, SecurityConfig } from '~/config';
 import { AuthStrategy } from '../auth.constant';
-import { UserService } from 'src/modules/user/user.service';
-import { AdminService } from 'src/modules/admin/admin.service';
+import { UserService } from '~/modules/user/user.service';
+import { AdminService } from '~/modules/admin/admin.service';
 
 @Injectable()
 export class RTJwtWebsiteStrategy extends PassportStrategy(

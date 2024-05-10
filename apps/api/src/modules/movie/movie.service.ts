@@ -6,11 +6,11 @@ import {
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieEntity } from './entities/movie.entity';
-import { ErrorEnum } from 'src/constants/error-code.constant';
+import { ErrorEnum } from '~/constants/error-code.constant';
 import { isEmpty } from 'lodash';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
+import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 
 @Injectable()
 export class MovieService {

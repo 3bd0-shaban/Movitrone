@@ -10,15 +10,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
+import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { JwtAdminGuard } from '../auth/guards/jwt-auth.guard';
-import { updateUserDTO } from 'src/shared/dto/update-user.dto';
+import { updateUserDTO } from '~/shared/dto/update-user.dto';
 import { DashboardGuard } from '../auth/guards/dashboard.guard';
 import { CurrentUser } from '../auth/decorator/auth-user.decorator';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { AdminService } from './admin.service';
 import { AdminEntity } from './entities/admin.entity';
-import { PasswordUpdateDto } from 'src/shared/dto/password.dto';
+import { PasswordUpdateDto } from '~/shared/dto/password.dto';
 import { LogService } from '../log/log.service';
 
 @ApiTags('Admin - Dashboard Manpulation')

@@ -5,9 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DataSource, LoggerOptions } from 'typeorm';
 
-import { ConfigKeyPaths, IDatabaseConfig } from 'src/config';
+import { ConfigKeyPaths, IDatabaseConfig } from '~/config';
 
-import { env } from 'src/global/env';
+import { env } from '~/global/env';
 
 import { EntityExistConstraint } from './constraints/entity-exist.constraint';
 import { UniqueConstraint } from './constraints/unique.constraint';

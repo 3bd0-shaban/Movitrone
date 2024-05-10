@@ -1,6 +1,6 @@
 import { ConfigType, registerAs } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { env, envBoolean, envNumber } from 'src/global/env';
+import { env, envBoolean, envNumber } from '~/global/env';
 import dotenv from 'dotenv';
 
 dotenv?.config({ path: `.env.${process.env.NODE_ENV}` });

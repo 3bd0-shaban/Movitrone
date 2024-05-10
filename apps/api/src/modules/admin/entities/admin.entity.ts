@@ -1,6 +1,6 @@
-import { Episode } from 'src/modules/episode/entities/episode.entity';
-import { LogEntity } from 'src/modules/log/entities/log.entity';
-import { UserShared } from 'src/shared/entities/user.entity';
+import { Episode } from '~/modules/episode/entities/episode.entity';
+import { LogEntity } from '~/modules/log/entities/log.entity';
+import { UserShared } from '~/shared/entities/user.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 
 @Entity({ name: 'dashboard_users' })

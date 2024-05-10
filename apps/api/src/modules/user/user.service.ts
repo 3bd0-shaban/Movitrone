@@ -7,13 +7,13 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository, UpdateResult } from 'typeorm';
-import { CreateUserDTO } from 'src/shared/dto/create-user.dto';
-import { ErrorEnum } from 'src/constants/error-code.constant';
+import { CreateUserDTO } from '~/shared/dto/create-user.dto';
+import { ErrorEnum } from '~/constants/error-code.constant';
 import { isEmpty } from 'lodash';
 import { AuthService } from '../auth/auth.service';
-import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
-import { updateUserDTO } from 'src/shared/dto/update-user.dto';
-import { PasswordUpdateDto } from 'src/shared/dto/password.dto';
+import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
+import { updateUserDTO } from '~/shared/dto/update-user.dto';
+import { PasswordUpdateDto } from '~/shared/dto/password.dto';
 
 @Injectable()
 export class UserService {

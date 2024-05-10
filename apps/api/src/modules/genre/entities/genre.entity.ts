@@ -1,5 +1,5 @@
-import { CommonEntity } from 'src/common/entity/common.entity';
-import { MovieEntity } from 'src/modules/movie/entities/movie.entity';
+import { CommonEntity } from '~/common/entity/common.entity';
+import { MovieEntity } from '~/modules/movie/entities/movie.entity';
 import { Entity, Column, ManyToMany } from 'typeorm';
 
 @Entity({ name: 'genres' })

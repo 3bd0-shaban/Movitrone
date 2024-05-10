@@ -2,7 +2,7 @@ import { Controller, Get, UseGuards, Query } from '@nestjs/common';
 import { LogService } from './log.service';
 import { JwtAdminGuard } from '../auth/guards/jwt-auth.guard';
 import { DashboardGuard } from '../auth/guards/dashboard.guard';
-import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
+import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { LogEntity } from './entities/log.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 

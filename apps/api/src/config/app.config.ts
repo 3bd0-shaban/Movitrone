@@ -8,7 +8,7 @@ export const AppConfig = registerAs(appRegToken, () => ({
   port: envNumber('APP_PORT', 3000),
   baseUrl: env('APP_BASE_URL'),
   globalPrefix: env('GLOBAL_PREFIX', 'api'),
-  locale: env('APP_LOCALE', 'zh-CN'),
+  locale: env('APP_LOCALE', 'EN-US'),
   /** Whether multi-end login is allowed */
   multiDeviceLogin: envBoolean('MULTI_DEVICE_LOGIN', true),
 

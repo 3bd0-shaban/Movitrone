@@ -15,7 +15,7 @@ import { UpdateGenreDto } from './dto/update-genre.dto';
 import { GenreEntity } from './entities/genre.entity';
 import { JwtAdminGuard } from '../auth/guards/jwt-auth.guard';
 import { DashboardGuard } from '../auth/guards/dashboard.guard';
-import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
+import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Genre')

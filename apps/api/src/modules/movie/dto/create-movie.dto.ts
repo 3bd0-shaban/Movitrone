@@ -9,7 +9,7 @@ import {
   ArrayNotEmpty,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { GenreEntity } from 'src/modules/genre/entities/genre.entity';
+import { GenreEntity } from '~/modules/genre/entities/genre.entity';
 
 export class CreateMovieDto {
   @ApiProperty({ description: 'The title of the movie' })

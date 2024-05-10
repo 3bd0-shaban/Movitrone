@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { CommonEntity } from 'src/common/entity/common.entity';
+import { CommonEntity } from '~/common/entity/common.entity';
 import { Column } from 'typeorm';
 
 export class UserShared extends CommonEntity {

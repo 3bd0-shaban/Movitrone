@@ -1,6 +1,6 @@
 import { videoShared } from '@common/utilities';
-import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
-import { GenreEntity } from 'src/modules/genre/entities/genre.entity';
+import { AdminEntity } from '~/modules/admin/entities/admin.entity';
+import { GenreEntity } from '~/modules/genre/entities/genre.entity';
 
 import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
 

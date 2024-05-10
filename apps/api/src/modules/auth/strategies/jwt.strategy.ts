@@ -2,10 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserJwtPayload } from '../auth';
-import { ISecurityConfig, SecurityConfig } from 'src/config';
+import { ISecurityConfig, SecurityConfig } from '~/config';
 import { AuthStrategy } from '../auth.constant';
-import { UserService } from 'src/modules/user/user.service';
-import { AdminService } from 'src/modules/admin/admin.service';
+import { UserService } from '~/modules/user/user.service';
+import { AdminService } from '~/modules/admin/admin.service';
 import { AuthService } from '../auth.service';
 
 @Injectable()

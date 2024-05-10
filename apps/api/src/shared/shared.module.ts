@@ -3,7 +3,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 import { MailerModule } from './mailer/mailer.module';
-import { isDev } from 'src/global/env';
+import { isDev } from '~/global/env';
 
 @Global()
 @Module({

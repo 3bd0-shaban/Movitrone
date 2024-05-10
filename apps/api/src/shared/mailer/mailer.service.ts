@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { MailerService as NestMailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { AppConfig, IAppConfig } from 'src/config';
-import { ErrorEnum } from 'src/constants/error-code.constant';
+import { AppConfig, IAppConfig } from '~/config';
+import { ErrorEnum } from '~/constants/error-code.constant';
 import { randomValue } from '~/utils/tool.util';
 
 @Injectable()

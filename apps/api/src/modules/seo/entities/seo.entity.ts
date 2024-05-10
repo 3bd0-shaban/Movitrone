@@ -1,4 +1,4 @@
-import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
+import { AdminEntity } from '~/modules/admin/entities/admin.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'seos' })

@@ -11,12 +11,12 @@ import { PhoneValidationService } from '@common/services';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
-import { ErrorEnum } from 'src/constants/error-code.constant';
+import { ErrorEnum } from '~/constants/error-code.constant';
 import { Response } from 'express';
 import { RefreshREsult, UserJwtPayload } from './auth';
 import { AdminEntity } from '../admin/entities/admin.entity';
 import { JwtService } from '@nestjs/jwt';
-import { ISecurityConfig, SecurityConfig } from 'src/config';
+import { ISecurityConfig, SecurityConfig } from '~/config';
 import { addDurationFromNow } from '@common/utilities';
 import { ACCESS_TOKEN_DURATION } from './auth.constant';
 

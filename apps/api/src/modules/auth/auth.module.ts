@@ -6,8 +6,8 @@ import { PhoneValidationService } from '@common/services';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ConfigKeyPaths, ISecurityConfig } from 'src/config';
-import { isDev } from 'src/global/env';
+import { ConfigKeyPaths, ISecurityConfig } from '~/config';
+import { isDev } from '~/global/env';
 import { AdminAuthController } from './controllers/adminAuth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '../user/entities/user.entity';
@@ -19,7 +19,7 @@ import {
 import { RTJwtWebsiteStrategy } from './strategies/rt-jwt.strategy';
 import { AdminModule } from '../admin/admin.module';
 import { AuthStrategy } from './auth.constant';
-import { MailerService } from 'src/shared/mailer/mailer.service';
+import { MailerService } from '~/shared/mailer/mailer.service';
 
 @Module({
   imports: [

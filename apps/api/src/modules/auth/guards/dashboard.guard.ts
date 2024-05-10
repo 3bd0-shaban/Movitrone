@@ -4,7 +4,7 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AdminEntity } from 'src/modules/admin/entities/admin.entity';
+import { AdminEntity } from '~/modules/admin/entities/admin.entity';
 
 @Injectable()
 export class DashboardGuard implements CanActivate {

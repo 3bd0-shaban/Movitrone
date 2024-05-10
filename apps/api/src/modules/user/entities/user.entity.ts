@@ -1,4 +1,4 @@
-import { UserShared } from 'src/shared/entities/user.entity';
+import { UserShared } from '~/shared/entities/user.entity';
 import { Entity } from 'typeorm';
 
 @Entity({ name: 'website_users' })

@@ -14,7 +14,7 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { JwtAdminGuard } from '../auth/guards/jwt-auth.guard';
 import { DashboardGuard } from '../auth/guards/dashboard.guard';
-import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
+import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { MovieEntity } from './entities/movie.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 

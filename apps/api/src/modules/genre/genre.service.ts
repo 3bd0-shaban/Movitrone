@@ -7,9 +7,9 @@ import { CreateGenreDto } from './dto/create-genre.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenreEntity } from './entities/genre.entity';
 import { Repository, UpdateResult } from 'typeorm';
-import { ErrorEnum } from 'src/constants/error-code.constant';
+import { ErrorEnum } from '~/constants/error-code.constant';
 import { isEmpty } from 'lodash';
-import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
+import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 
 @Injectable()

@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
-import { ErrorEnum } from 'src/constants/error-code.constant';
+import { ErrorEnum } from '~/constants/error-code.constant';
 import { isEmpty } from 'lodash';
 import { AuthService } from '../auth/auth.service';
-import { PaginationArgs } from 'src/shared/dto/args/pagination-query.args';
-import { updateUserDTO } from 'src/shared/dto/update-user.dto';
+import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
+import { updateUserDTO } from '~/shared/dto/update-user.dto';
 import { AdminEntity } from './entities/admin.entity';
 import { CreateAdminDto } from './dto/create-admin.dto';
-import { PasswordUpdateDto } from 'src/shared/dto/password.dto';
+import { PasswordUpdateDto } from '~/shared/dto/password.dto';
 
 @Injectable()
 export class AdminService {

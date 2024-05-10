@@ -2,15 +2,15 @@ import { Controller, Post, Body, Inject, Res, Get } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from '../../user/user.service';
-import { CreateUserDTO } from 'src/shared/dto/create-user.dto';
+import { CreateUserDTO } from '~/shared/dto/create-user.dto';
 import { SignInDto } from '../dto/SignIn.dto';
-import { ISecurityConfig, SecurityConfig } from 'src/config';
+import { ISecurityConfig, SecurityConfig } from '~/config';
 import { Response } from 'express';
 import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
 import { RefreshREsult } from '../auth';
 import { RTWebsiteCookie } from '../decorator/http-Cookies.decorator';
 import { addDurationFromNow } from '@common/utilities';
-import { MailerService } from 'src/shared/mailer/mailer.service';
+import { MailerService } from '~/shared/mailer/mailer.service';
 
 @ApiTags('Authentication - Website')
 @Controller('auth')
