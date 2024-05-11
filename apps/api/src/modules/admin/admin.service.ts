@@ -10,10 +10,10 @@ import { ErrorEnum } from '~/constants/error-code.constant';
 import { isEmpty } from 'lodash';
 import { AuthService } from '../auth/auth.service';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
-import { updateUserDTO } from '~/shared/dto/update-user.dto';
+import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
 import { AdminEntity } from './entities/admin.entity';
 import { CreateAdminDto } from './dto/create-admin.dto';
-import { PasswordUpdateDto } from '~/shared/dto/password.dto';
+import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
 
 @Injectable()
 export class AdminService {

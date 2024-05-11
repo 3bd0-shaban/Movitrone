@@ -46,4 +46,7 @@ export class videoShared extends CommonEntity {
 
   @Column()
   language: string;
+
+  @Column('simple-array')
+  servers_url: string[];
 }

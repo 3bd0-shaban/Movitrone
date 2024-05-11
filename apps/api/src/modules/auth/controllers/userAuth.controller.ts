@@ -2,7 +2,7 @@ import { Controller, Post, Body, Inject, Res, Get } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from '../../user/user.service';
-import { CreateUserDTO } from '~/shared/dto/create-user.dto';
+import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import { Response } from 'express';

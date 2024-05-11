@@ -8,36 +8,48 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieEntity } from './entities/movie.entity';
 import { ErrorEnum } from '~/constants/error-code.constant';
 import { isEmpty } from 'lodash';
-import { Repository, UpdateResult } from 'typeorm';
+import { In, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
+import { GenreEntity } from '../genre/entities/genre.entity';
 
 @Injectable()
 export class MovieService {
   constructor(
     @InjectRepository(MovieEntity)
     private readonly movieRepository: Repository<MovieEntity>,
+    @InjectRepository(GenreEntity)
+    private readonly genreRepository: Repository<GenreEntity>,
   ) {}
 
   /**
    * Create New movie
    *
-   * @param {CreateMovieDto} CreateMovieDto - enterted inputs
-   * @returns {Promise<MovieEntity>} - Password match result
+   * @param {CreateMovieDto} inputs - entered inputs
+   * @returns {Promise<MovieEntity>} - Created movie entity
    * @memberof Movieservice
    */
   async create(inputs: CreateMovieDto): Promise<MovieEntity> {
-    const { movie_Title } = inputs;
+    const { movie_Title, genres: genreIds } = inputs;
+
     const exists = await this.movieRepository.findOneBy({
       movie_Title,
     });
-    if (!isEmpty(exists)) {
+    if (exists) {
       throw new ConflictException(ErrorEnum.MOVIE_ALREADY_EXIST);
     }
-    const movieDoc = this.movieRepository.create({
-      ...inputs,
+
+    // Find genres by their IDs
+    const genres = await this.genreRepository.find({
+      where: { id: In(genreIds) },
     });
-    return await movieDoc.save();
+
+    const movie = this.movieRepository.create({
+      ...inputs,
+      genres: genres,
+    });
+
+    return this.movieRepository.save(movie);
   }
 
   /**
