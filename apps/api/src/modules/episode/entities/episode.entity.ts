@@ -1,8 +1,8 @@
-import { videoShared } from '@common/utilities';
 import { AdminEntity } from '~/modules/admin/entities/admin.entity';
 import { GenreEntity } from '~/modules/genre/entities/genre.entity';
 
 import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
+import { videoShared } from '~/common/entity/video.entity';
 
 @Entity({ name: 'episodes' })
 export class Episode extends videoShared {

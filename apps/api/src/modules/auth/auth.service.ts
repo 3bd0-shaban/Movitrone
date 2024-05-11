@@ -17,8 +17,8 @@ import { RefreshREsult, UserJwtPayload } from './auth';
 import { AdminEntity } from '../admin/entities/admin.entity';
 import { JwtService } from '@nestjs/jwt';
 import { ISecurityConfig, SecurityConfig } from '~/config';
-import { addDurationFromNow } from '@common/utilities';
 import { ACCESS_TOKEN_DURATION } from './auth.constant';
+import { addDurationFromNow } from '~/shared/utilities/date-time.utils';
 
 @Injectable()
 export class AuthService {

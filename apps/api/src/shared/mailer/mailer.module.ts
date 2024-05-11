@@ -7,9 +7,9 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 
 import { ConfigKeyPaths, IAppConfig, IMailerConfig } from '~/config';
 
-import { MailerService } from './mailer.service';
+import { EmailService } from './mailer.service';
 
-const providers: Provider<any>[] = [MailerService];
+const providers: Provider<any>[] = [EmailService];
 
 @Module({
   imports: [

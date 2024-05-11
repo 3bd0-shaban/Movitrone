@@ -1,5 +1,11 @@
 import { UserShared } from '~/shared/entities/user.entity';
-import { Entity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity({ name: 'website_users' })
-export class UserEntity extends UserShared {}
+export class UserEntity extends UserShared {
+  @Column()
+  otp: string;
+
+  @Column('boolean')
+  is_Verified: boolean;
+}

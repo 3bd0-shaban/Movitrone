@@ -4,7 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
-import { addDurationFromNow } from '@common/utilities';
+import { addDurationFromNow } from '~/shared/utilities/date-time.utils';
 import { Response } from 'express';
 import { RefreshREsult } from '../auth';
 import { RTDashboardCookie } from '../decorator/http-Cookies.decorator';

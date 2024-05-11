@@ -19,7 +19,6 @@ import {
 import { RTJwtWebsiteStrategy } from './strategies/rt-jwt.strategy';
 import { AdminModule } from '../admin/admin.module';
 import { AuthStrategy } from './auth.constant';
-import { MailerService } from '~/shared/mailer/mailer.service';
 
 @Module({
   imports: [
@@ -55,7 +54,6 @@ import { MailerService } from '~/shared/mailer/mailer.service';
     JwtDashboardStrategy,
     JwtAdminStrategy,
     RTJwtWebsiteStrategy,
-    MailerService,
   ],
   exports: [AuthService],
 })

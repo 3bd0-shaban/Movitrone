@@ -1,6 +1,5 @@
 import { getVideo } from '@/services/getVideo';
-// import Video from 'next-video';
-import VideoCom from './videoCom';
+
 import Video from 'next-video';
 
 export default async function Page() {

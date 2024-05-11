@@ -4,10 +4,9 @@ import { MailerService as NestMailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { AppConfig, IAppConfig } from '~/config';
 import { ErrorEnum } from '~/constants/error-code.constant';
-import { randomValue } from '~/utils/tool.util';
 
 @Injectable()
-export class MailerService {
+export class EmailService {
   constructor(
     @Inject(AppConfig.KEY) private appConfig: IAppConfig,
     private mailerService: NestMailerService,
@@ -34,14 +33,14 @@ export class MailerService {
     }
   }
 
-  async sendVerificationCode(to, code = randomValue(4, '1234567890')) {
-    const subject = `[${this.appConfig.name}] 验证码`;
+  async sendVerificationCode(to: string, code: string) {
+    const subject = `[${this.appConfig.name}] email verification code`;
 
     try {
       await this.mailerService.sendMail({
         to,
         subject,
-        template: './verification-code-zh',
+        template: './verification-code',
         context: {
           code,
         },

@@ -14,6 +14,9 @@ import { AuthService } from '../auth/auth.service';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { updateUserDTO } from '~/shared/dto/update-user.dto';
 import { PasswordUpdateDto } from '~/shared/dto/password.dto';
+import { randomValue } from '~/utils/tool.util';
+import { EmailService } from '~/shared/mailer/mailer.service';
+import { VerifyOTPDTOs } from './dto/verify-otp.dto';
 
 @Injectable()
 export class UserService {
@@ -21,6 +24,7 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly authService: AuthService,
+    private readonly mailerService: EmailService,
   ) {}
 
   /**
@@ -47,8 +51,12 @@ export class UserService {
       createUserDto.password,
     );
 
+    const otp = randomValue(4, '1234567890');
+    this.mailerService.sendVerificationCode(email, otp);
+
     const user = this.userRepository.create({
       ...createUserDto,
+      otp,
       password: hashedPassword,
       phone: formattedPhoneNumber,
     });
@@ -153,5 +161,25 @@ export class UserService {
     updateUserDto: updateUserDTO,
   ): Promise<UpdateResult> {
     return await this.userRepository.update(userId, updateUserDto);
+  }
+
+  /**
+   * Update user to veified if valid otp
+   *
+   * @param {number} userId - User ID (assuming it's the authenticated user's ID)
+   * @param {VerifyOTPDTOs} inputs - otp
+   * @returns {Promise<UpdateResult>} - UpdateResult
+   */
+  async VerifyOTP(
+    userId: number,
+    inputs: VerifyOTPDTOs,
+  ): Promise<UpdateResult> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (user.otp !== inputs.otp) {
+      throw new UnprocessableEntityException(
+        ErrorEnum.INVALID_VERIFICATION_CODE,
+      );
+    }
+    return await this.userRepository.update(userId, { is_Verified: true });
   }
 }
