@@ -40,7 +40,10 @@ async function bootstrap() {
   // class-validator 的 DTO 类中注入 nest 容器的依赖 (用于自定义验证器)
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-  app.enableCors({ origin: '*', credentials: true });
+  app.enableCors({
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    credentials: true,
+  });
   app.setGlobalPrefix('api');
   // app.useStaticAssets({ root: path.join(__dirname, '..', 'public') });
   // Starts listening for shutdown hooks

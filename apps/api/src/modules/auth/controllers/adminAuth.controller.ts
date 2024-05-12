@@ -50,6 +50,7 @@ export class AdminAuthController {
     res.send({
       access_token,
       session_expireIn: addDurationFromNow(REFRESH_TOKEN_DURATION),
+      role: user.role,
     });
   }
 
