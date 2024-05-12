@@ -1,16 +1,14 @@
 import { AdminEntity } from '~/modules/admin/entities/admin.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { CommonEntity } from '~/common/entity/common.entity';
 
 @Entity({ name: 'seos' })
-export class Seo {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class SeoEntity extends CommonEntity {
+  @Column()
+  tag_Title: string;
 
   @Column()
-  tag_Title: number;
-
-  @Column()
-  tag_Description: number;
+  tag_Description: string;
 
   @Column()
   country: string;
@@ -19,10 +17,10 @@ export class Seo {
   page: string;
 
   @OneToOne((type) => AdminEntity, (admin) => admin.id)
-  created_By: AdminEntity;
+  created_By?: AdminEntity;
 
   @Column()
-  canonical_Url: number;
+  canonical_Url: string;
 
   @Column('simple-array')
   keywoprds: string[];
@@ -33,12 +31,9 @@ export class Seo {
   })
   Seo_Status: string;
 
-  @Column('boolean')
-  is_Active: boolean;
+  @Column('boolean', { default: true })
+  is_Active?: boolean;
 
-  @Column('boolean')
-  is_Main: boolean;
-
-  @Column({ default: Date.now() })
-  created_At: string;
+  @Column('boolean', { default: false })
+  is_Main?: boolean;
 }

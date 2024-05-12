@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionModule } from './modules/session/session.module';
 import { GenreModule } from './modules/genre/genre.module';
 import { WhitelistModule } from './modules/whitelist/whitelist.module';
@@ -21,6 +20,7 @@ import { isDev } from './global/env';
 import config from './config';
 import { DatabaseModule } from './shared/database/database.module';
 import { MailerModule } from './shared/mailer/mailer.module';
+import { SeoAnalyticsModule } from './modules/analytics/seo-analytics/seo-analytics.module';
 
 @Module({
   imports: [
@@ -64,6 +64,9 @@ import { MailerModule } from './shared/mailer/mailer.module';
     UserModule,
     BannerModule,
     CommentModule,
+
+    //Analytics
+    SeoAnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

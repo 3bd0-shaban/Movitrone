@@ -54,4 +54,8 @@ export enum ErrorEnum {
   //movie
   MOVIE_ALREADY_EXIST = '1405: movie already exists',
   MOVIE_NOT_EXIST = '1406: movie is not exist',
+
+  //movie
+  SEO_ALREADY_EXIST = '1407: Seo configuration already exist for this country!',
+  SEO_NOT_EXIST = '1408: Seo is not exist',
 }
