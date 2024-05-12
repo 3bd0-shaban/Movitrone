@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   Query,
@@ -37,7 +37,7 @@ export class AdminController {
     return this.adminService.findOne(user.id);
   }
 
-  @Patch('update/self')
+  @Put('update/self')
   @UseGuards(JwtAdminGuard)
   async updateSelf(
     @CurrentUser() user: AdminEntity,
@@ -48,7 +48,7 @@ export class AdminController {
     return 'ok';
   }
 
-  @Patch('update/self/password')
+  @Put('update/self/password')
   @UseGuards(JwtAdminGuard)
   async updateSelfPassword(
     @CurrentUser() user: AdminEntity,
@@ -88,7 +88,7 @@ export class AdminController {
     return this.adminService.findOne(id);
   }
 
-  @Patch('update-by-id/:id')
+  @Put('update-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async update(
     @Param('id') id: number,
@@ -100,7 +100,7 @@ export class AdminController {
     return 'ok';
   }
 
-  @Patch('update-by-id/:id/password')
+  @Put('update-by-id/:id/password')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async updatePassword(
     @Param('id') id: number,

@@ -5,6 +5,11 @@ import { DashboardGuard } from '~/modules/auth/guards/dashboard.guard';
 import { JwtAdminGuard } from '~/modules/auth/guards/jwt-auth.guard';
 import { TimeRangeArgs } from './dto/args/timeRange-query.args';
 import { PageTimeQueryDto } from './dto/args/page-time-query.args';
+import {
+  IAllPageViews,
+  ICountriesViewsByPagePerDay,
+  IPageViewsPerDay,
+} from './seo-analytics';
 
 @ApiTags('Seo Analytics')
 @ApiBearerAuth()
@@ -14,14 +19,18 @@ export class SeoAnalyticsController {
 
   @Get('all-pages-views')
   @UseGuards(JwtAdminGuard, DashboardGuard)
-  async getAllPagesViews(@Query() query: TimeRangeArgs): Promise<any[]> {
+  async getAllPagesViews(
+    @Query() query: TimeRangeArgs,
+  ): Promise<IAllPageViews[]> {
     const { startDate, endDate } = query;
     return await this.seoAnalyticsService.getAllPagesViews(startDate, endDate);
   }
 
   @Get('page-views-by-page')
   @UseGuards(JwtAdminGuard, DashboardGuard)
-  async getPagesViewsByPage(@Query() query: PageTimeQueryDto): Promise<any[]> {
+  async getPagesViewsByPage(
+    @Query() query: PageTimeQueryDto,
+  ): Promise<IPageViewsPerDay[]> {
     const { startDate, endDate, page } = query;
     return await this.seoAnalyticsService.getPagesViewsPerDay(
       page,
@@ -33,13 +42,12 @@ export class SeoAnalyticsController {
   @Get('country-views-by-page')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async getCountryViewsByPageWithPeroid(
-    @Query('page') page: string,
-    @Query('start') start: Date,
-    @Query('end') end: Date,
-  ): Promise<any[]> {
+    @Query() query: PageTimeQueryDto,
+  ): Promise<ICountriesViewsByPagePerDay[]> {
+    const { startDate, endDate, page } = query;
     return await this.seoAnalyticsService.getCountryViewsByPageWithPeriod(
-      start,
-      end,
+      startDate,
+      endDate,
       page,
     );
   }

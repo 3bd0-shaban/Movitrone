@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   Query,
@@ -37,7 +37,7 @@ export class UserController {
     return this.userService.findOne(user.id);
   }
 
-  @Patch('update/self')
+  @Put('update/self')
   @UseGuards(JwtUserGuard)
   async updateSelf(
     @CurrentUser() user: UserEntity,
@@ -47,7 +47,7 @@ export class UserController {
     return 'ok';
   }
 
-  @Patch('update/self/password')
+  @Put('update/self/password')
   @UseGuards(JwtUserGuard)
   async updateSelfPassword(
     @CurrentUser() user: UserEntity,
@@ -78,7 +78,7 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Patch('update-by-id/:id')
+  @Put('update-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async update(
     @Param('id') id: number,
@@ -88,7 +88,7 @@ export class UserController {
     return 'ok';
   }
 
-  @Patch('update-by-id/:id/password')
+  @Put('update-by-id/:id/password')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async updatePassword(
     @Param('id') id: number,

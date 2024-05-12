@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsISO8601 } from 'class-validator';
+import { IsNotEmpty, IsISO8601, IsDateString, IsDate } from 'class-validator';
 
 export class TimeRangeArgs {
   @ApiProperty({
@@ -9,6 +9,8 @@ export class TimeRangeArgs {
   })
   @IsNotEmpty()
   // @IsISO8601()
+  // @IsDateString()
+  // @IsDate()
   startDate: Date;
 
   @ApiProperty({
@@ -18,5 +20,7 @@ export class TimeRangeArgs {
   })
   @IsNotEmpty()
   // @IsISO8601()
+  // @IsDateString()
+  // @IsDate()
   endDate: Date;
 }

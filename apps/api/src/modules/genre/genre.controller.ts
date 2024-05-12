@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   UseGuards,
@@ -44,7 +44,7 @@ export class GenreController {
     return this.genreService.findOne(id);
   }
 
-  @Patch('update/:id')
+  @Put('update/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async update(
     @Param('id') id: number,

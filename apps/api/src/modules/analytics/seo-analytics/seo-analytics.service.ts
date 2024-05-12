@@ -7,7 +7,7 @@ import {
   IAllPageViews,
   ICountriesViewsByPagePerDay,
   IPageViewsPerDay,
-} from './seo-analytics.index';
+} from './seo-analytics';
 
 @Injectable()
 export class SeoAnalyticsService {

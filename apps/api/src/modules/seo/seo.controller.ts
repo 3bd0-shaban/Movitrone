@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   UseGuards,
@@ -70,7 +70,6 @@ export class SeoController {
   }
 
   @Get('country')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
   async findByCountryPage(@Query() query: SeoWebsitePages): Promise<SeoEntity> {
     const { code, page } = query;
     const seo = await this.seoService.seoByCountryAndPage(page, code);
@@ -78,7 +77,7 @@ export class SeoController {
     return seo;
   }
 
-  @Patch('update/:id')
+  @Put('update/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async update(
     @Param('id') id: number,
@@ -90,7 +89,7 @@ export class SeoController {
     return 'ok';
   }
 
-  @Patch('main/:id')
+  @Put('main/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async Main(
     @Param('id') id: number,
