@@ -2,12 +2,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Input, Layout } from 'antd';
 import SideBar from './SideBar';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { MainDropdown } from './MainDropdown';
 import { iAdmin } from '@/types/user/iAdmin';
 import Image from 'next/image';
 import { FaSearchPlus } from 'react-icons/fa';
 import { useGetSelfAccountQuery } from '@/services/APIs/user/AdminApi';
+import { RiMenuFold2Fill, RiMenuUnfold2Line } from 'react-icons/ri';
 
 export default function AdminWraper({
   children,
@@ -101,7 +101,7 @@ export default function AdminWraper({
             <div className="flex items-center gap-2">
               <Button
                 type="text"
-                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                icon={collapsed ? <RiMenuUnfold2Line /> : <RiMenuFold2Fill />}
                 onClick={() => {
                   setCollapsed(collapsed === true ? false : true);
                   setWidth(collapsed ? 320 : 100);

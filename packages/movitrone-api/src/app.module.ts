@@ -15,8 +15,6 @@ import { CommentModule } from './modules/comment/comment.module';
 import { ThrottlerModule, seconds } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { isDev } from './global/env';
-import config from './config';
 import { DatabaseModule } from './shared/database/database.module';
 import { MailerModule } from './shared/mailer/mailer.module';
 import { SeoAnalyticsModule } from './modules/analytics/seo-analytics/seo-analytics.module';
@@ -24,6 +22,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { SeoPageModule } from './modules/seo-page/seo-page.module';
 import { SeoCountryModule } from './modules/seo-country/seo-country.module';
 import { join } from 'node:path';
+import { isDev } from './global/env';
+import config from './config';
 
 @Module({
   imports: [
@@ -31,12 +31,7 @@ import { join } from 'node:path';
     ConfigModule.forRoot({
       isGlobal: true,
       expandVariables: true,
-      envFilePath: [
-        '.env.development',
-        // '.env.production',
-        `.env.${process.env.NODE_ENV}`,
-        '.env',
-      ],
+      envFilePath: [`.env.${process.env.NODE_ENV}`, '.env'],
       load: [...Object.values(config)],
     }),
     ServeStaticModule.forRoot({

@@ -8,7 +8,6 @@ import { FaChevronDown, FaUserMinus } from 'react-icons/fa';
 import Link from 'next/link';
 import { usePagination } from '@/Hooks';
 import { getError } from '@/Helpers/getError';
-import userColumns from '@/components/Layouts/columns/users.column';
 import { PiEye } from 'react-icons/pi';
 import {
   useGetAllSeoCountriesQuery,
@@ -16,6 +15,7 @@ import {
   useMarkSeoCountryAsMainByIdMutation,
 } from '@/services/APIs/seo/SeoCountryApi';
 import { iSeoCountry } from '@/types/seo/iSeoCountry';
+import SeoCountryColumn from '@/components/Layouts/columns/seo-country.column';
 
 const SeoCountryTable: FC = ({}) => {
   const { data, isFetching, refetch } = useGetAllSeoCountriesQuery();
@@ -80,7 +80,7 @@ const SeoCountryTable: FC = ({}) => {
     },
   ];
   const columns: ColumnsType<iSeoCountry> = [
-    ...userColumns,
+    ...SeoCountryColumn,
     {
       title: 'Action',
       render: (_, record) => (

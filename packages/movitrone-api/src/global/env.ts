@@ -1,10 +1,10 @@
-// import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 
-// dotenv?.config({ path: `.env.${process.env.NODE_ENV}` });
+dotenv?.config({ path: `.env.${process.env.NODE_ENV}` });
+
 const dev = process.env.NODE_ENV;
-console.log(dev);
+
 export const isDev = dev === 'development';
-console.log(dev === 'development');
 
 export const isTest = !!process.env.TEST;
 export const cwd = process.cwd();

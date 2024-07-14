@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { SignInDto } from './dto/SignIn.dto';
 import * as bcrypt from 'bcrypt';
-import { PhoneValidationService } from '@common/services';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -19,6 +18,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import { ACCESS_TOKEN_DURATION } from './auth.constant';
 import { addDurationFromNow } from '~/shared/utilities/date-time.utils';
+import { PhoneValidationService } from '~/shared/services/ValidatePhone.service';
 
 @Injectable()
 export class AuthService {

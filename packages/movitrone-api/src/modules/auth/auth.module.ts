@@ -2,7 +2,6 @@ import { Module, forwardRef } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserAuthController } from './controllers/userAuth.controller';
 import { UserModule } from '../user/user.module';
-import { PhoneValidationService } from '@common/services';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -19,6 +18,7 @@ import {
 import { RTJwtWebsiteStrategy } from './strategies/rt-jwt.strategy';
 import { AdminModule } from '../admin/admin.module';
 import { AuthStrategy } from './auth.constant';
+import { PhoneValidationService } from '~/shared/services/ValidatePhone.service';
 
 @Module({
   imports: [
