@@ -9,6 +9,7 @@
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean",
+    "start": "cd apps/api && npm start && cd ../apps/web && npm start && cd apps/docs && npm start",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
