@@ -1,0 +1,94 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  NODE_ENV: production
+  NGINX_SITES_DIR: /etc/nginx/sites-available
+  NGINX_SITES_ENABLED_DIR: /etc/nginx/sites-enabled
+  PROJECT_NAME: movitrone
+  PROJECT_DIR: /var/www/movitrone
+  EMAIL_NOTIFICATION: abdulra7manshaban@gmail.com
+  SITE_DOMAIN: movitrone.site
+  BACKUP_DIR: /var/backups/movitrone
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          repository: 3bd0-shaban/movitrone.git
+          ref: master
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Backup Current Deployment
+        run: |
+          if [ -d ${{ env.BACKUP_DIR }} ]; then
+            timestamp=$(date +%Y%m%d%H%M%S)
+            sudo cp -r ${{ env.PROJECT_DIR }} ${{ env.BACKUP_DIR }}/${timestamp}
+            echo "Backup created at ${{ env.BACKUP_DIR }}/${timestamp}"
+          else
+            echo "Backup directory ${{ env.BACKUP_DIR }} does not exist. Skipping backup."
+          fi
+
+      - name: Move Project to Nginx Sites
+        run: |
+          sudo mkdir -p ${{ env.PROJECT_DIR }}
+          sudo cp -r ./* ${{ env.PROJECT_DIR }}
+          sudo cp ${{ env.PROJECT_DIR }}/packages/movitrone-web/.env.prod ${{ env.PROJECT_DIR }}/.env.local
+
+      - name: Install Dependencies
+        run: sudo npm install
+        working-directory: ${{ env.PROJECT_DIR }}
+
+      - name: Build
+        run: sudo npm run build
+        working-directory: ${{ env.PROJECT_DIR }}
+
+      - name: Configure Nginx
+        run: |
+          sudo cp ${{ env.PROJECT_DIR }}/nginx.conf ${{ env.NGINX_SITES_DIR }}/${{ env.PROJECT_NAME }}
+          sudo ln -sf ${{ env.NGINX_SITES_DIR }}/${{ env.PROJECT_NAME }} ${{ env.NGINX_SITES_ENABLED_DIR }}/${{ env.PROJECT_NAME }}
+          sudo systemctl reload nginx
+
+      - name: Obtain SSL Certificates
+        run: |
+          sudo certbot --nginx -d ${{ env.SITE_DOMAIN }} --non-interactive --agree-tos --email ${{ env.EMAIL_NOTIFICATION }}
+
+      - name: Deploy with PM2
+        run: |
+          sudo pm2 reload ecosystem.config.js --env production
+          sudo pm2 save
+
+      - name: Cleanup workspace
+        if: always()
+        run: sudo rm -rf $GITHUB_WORKSPACE/*
+
+      - name: Notify success
+        if: success()
+        run: |
+          echo 'Build and Deployment were successful!'
+          sudo rm -rf ${{ env.BACKUP_DIR }}
+
+      - name: Notify failure
+        if: failure()
+        run: |
+          echo 'Build or Deployment failed.'
+          sudo apt-get install -y mailutils
+          echo "The build failed. Check the GitHub Actions logs for more details." | mail -s "GitHub Actions Build Failed" ${{ env.EMAIL_NOTIFICATION }}
+          echo 'Reverting to previous version'
+          sudo rm -rf ${{ env.PROJECT_DIR }}
+          last_backup=$(ls -t ${{ env.BACKUP_DIR }} | head -n1)
+          sudo cp -r ${{ env.BACKUP_DIR }}/${last_backup} ${{ env.PROJECT_DIR }}
+          sudo pm2 reload ecosystem.config.js --env production

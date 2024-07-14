@@ -1,1 +1,11 @@
 node_modules
+dist
+data
+JSONS
+.git
+.dockerifnore
+.gitignore
+.eslintignore
+.eslintrc.json
+.prettierignore
+.prettierrc.json
