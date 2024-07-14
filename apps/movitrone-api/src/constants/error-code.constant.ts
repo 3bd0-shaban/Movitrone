@@ -58,4 +58,13 @@ export enum ErrorEnum {
   //movie
   SEO_ALREADY_EXIST = '1407: Seo configuration already exist for this country!',
   SEO_NOT_EXIST = '1408: Seo is not exist',
+
+  //SEO Country
+  SEO_COUNTRY_ALREADY_EXIST = '1701: SEO Country configuration already exists for this country',
+  SEO_COUNTRY_NOT_EXIST = '1702: SEO Country does not exist',
+  SEO_COUNTRY_NO_MAIN = '1703: Main Country SEO configuration does not exist',
+
+  //SEO Page
+  SEO_PAGE_ALREADY_EXIST = '1711: SEO Page configuration already exists for this country',
+  SEO_PAGE_NOT_EXIST = '1712: SEO Page does not exist',
 }

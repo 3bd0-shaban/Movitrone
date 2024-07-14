@@ -1,8 +1,6 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { SeoAnalyticsService } from './seo-analytics.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { DashboardGuard } from '~/modules/auth/guards/dashboard.guard';
-import { JwtAdminGuard } from '~/modules/auth/guards/jwt-auth.guard';
 import { TimeRangeArgs } from './dto/args/timeRange-query.args';
 import { PageTimeQueryDto } from './dto/args/page-time-query.args';
 import {
@@ -10,6 +8,8 @@ import {
   ICountriesViewsByPagePerDay,
   IPageViewsPerDay,
 } from './seo-analytics';
+import { AdminGuard } from '~/modules/auth/guards/admin.guard';
+import { JwtUserGuard } from '~/modules/auth/guards/jwt-auth.guard';
 
 @ApiTags('Seo Analytics')
 @ApiBearerAuth()
@@ -18,7 +18,7 @@ export class SeoAnalyticsController {
   constructor(private readonly seoAnalyticsService: SeoAnalyticsService) {}
 
   @Get('all-pages-views')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtUserGuard, AdminGuard)
   async getAllPagesViews(
     @Query() query: TimeRangeArgs,
   ): Promise<IAllPageViews[]> {
@@ -27,7 +27,7 @@ export class SeoAnalyticsController {
   }
 
   @Get('page-views-by-page')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtUserGuard, AdminGuard)
   async getPagesViewsByPage(
     @Query() query: PageTimeQueryDto,
   ): Promise<IPageViewsPerDay[]> {
@@ -40,7 +40,7 @@ export class SeoAnalyticsController {
   }
 
   @Get('country-views-by-page')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtUserGuard, AdminGuard)
   async getCountryViewsByPageWithPeroid(
     @Query() query: PageTimeQueryDto,
   ): Promise<ICountriesViewsByPagePerDay[]> {

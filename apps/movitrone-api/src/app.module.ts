@@ -5,7 +5,6 @@ import { SessionModule } from './modules/session/session.module';
 import { GenreModule } from './modules/genre/genre.module';
 import { WhitelistModule } from './modules/whitelist/whitelist.module';
 import { LogModule } from './modules/log/log.module';
-import { SeoModule } from './modules/seo/seo.module';
 import { MovieModule } from './modules/movie/movie.module';
 import { EpisodeModule } from './modules/episode/episode.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -21,6 +20,10 @@ import config from './config';
 import { DatabaseModule } from './shared/database/database.module';
 import { MailerModule } from './shared/mailer/mailer.module';
 import { SeoAnalyticsModule } from './modules/analytics/seo-analytics/seo-analytics.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { SeoPageModule } from './modules/seo-page/seo-page.module';
+import { SeoCountryModule } from './modules/seo-country/seo-country.module';
+import { join } from 'node:path';
 
 @Module({
   imports: [
@@ -35,6 +38,10 @@ import { SeoAnalyticsModule } from './modules/analytics/seo-analytics/seo-analyt
         '.env',
       ],
       load: [...Object.values(config)],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../../', 'uploads'),
+      serveRoot: '/uploads/', //last slash was important
     }),
     ThrottlerModule.forRootAsync({
       useFactory: () => ({
@@ -59,7 +66,8 @@ import { SeoAnalyticsModule } from './modules/analytics/seo-analytics/seo-analyt
     GenreModule,
     WhitelistModule,
     LogModule,
-    SeoModule,
+    SeoPageModule,
+    SeoCountryModule,
     AuthModule,
     UserModule,
     BannerModule,
