@@ -17,8 +17,8 @@ const FTLEratesLOGO = ({
       height={height}
       width={width}
       className={className}
-      src="/Images/icons/FtlErates-black.svg"
-      alt="ftlerates"
+      src='/Images/icons/FtlErates-black.svg'
+      alt='ftlerates'
     />
   );
   // return theme === 'dark' || theme === 'undefined' ? (

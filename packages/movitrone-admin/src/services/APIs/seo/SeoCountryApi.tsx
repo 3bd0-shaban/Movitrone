@@ -6,7 +6,6 @@ import { useTableParamsStore } from '@/store/useTableParamsStore';
 const url = process.env.NEXT_PUBLIC_API_KEY;
 
 export function useGetAllSeoCountriesQuery() {
-  const queryClient = useQueryClient();
   const { pagination } = useTableParamsStore();
 
   return useQuery({
@@ -16,30 +15,22 @@ export function useGetAllSeoCountriesQuery() {
         seos: iSeoCountry[];
         totalCount: number;
         results: number;
-      }>(
-        {
-          method: 'GET',
-          url: `${url}/api/Seo-country?page=${pagination.page}&limit=${pagination.limit}`,
-        },
-        queryClient,
-      ),
+      }>({
+        method: 'GET',
+        url: `${url}/api/Seo-country?page=${pagination.page}&limit=${pagination.limit}`,
+      }),
     queryKey: ['SeoCountry', pagination],
   });
 }
 
 export function useGetCountrySeoByCountryCode(countryCode: string) {
-  const queryClient = useQueryClient();
-
   return useQuery({
     refetchOnWindowFocus: false,
     queryFn: () =>
-      ApiEndpoint<iSeoCountry>(
-        {
-          method: 'GET',
-          url: `${url}/api/seo-country/get/${countryCode}`,
-        },
-        queryClient,
-      ),
+      ApiEndpoint<iSeoCountry>({
+        method: 'GET',
+        url: `${url}/api/seo-country/get/${countryCode}`,
+      }),
     queryKey: ['SeoCountry'],
   });
 }
@@ -49,14 +40,11 @@ export function useCreateNewSeoCountryMutation() {
 
   return useMutation({
     mutationFn: ({ country }: { country: string }) =>
-      ApiEndpoint<void>(
-        {
-          method: 'PUT',
-          url: `${url}/api/seo-country`,
-          data: { country },
-        },
-        queryClient,
-      ),
+      ApiEndpoint<void>({
+        method: 'POST',
+        url: `${url}/api/seo-country`,
+        data: { country },
+      }),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['SeoCountry'] });
     },
@@ -68,13 +56,10 @@ export function useMarkSeoCountryAsMainByIdMutation() {
 
   return useMutation({
     mutationFn: ({ countryCode }: { countryCode: string }) =>
-      ApiEndpoint<void>(
-        {
-          method: 'PUT',
-          url: `${url}/api/seo-country/main/${countryCode}`,
-        },
-        queryClient,
-      ),
+      ApiEndpoint<void>({
+        method: 'PUT',
+        url: `${url}/api/seo-country/main/${countryCode}`,
+      }),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['SeoCountry'] });
     },
@@ -86,13 +71,10 @@ export function useDeleteSeoCountryByIdMutation() {
 
   return useMutation({
     mutationFn: ({ countryCode }: { countryCode: string }) =>
-      ApiEndpoint<void>(
-        {
-          method: 'DELETE',
-          url: `${url}/api/seo-country/delete/${countryCode}`,
-        },
-        queryClient,
-      ),
+      ApiEndpoint<void>({
+        method: 'DELETE',
+        url: `${url}/api/seo-country/delete/${countryCode}`,
+      }),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['SeoCountry'] });
     },

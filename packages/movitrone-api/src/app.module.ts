@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SessionModule } from './modules/session/session.module';
@@ -24,6 +24,7 @@ import { SeoCountryModule } from './modules/seo-country/seo-country.module';
 import { join } from 'node:path';
 import { isDev } from './global/env';
 import config from './config';
+import { VideoProxyMiddleware } from './proxy.middleware';
 
 @Module({
   imports: [
@@ -74,4 +75,10 @@ import config from './config';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(VideoProxyMiddleware)
+      .forRoutes({ path: 'proxy/video/*', method: RequestMethod.ALL });
+  }
+}

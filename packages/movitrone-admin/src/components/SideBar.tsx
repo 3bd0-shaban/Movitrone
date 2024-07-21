@@ -5,8 +5,6 @@ import { usePathname } from 'next/navigation';
 import React, { FC } from 'react';
 import { RiDashboard2Fill } from 'react-icons/ri';
 import { PiShieldLight } from 'react-icons/pi';
-
-import { iAdmin } from '@/types/user/iAdmin';
 import { FaStarHalf, FaUserAltSlash, FaUserSecret } from 'react-icons/fa';
 import Link from 'next/link';
 
@@ -25,8 +23,9 @@ const SideBar: FC<SideBarElementsProps> = ({ session }) => {
     key: React.Key,
     icon?: React.ReactNode,
     children?: MenuItem[],
-    type?: 'group',
+    type?: 'group' | 'divider' | 'item' | 'submenu',
   ): MenuItem {
+    //@ts-ignore
     return {
       key,
       icon,
@@ -41,7 +40,7 @@ const SideBar: FC<SideBarElementsProps> = ({ session }) => {
   items.push(getItem('Dashboard', 'grp-1', null, [], 'group'));
   items.push(
     getItem(
-      <Link href="/">Dashboard</Link>,
+      <Link href='/'>Dashboard</Link>,
       '1',
       <RiDashboard2Fill size={18} />,
     ),
@@ -50,18 +49,18 @@ const SideBar: FC<SideBarElementsProps> = ({ session }) => {
     getItem('Users', '3', <FaUserSecret size={18} />, [
       session?.role !== 'Admin'
         ? getItem(
-            <Link href="/users/super-admins">Super Admins</Link>,
+            <Link href='/users/super-admins'>Super Admins</Link>,
             '3-1',
             <PiShieldLight size={18} />,
           )
         : null,
       getItem(
-        <Link href="/users/admins">Admins</Link>,
+        <Link href='/users/admins'>Admins</Link>,
         '3-2',
         <FaStarHalf size={18} />,
       ),
       getItem(
-        <Link href="/users/website">Website users</Link>,
+        <Link href='/users/website'>Website users</Link>,
         '3-6',
         <FaUserAltSlash size={18} />,
       ),
@@ -69,9 +68,11 @@ const SideBar: FC<SideBarElementsProps> = ({ session }) => {
   );
   items.push(
     getItem(
-      <Link href="/seo/country">Seo Countries</Link>,
+      <Link href='/seo/country'>Seo Countries</Link>,
       '4-2',
       <FaStarHalf size={18} />,
+      undefined,
+      undefined,
     ),
   );
   const selectedTab = items.find(
@@ -88,7 +89,7 @@ const SideBar: FC<SideBarElementsProps> = ({ session }) => {
         selectedTab?.key as string,
         insideTab?.key as string,
       ]}
-      mode="inline"
+      mode='inline'
       style={{ minHeight: '100vh' }}
       triggerSubMenuAction={'click'}
       items={items}

@@ -15,7 +15,6 @@ export async function getVideo() {
   //       // 'X-Requested-With': 'XMLHttpRequest',
   //     },
   //   });
-
   //   const seoData = await seoResponse.json();
   //   return seoData;
   // } catch (error) {

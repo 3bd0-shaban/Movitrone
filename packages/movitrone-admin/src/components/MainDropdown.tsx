@@ -1,3 +1,4 @@
+'use client';
 import { iAdmin } from '@/types/user/iAdmin';
 import type { MenuProps } from 'antd';
 import { Button, Dropdown } from 'antd';
@@ -32,12 +33,12 @@ export function MainDropdown({ user }: { user: iAdmin }) {
       key: '1',
       label: (
         <>
-          <div className="flex gap-4 py-3">
+          <div className='flex gap-4 py-3'>
             <UserPhoto user={user as iAdmin} aspect={20} />
-            <div className="flex items-center gap-3">
+            <div className='flex items-center gap-3'>
               <div>
                 <p>{`${user?.firstname} ${user?.lastname}`}</p>
-                <p className="text-sm text-gray-400">{user?.email}</p>
+                <p className='text-sm text-gray-400'>{user?.email}</p>
               </div>
               <span
                 className={`flex h-8 w-8 items-center justify-center rounded-full ${
@@ -63,7 +64,7 @@ export function MainDropdown({ user }: { user: iAdmin }) {
     {
       key: '3',
       label: (
-        <Link href="/profile/open-tickets" className="p-3">
+        <Link href='/profile/open-tickets' className='p-3'>
           My Tickets
         </Link>
       ),
@@ -71,7 +72,7 @@ export function MainDropdown({ user }: { user: iAdmin }) {
     {
       key: '2',
       label: (
-        <Link href="/profile/settings" className="p-3">
+        <Link href='/profile/settings' className='p-3'>
           Account Settings
         </Link>
       ),
@@ -79,19 +80,19 @@ export function MainDropdown({ user }: { user: iAdmin }) {
     {
       key: '9',
       label: (
-        <Link href="/profile/change-password" className="p-3">
+        <Link href='/profile/change-password' className='p-3'>
           Change Password
         </Link>
       ),
     },
     {
       key: '4',
-      label: <button className="p-3 py-0.5">Mode</button>,
+      label: <button className='p-3 py-0.5'>Mode</button>,
       children: [
         {
           key: '4-1',
           label: (
-            <Button onClick={() => setTheme('light')} type="link">
+            <Button onClick={() => setTheme('light')} type='link'>
               Light
             </Button>
           ),
@@ -99,7 +100,7 @@ export function MainDropdown({ user }: { user: iAdmin }) {
         {
           key: '4-2',
           label: (
-            <Button onClick={() => setTheme('dark')} type="link">
+            <Button onClick={() => setTheme('dark')} type='link'>
               Dark
             </Button>
           ),
@@ -110,7 +111,7 @@ export function MainDropdown({ user }: { user: iAdmin }) {
     {
       key: '6',
       label: (
-        <Link href="/profile" className="px-3">
+        <Link href='/profile' className='px-3'>
           Account Settings
         </Link>
       ),
@@ -119,9 +120,9 @@ export function MainDropdown({ user }: { user: iAdmin }) {
       key: '7',
       label: (
         <Button
-          type="text"
+          type='text'
           onClick={HandleLogOut}
-          className="h-full w-full !text-start hover:!bg-transparent"
+          className='h-full w-full !text-start hover:!bg-transparent'
         >
           SignOut
         </Button>
@@ -129,9 +130,9 @@ export function MainDropdown({ user }: { user: iAdmin }) {
     },
   ];
   return (
-    <Dropdown menu={{ items }} placement="bottomRight" arrow>
-      <span className="rounded-full bg-gradient-to-r from-indigo-500 via-red-500 to-pink-500 p-1">
-        <div className=" h-12 w-12 rounded-full bg-white">
+    <Dropdown menu={{ items }} placement='bottomRight' arrow>
+      <span className='rounded-full bg-gradient-to-r from-indigo-500 via-red-500 to-pink-500 p-1'>
+        <div className='h-12 w-12 rounded-full bg-white'>
           <UserPhoto user={user as iAdmin} aspect={12} />
         </div>
       </span>

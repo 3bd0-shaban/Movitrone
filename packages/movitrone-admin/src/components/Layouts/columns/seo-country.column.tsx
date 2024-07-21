@@ -1,7 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { ColumnsType } from 'antd/lib/table';
 import moment from 'moment';
-import ViewCountry from '../../parts/ViewCountry';
 import { iSeoCountry } from '@/types/seo/iSeoCountry';
 import { getCountryByCode } from '@/Helpers/getCountry';
 import CountryFlag from '@/components/parts/CountryFlag';
@@ -11,11 +10,9 @@ const SeoCountryColumn: ColumnsType<iSeoCountry> = [
   {
     title: 'Country',
     render: (_, record) => (
-       <CountryFlag
-          country={getCountryByCode(record.country as string) as iCountry}
-          isActive={record.is_Active}
-        >
-        </CountryFlag>
+      <CountryFlag
+        country={getCountryByCode(record.country as string) as iCountry}
+      ></CountryFlag>
     ),
   },
   {
@@ -28,7 +25,7 @@ const SeoCountryColumn: ColumnsType<iSeoCountry> = [
       ),
   },
   {
-    title: 'Goined At',
+    title: 'Created At',
     render: (_, record) => <p>{moment(record?.createdAt).format('LL')}</p>,
   },
 ];

@@ -8,11 +8,11 @@ const userColumns: ColumnsType<iAdmin> = [
   {
     title: 'Basic Information',
     render: (_, record) => (
-      <div className="flex items-center gap-2">
+      <div className='flex items-center gap-2'>
         <UserPhoto user={record as iAdmin} />
-        <div className="flex flex-col">
+        <div className='flex flex-col'>
           <p>{`${record.firstname} ${record.lastname}`}</p>
-          <p className="text-sm text-gray-400">{record.email}</p>
+          <p className='text-sm text-gray-400'>{record.email}</p>
         </div>
       </div>
     ),

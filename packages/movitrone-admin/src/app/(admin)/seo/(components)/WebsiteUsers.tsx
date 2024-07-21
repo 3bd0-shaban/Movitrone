@@ -79,7 +79,7 @@ const WebsiteUsers: FC = ({}) => {
         <Link
           href={`${tableData?.id as number}/book-ticket`}
           draggable={false}
-          className="flex h-full w-full items-center justify-start gap-2 text-red-500"
+          className='flex h-full w-full items-center justify-start gap-2 text-red-500'
         >
           <FaEye size={17} />
           <p>View</p>
@@ -91,7 +91,7 @@ const WebsiteUsers: FC = ({}) => {
       label: (
         <button
           onClick={() => HandleBlockUser(tableData as iUser)}
-          className="flex justify-start text-red-500"
+          className='flex justify-start text-red-500'
         >
           Block
         </button>
@@ -103,7 +103,7 @@ const WebsiteUsers: FC = ({}) => {
       label: (
         <button
           onClick={() => HandleVerified(tableData as iUser)}
-          className="flex justify-start text-red-500"
+          className='flex justify-start text-red-500'
         >
           Mark as Verified
         </button>
@@ -116,7 +116,7 @@ const WebsiteUsers: FC = ({}) => {
       label: (
         <button
           onClick={() => HandleDeleteUser(tableData as iUser)}
-          className="flex gap-2 hover:text-white"
+          className='flex gap-2 hover:text-white'
         >
           <FaUserMinus size={20} />
           Delete
@@ -129,7 +129,7 @@ const WebsiteUsers: FC = ({}) => {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
-        <Dropdown menu={{ items }} placement="bottomRight">
+        <Dropdown menu={{ items }} placement='bottomRight'>
           <Button
             onMouseEnter={(e) => {
               e.preventDefault();
@@ -147,12 +147,12 @@ const WebsiteUsers: FC = ({}) => {
   ];
 
   return (
-    <div className="card-shadows-slate-300 overflow-hidden !p-0">
+    <div className='card-shadows-slate-300 overflow-hidden !p-0'>
       <Table
         columns={[...userColumns, ...ExtraEmployeeColumn]}
         rowKey={(record) => record.id as number}
         scroll={{ x: 1000 }}
-        size="middle"
+        size='middle'
         dataSource={users}
         pagination={{
           current: tableParamsStore?.pagination?.page,

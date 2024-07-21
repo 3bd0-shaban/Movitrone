@@ -12,11 +12,4 @@ export interface iAdmin {
   role?: iRole;
 }
 
-export interface AuthState {
-  access_token: string;
-  status: number;
-  message: string;
-  user: iAdmin;
-}
-
 export type iRole = 'Admin' | 'Super Admin';

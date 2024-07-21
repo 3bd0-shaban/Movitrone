@@ -13,10 +13,10 @@ export default async function Users({
   ];
   return (
     <>
-      <div className="card-shadows-slate-300 flex items-end justify-between pb-5">
-        <div className="flex flex-col gap-y-1">
-          <span className="text-xl font-semibold">Dashboard Users</span>
-          <p className="text-xs font-medium text-gray-400">{`Home - Users - admin`}</p>
+      <div className='card-shadows-slate-300 flex items-end justify-between pb-5'>
+        <div className='flex flex-col gap-y-1'>
+          <span className='text-xl font-semibold'>Dashboard Users</span>
+          <p className='text-xs font-medium text-gray-400'>{`Home - Users - admin`}</p>
         </div>
         {/* <NewClient /> */}
       </div>

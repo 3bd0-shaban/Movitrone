@@ -40,7 +40,7 @@ html {
 
 .card-shadows-slate-300 {
   box-shadow: '0 1px 10px 7px rgba(0, 0, 255, 0.1)';
-  @apply mb-5 rounded-xl bg-white/10 backdrop-blur-md p-5;
+  @apply mb-5 rounded-xl bg-white/10 p-5 backdrop-blur-md;
 }
 
 /* shadow-[0 1px 10px 7px rgba(0, 0, 255, 0.1)] */

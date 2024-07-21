@@ -49,6 +49,7 @@
     "fs-extra": "^11.2.0",
     "google-libphonenumber": "^3.2.34",
     "handlebars": "^4.7.8",
+    "http-proxy-middleware": "^3.0.0",
     "ioredis": "^5.4.1",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",

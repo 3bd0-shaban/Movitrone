@@ -43,7 +43,7 @@ const UsersTable: FC<{ role: iRole }> = ({ role }) => {
         <Link
           href={`${tableData?.id}/open-tickets`}
           draggable={false}
-          className="flex h-full w-full items-center justify-start gap-2 text-red-500"
+          className='flex h-full w-full items-center justify-start gap-2 text-red-500'
         >
           <PiEye size={17} />
           <p>View</p>
@@ -56,7 +56,7 @@ const UsersTable: FC<{ role: iRole }> = ({ role }) => {
         <Link
           href={`${tableData?.id}/analytics`}
           draggable={false}
-          className="flex h-full w-full items-center justify-start gap-2 text-red-500"
+          className='flex h-full w-full items-center justify-start gap-2 text-red-500'
         >
           <FaEye size={17} />
           <p>View Analytics</p>
@@ -69,7 +69,7 @@ const UsersTable: FC<{ role: iRole }> = ({ role }) => {
       label: (
         <button
           onClick={() => HandleDeleteUser(tableData as iAdmin)}
-          className="flex gap-2 hover:text-white"
+          className='flex gap-2 hover:text-white'
         >
           <FaUserMinus size={20} />
           Delete
@@ -85,7 +85,7 @@ const UsersTable: FC<{ role: iRole }> = ({ role }) => {
         <Dropdown
           trigger={['click', 'hover']}
           menu={{ items }}
-          overlayClassName="backdrop-blur-xl"
+          overlayClassName='backdrop-blur-xl'
         >
           <Button
             onClick={(e) => {
@@ -103,7 +103,7 @@ const UsersTable: FC<{ role: iRole }> = ({ role }) => {
     },
   ];
   return (
-    <div className="card-shadows-slate-300 overflow-hidden !p-0">
+    <div className='card-shadows-slate-300 overflow-hidden !p-0'>
       <Table
         columns={columns}
         rowKey={(record) => record.id as number}
@@ -116,7 +116,7 @@ const UsersTable: FC<{ role: iRole }> = ({ role }) => {
         }}
         onChange={handleTableChange}
         scroll={{ x: 1000 }}
-        size="middle"
+        size='middle'
       />
     </div>
   );

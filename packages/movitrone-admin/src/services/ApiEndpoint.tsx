@@ -1,12 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosRequestConfig } from 'axios';
-import { refreshToken } from './refreshToken';
+import { refreshToken, RefreshTokenProps } from './refreshToken';
 import { getCookie, setCookie } from 'cookies-next';
-import { AuthState } from '@/types/user/iAdmin';
 
 export async function ApiEndpoint<T>(
   config: AxiosRequestConfig = {},
-  queryClient: ReturnType<typeof useQueryClient>,
   formdata?: 'application/pdf' | 'multipart/form-data' | 'application/json',
 ): Promise<T> {
   try {
@@ -39,10 +36,14 @@ export async function ApiEndpoint<T>(
     const response = await axios(config);
     return response.data;
   } catch (error: any) {
-    if (error.response && error.response.status === 403) {
+    if (
+      (error.response && error.response.status === 403) ||
+      error.response.status === 401
+    ) {
       // Token is expired or invalid, try to refresh it
       try {
-        const { access_token, user } = (await refreshToken()) as AuthState;
+        const { access_token, expires_at } =
+          (await refreshToken()) as RefreshTokenProps;
         setCookie('access_token', access_token);
 
         // Ensure that config.headers is defined or create it if it doesn't exist

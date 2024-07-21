@@ -1,4 +1,5 @@
-import React from 'react'
+'use client';
+import React from 'react';
 import Image from 'next/image';
 import { FC } from 'react';
 import { getCountryFlag } from '@/Helpers/getCountryFlag';
@@ -10,11 +11,7 @@ interface CountryFlagProps {
   children?: React.ReactNode;
 }
 
-const CountryFlag: FC<CountryFlagProps> = ({
-  country,
-  isActive = true,
-  children,
-}) => {
+const CountryFlag: FC<CountryFlagProps> = ({ country, children }) => {
   return (
     <div className='flex flex-col'>
       <div className='flex items-center justify-start gap-2'>
@@ -37,9 +34,6 @@ const CountryFlag: FC<CountryFlagProps> = ({
           {children}
         </div>
       </div>
-      <p className='-mt-3 text-lg capitalize text-red-500'>
-        {!isActive && 'Inactive'}
-      </p>
     </div>
   );
 };
