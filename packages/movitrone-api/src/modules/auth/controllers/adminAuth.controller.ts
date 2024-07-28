@@ -3,13 +3,18 @@ import { AuthService } from '../auth.service';
 import { ApiTags } from '@nestjs/swagger';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from '~/config';
-import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
+import {
+  ACCESS_TOKEN_DURATION,
+  AuthStrategy,
+  REFRESH_TOKEN_DURATION,
+} from '../auth.constant';
 import { addDurationFromNow } from '~/shared/utilities/date-time.utils';
 import { Response } from 'express';
 import { RefreshREsult } from '../auth';
 import { RTDashboardCookie } from '../decorator/http-Cookies.decorator';
 import { DashboardUserService } from '~/modules/users/dashboardUser/admin.service';
 import { CreateAdminDto } from '~/modules/users/dashboardUser/dto/create-admin.dto';
+import { isDev } from '~/global/env';
 
 @ApiTags('Authentication - Dashboard')
 @Controller('auth-admin')
@@ -20,10 +25,10 @@ export class AdminAuthController {
     private readonly adminService: DashboardUserService,
   ) {}
 
-  @Post('register')
-  async Signup(@Body() createUserDTO: CreateAdminDto) {
-    return this.adminService.create(createUserDTO);
-  }
+  // @Post('register')
+  // async Signup(@Body() createUserDTO: CreateAdminDto) {
+  //   return this.adminService.create(createUserDTO);
+  // }
 
   @Post('signin')
   async Signin(@Body() inputs: SignInDto, @Res() res: Response) {
@@ -33,7 +38,7 @@ export class AdminAuthController {
     };
     const access_token = await this.authService.generateToken(
       this.securityConfig.jwtSecret,
-      '15m',
+      isDev ? '7d' : '15m',
       jwtPayload,
     );
     const refreshToken = await this.authService.generateToken(
@@ -49,7 +54,9 @@ export class AdminAuthController {
     );
     res.send({
       access_token,
-      session_expireIn: addDurationFromNow(REFRESH_TOKEN_DURATION),
+      expires_at: addDurationFromNow(
+        isDev ? 7 * 24 * 60 * 60 * 1000 : ACCESS_TOKEN_DURATION,
+      ),
       role: user.role,
     });
   }

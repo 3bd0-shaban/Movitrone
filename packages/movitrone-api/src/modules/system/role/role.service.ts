@@ -7,10 +7,10 @@ import { PagerDto } from '~/common/dto/pager.dto';
 import { ROOT_ROLE_ID } from '~/constants/system.constant';
 import { paginate } from '~/helper/paginate';
 import { Pagination } from '~/helper/paginate/pagination';
-import { MenuEntity } from '~/modules/system/menu/menu.entity';
 import { RoleEntity } from '~/modules/system/role/entity/role.entity';
 
 import { RoleDto, RoleQueryDto, RoleUpdateDto } from './dto/role.dto';
+import { MenuEntity } from '../menu/entity/menu.entity';
 
 @Injectable()
 export class RoleService {
@@ -57,8 +57,9 @@ export class RoleService {
 
   /**
    * Get role information by role ID
+   * @param {number} id
    */
-  async info(id: number) {
+  async RoleById(id: number) {
     const info = await this.roleRepository
       .createQueryBuilder('role')
       .where({

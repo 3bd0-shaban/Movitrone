@@ -7,14 +7,15 @@ import {
 import { REQUEST } from '@nestjs/core';
 
 import { OperatorDto } from '../dto/operator.dto';
+import { Request } from 'express';
 
 @Injectable()
 export class CreatorPipe implements PipeTransform {
-  constructor(@Inject(REQUEST) private readonly request: any) {}
+  constructor(@Inject(REQUEST) private readonly request: Request) {}
   transform(value: OperatorDto, metadata: ArgumentMetadata) {
     const user = this.request.user as any;
 
-    value.createBy = user.uid;
+    value.createdBy = user.id;
 
     return value;
   }

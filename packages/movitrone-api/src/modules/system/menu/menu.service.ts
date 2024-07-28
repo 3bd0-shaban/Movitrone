@@ -11,13 +11,13 @@ import { RedisKeys } from '~/constants/cache.constant';
 import { ErrorEnum } from '~/constants/error-code.constant';
 import { genAuthPermKey, genAuthTokenKey } from '~/helper/genRedisKey';
 // import { SseService } from '~/modules/sse/sse.service';
-import { MenuEntity } from '~/modules/system/menu/menu.entity';
+import { MenuEntity } from './entity/menu.entity';
 
 import { deleteEmptyChildren, generatorMenu, generatorRouters } from '~/utils';
 
 import { RoleService } from '../role/role.service';
 
-import { MenuDto, MenuQueryDto, MenuUpdateDto } from './menu.dto';
+import { MenuDto, MenuQueryDto, MenuUpdateDto } from './dto/menu.dto';
 
 @Injectable()
 export class MenuService {
@@ -61,6 +61,7 @@ export class MenuService {
 
   async create(menu: MenuDto): Promise<void> {
     const result = await this.menuRepository.save(menu);
+    console.log(result);
     // this.sseService.noticeClientToUpdateMenusByMenuIds([result.id]);
   }
 

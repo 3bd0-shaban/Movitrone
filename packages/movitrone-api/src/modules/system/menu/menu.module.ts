@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleModule } from '../role/role.module';
 
 import { MenuController } from './menu.controller';
-import { MenuEntity } from './menu.entity';
+import { MenuEntity } from './entity/menu.entity';
 import { MenuService } from './menu.service';
 
 const providers = [MenuService];

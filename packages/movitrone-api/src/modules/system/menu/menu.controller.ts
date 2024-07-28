@@ -7,8 +7,9 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { flattenDeep } from 'lodash';
 
 import { ApiResult } from '~/common/decorators/api-result.decorator';
@@ -22,9 +23,11 @@ import {
   getDefinePermissions,
 } from '~/modules/auth/decorator/permission.decorator';
 
-import { MenuDto, MenuQueryDto, MenuUpdateDto } from './menu.dto';
-import { MenuItemInfo } from './menu.model';
+import { MenuDto, MenuQueryDto, MenuUpdateDto } from './dto/menu.dto';
+import { MenuItemInfo } from './model/menu.model';
 import { MenuService } from './menu.service';
+import { JwtAdminGuard } from '~/modules/auth/guards/jwt-auth.guard';
+import { DashboardGuard } from '~/modules/auth/guards/dashboard.guard';
 
 export const permissions = definePermission('system:menu', {
   LIST: 'list',
@@ -35,7 +38,7 @@ export const permissions = definePermission('system:menu', {
 } as const);
 
 @ApiTags('System - Menu permissions module')
-@ApiSecurityAuth()
+@ApiBearerAuth()
 @Controller('menus')
 export class MenuController {
   constructor(private menuService: MenuService) {}
@@ -48,7 +51,7 @@ export class MenuController {
     return this.menuService.list(dto);
   }
 
-  @Get(':id')
+  @Get('get/:id')
   @ApiOperation({ summary: 'Get menu or permission information' })
   @Perm(permissions.READ)
   async info(@IdParam() id: number) {
@@ -56,10 +59,12 @@ export class MenuController {
   }
 
   @Post()
+  @UseGuards(JwtAdminGuard)
   @ApiOperation({ summary: 'Add new menu or permission' })
   @Perm(permissions.CREATE)
   async create(@Body(CreatorPipe) dto: MenuDto): Promise<void> {
     // check
+    console.log(dto);
     await this.menuService.check(dto);
     if (!dto.parentId) dto.parentId = null;
 

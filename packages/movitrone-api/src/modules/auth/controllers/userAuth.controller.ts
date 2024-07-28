@@ -5,7 +5,11 @@ import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import { Response } from 'express';
-import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
+import {
+  ACCESS_TOKEN_DURATION,
+  AuthStrategy,
+  REFRESH_TOKEN_DURATION,
+} from '../auth.constant';
 import { RefreshREsult } from '../auth';
 import { RTWebsiteCookie } from '../decorator/http-Cookies.decorator';
 import { addDurationFromNow } from '~/shared/utilities/date-time.utils';
@@ -13,6 +17,7 @@ import { VerifyOTPDTOs } from '~/modules/users/websiteUser/dto/verify-otp.dto';
 import { CurrentUser } from '../decorator/auth-user.decorator';
 import { UserEntity } from '~/modules/users/websiteUser/entities/user.entity';
 import { WebsiteUserService } from '~/modules/users/websiteUser/user.service';
+import { isDev } from '~/global/env';
 
 @ApiTags('Authentication - Website')
 @Controller('auth')
@@ -40,7 +45,7 @@ export class UserAuthController {
     };
     const access_token = await this.authService.generateToken(
       this.securityConfig.jwtSecret,
-      '15m',
+      isDev ? '7d' : '15m',
       jwtPayload,
     );
     const refreshToken = await this.authService.generateToken(
@@ -56,7 +61,9 @@ export class UserAuthController {
     );
     res.send({
       access_token,
-      session_expireIn: addDurationFromNow(REFRESH_TOKEN_DURATION),
+      expires_at: addDurationFromNow(
+        isDev ? 7 * 24 * 60 * 60 * 1000 : ACCESS_TOKEN_DURATION,
+      ),
     });
   }
 

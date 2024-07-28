@@ -62,7 +62,7 @@ export class RoleController {
   @ApiResult({ type: RoleInfo })
   @Perm(permissions.READ)
   async info(@IdParam() id: number) {
-    return this.roleService.info(id);
+    return this.roleService.RoleById(id);
   }
 
   @Post()

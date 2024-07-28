@@ -23,25 +23,25 @@ export abstract class CommonEntity extends BaseEntity {
 export abstract class CompleteEntity extends CommonEntity {
   @ApiHideProperty()
   @Exclude()
-  @Column({ name: 'created_by', update: false, comment: '创建者' })
-  created_By: number;
+  @Column({ name: 'created_by', update: false, comment: 'Created by' })
+  createdBy: number;
 
   @ApiHideProperty()
   @Exclude()
-  @Column({ name: 'updated_by', comment: '更新者' })
-  updated_By: number;
+  @Column({ name: 'updated_by', comment: 'Updated by' })
+  updatedBy: number;
 
-  @ApiProperty({ description: '创建者' })
+  @ApiProperty({ description: 'Creator' })
   @VirtualColumn({
     query: (alias) =>
-      `SELECT username FROM sys_user WHERE id = ${alias}.create_by`,
+      `SELECT username FROM sys_user WHERE id = ${alias}.created_by`,
   })
   creator: string;
 
-  @ApiProperty({ description: '更新者' })
+  @ApiProperty({ description: 'Updater' })
   @VirtualColumn({
     query: (alias) =>
-      `SELECT username FROM sys_user WHERE id = ${alias}.update_by`,
+      `SELECT username FROM sys_user WHERE id = ${alias}.updated_by`,
   })
   updater: string;
 }

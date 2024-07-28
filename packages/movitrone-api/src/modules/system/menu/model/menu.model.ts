@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-
-import { MenuEntity } from './menu.entity';
+import { MenuEntity } from '../entity/menu.entity';
 
 export class MenuItemInfo extends MenuEntity {
   @ApiProperty({ type: [MenuItemInfo] })

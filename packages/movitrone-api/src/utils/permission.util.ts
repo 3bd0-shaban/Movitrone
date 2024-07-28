@@ -1,10 +1,10 @@
 import { ForbiddenException } from '@nestjs/common';
 
 import { envBoolean } from '~/global/env';
-import { MenuEntity } from '~/modules/system/menu/menu.entity';
 import { isExternal } from '~/utils/is.util';
 
 import { uniqueSlash } from './tool.util';
+import { MenuEntity } from '~/modules/system/menu/entity/menu.entity';
 
 export interface RouteRecordRaw {
   id: number;

@@ -7,6 +7,7 @@ import { PERMISSION_KEY } from '../auth.constant';
 type TupleToObject<T extends string, P extends ReadonlyArray<string>> = {
   [K in Uppercase<P[number]>]: `${T}:${Lowercase<K>}`;
 };
+
 type AddPrefixToObjectValue<
   T extends string,
   P extends Record<string, string>,
