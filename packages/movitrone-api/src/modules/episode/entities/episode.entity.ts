@@ -1,4 +1,4 @@
-import { AdminEntity } from '~/modules/admin/entities/admin.entity';
+import { DashboardUserEntity } from '~/modules/users/dashboardUser/entities/admin.entity';
 import { GenreEntity } from '~/modules/genre/entities/genre.entity';
 
 import { Column, Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
@@ -13,9 +13,9 @@ export class Episode extends videoShared {
   @JoinTable()
   genres: GenreEntity[];
 
-  @OneToOne((type) => AdminEntity, (genre) => genre.episodes, {
+  @OneToOne((type) => DashboardUserEntity, (genre) => genre.episodes, {
     nullable: true,
   })
   @JoinTable()
-  created_By: AdminEntity | null;
+  created_By: DashboardUserEntity | null;
 }

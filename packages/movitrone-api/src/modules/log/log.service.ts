@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LogEntity } from './entities/log.entity';
 import { Repository } from 'typeorm';
-import { AdminEntity } from '~/modules/admin/entities/admin.entity';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
+import { DashboardUserEntity } from '../users/dashboardUser/entities/admin.entity';
 
 @Injectable()
 export class LogService {
@@ -16,10 +16,13 @@ export class LogService {
    * Create a new log action
    *
    * @param {string} content - Log content
-   * @param {AdminEntity} admin - Admin entity
+   * @param {DashboardUserEntity} admin - Admin entity
    * @returns {Promise<LogEntity>} - The created log entity
    */
-  async create(content: string, admin: AdminEntity): Promise<LogEntity> {
+  async create(
+    content: string,
+    admin: DashboardUserEntity,
+  ): Promise<LogEntity> {
     const log = this.logRepository.create({ content, admin });
     return await log.save();
   }

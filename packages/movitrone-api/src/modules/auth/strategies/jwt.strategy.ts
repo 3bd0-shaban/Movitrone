@@ -4,8 +4,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserJwtPayload } from '../auth';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import { AuthStrategy } from '../auth.constant';
-import { UserService } from '~/modules/user/user.service';
-import { AdminService } from '~/modules/admin/admin.service';
 import { AuthService } from '../auth.service';
 
 @Injectable()

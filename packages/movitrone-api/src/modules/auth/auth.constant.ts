@@ -1,3 +1,5 @@
+export const PERMISSION_KEY = '__permission_key__';
+
 export const AuthStrategy = {
   LOCAL: 'local',
   LOCAL_EMAIL: 'local_email',

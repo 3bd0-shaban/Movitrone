@@ -1,7 +1,6 @@
 import { Controller, Post, Body, Inject, Res, Get } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { ApiTags } from '@nestjs/swagger';
-import { UserService } from '../../user/user.service';
 import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from '~/config';
@@ -10,9 +9,10 @@ import { AuthStrategy, REFRESH_TOKEN_DURATION } from '../auth.constant';
 import { RefreshREsult } from '../auth';
 import { RTWebsiteCookie } from '../decorator/http-Cookies.decorator';
 import { addDurationFromNow } from '~/shared/utilities/date-time.utils';
-import { VerifyOTPDTOs } from '~/modules/user/dto/verify-otp.dto';
+import { VerifyOTPDTOs } from '~/modules/users/websiteUser/dto/verify-otp.dto';
 import { CurrentUser } from '../decorator/auth-user.decorator';
-import { UserEntity } from '~/modules/user/entities/user.entity';
+import { UserEntity } from '~/modules/users/websiteUser/entities/user.entity';
+import { WebsiteUserService } from '~/modules/users/websiteUser/user.service';
 
 @ApiTags('Authentication - Website')
 @Controller('auth')
@@ -20,7 +20,7 @@ export class UserAuthController {
   constructor(
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
     private readonly authService: AuthService,
-    private readonly userService: UserService,
+    private readonly userService: WebsiteUserService,
   ) {}
 
   @Post('register')

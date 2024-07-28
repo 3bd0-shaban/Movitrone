@@ -4,6 +4,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
 
 import { MailerModule } from './mailer/mailer.module';
 import { isDev } from '~/global/env';
+import { RedisModule } from './redis/redis.module';
+import { DatabaseModule } from './database/database.module';
 
 @Global()
 @Module({
@@ -23,7 +25,9 @@ import { isDev } from '~/global/env';
       verboseMemoryLeak: isDev,
       ignoreErrors: false,
     }),
+    DatabaseModule,
     MailerModule,
+    RedisModule,
   ],
   exports: [MailerModule],
 })

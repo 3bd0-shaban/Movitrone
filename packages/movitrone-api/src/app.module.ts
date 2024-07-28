@@ -1,34 +1,34 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SessionModule } from './modules/session/session.module';
+import { SeasionModule } from './modules/seasion/seasion.module';
 import { GenreModule } from './modules/genre/genre.module';
 import { WhitelistModule } from './modules/whitelist/whitelist.module';
 import { LogModule } from './modules/log/log.module';
 import { MovieModule } from './modules/movie/movie.module';
 import { EpisodeModule } from './modules/episode/episode.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { AdminModule } from './modules/admin/admin.module';
-import { UserModule } from './modules/user/user.module';
+import { AdminModule } from './modules/users/dashboardUser/admin.module';
+import { UserModule } from './modules/users/websiteUser/user.module';
 import { BannerModule } from './modules/banner/banner.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { ThrottlerModule, seconds } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { DatabaseModule } from './shared/database/database.module';
-import { MailerModule } from './shared/mailer/mailer.module';
 import { SeoAnalyticsModule } from './modules/analytics/seo-analytics/seo-analytics.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { SeoPageModule } from './modules/seo-page/seo-page.module';
-import { SeoCountryModule } from './modules/seo-country/seo-country.module';
+import { SeoPageModule } from './modules/seo/seo-page/seo-page.module';
+import { SeoCountryModule } from './modules/seo/seo-country/seo-country.module';
 import { join } from 'node:path';
 import { isDev } from './global/env';
 import config from './config';
 import { VideoProxyMiddleware } from './proxy.middleware';
+import { SystemModule } from './modules/system/system.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
-    DatabaseModule,
+    SharedModule,
     ConfigModule.forRoot({
       isGlobal: true,
       expandVariables: true,
@@ -54,11 +54,10 @@ import { VideoProxyMiddleware } from './proxy.middleware';
       verboseMemoryLeak: isDev,
       ignoreErrors: false,
     }),
-    MailerModule,
     AdminModule,
     MovieModule,
     EpisodeModule,
-    SessionModule,
+    SeasionModule,
     GenreModule,
     WhitelistModule,
     LogModule,
@@ -68,7 +67,7 @@ import { VideoProxyMiddleware } from './proxy.middleware';
     UserModule,
     BannerModule,
     CommentModule,
-
+    SystemModule,
     //Analytics
     SeoAnalyticsModule,
   ],

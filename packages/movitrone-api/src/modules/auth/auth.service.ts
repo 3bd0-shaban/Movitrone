@@ -8,12 +8,12 @@ import {
 import { SignInDto } from './dto/SignIn.dto';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../user/entities/user.entity';
+import { UserEntity } from '../users/websiteUser/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ErrorEnum } from '~/constants/error-code.constant';
 import { Response } from 'express';
 import { RefreshREsult, UserJwtPayload } from './auth';
-import { AdminEntity } from '../admin/entities/admin.entity';
+import { DashboardUserEntity } from '../users/dashboardUser/entities/admin.entity';
 import { JwtService } from '@nestjs/jwt';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import { ACCESS_TOKEN_DURATION } from './auth.constant';
@@ -28,8 +28,8 @@ export class AuthService {
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(AdminEntity)
-    private readonly adminRepository: Repository<AdminEntity>,
+    @InjectRepository(DashboardUserEntity)
+    private readonly adminRepository: Repository<DashboardUserEntity>,
   ) {}
 
   /**
@@ -117,10 +117,10 @@ export class AuthService {
    * get admin who is authenticated
    *
    * @param {string} id - user ID
-   * @returns {Promise<AdminEntity>} - Result Admin Entity
+   * @returns {Promise<DashboardUserEntity>} - Result Admin Entity
    * @memberof AuthService
    */
-  async getAuthAdmin(id: number): Promise<AdminEntity> {
+  async getAuthAdmin(id: number): Promise<DashboardUserEntity> {
     const user = await this.adminRepository.findOneBy({ id });
 
     if (user) {
