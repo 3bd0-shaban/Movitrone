@@ -20,7 +20,7 @@ import type { ConfigKeyPaths } from './config';
 import { isDev } from './global/env';
 import { setupSwagger } from './setup-swagger';
 import * as cookieParser from 'cookie-parser';
-import * as morgan from 'morgan';
+// import * as morgan from 'morgan';
 
 declare const module: any;
 
@@ -32,7 +32,7 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService<ConfigKeyPaths>);
-  app.use(morgan('dev'));
+  // app.use(morgan('dev'));
   app.use(cookieParser());
 
   // const { port, globalPrefix } = configService.get('app', { infer: true });

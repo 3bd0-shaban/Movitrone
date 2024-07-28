@@ -1,15 +1,14 @@
-import { iAdmin } from '@/types/user/iAdmin';
 import axios, { AxiosRequestConfig } from 'axios';
 
 const url = process.env.NEXT_PUBLIC_API_KEY;
+
 export interface RefreshTokenProps {
   access_token: string;
-  expires_at: string;
+  expires_at: Date;
 }
-export async function refreshToken(): Promise<{
-  access_token: string;
-  expires_at: string;
-}> {
+
+
+export async function refreshToken(): Promise<RefreshTokenProps> {
   try {
     const headers: AxiosRequestConfig = {
       headers: {

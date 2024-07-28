@@ -3,7 +3,6 @@ import React from 'react';
 import { SessionProvider } from 'next-auth/react';
 import { AuthProvider } from '@/Contexts/AuthContext';
 import Toast from '@/lib/Toast';
-import { ThemeProvider } from 'next-themes';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import AntdThemeMode from '@/lib/AntdRegistry';
 

@@ -18,11 +18,11 @@ export function getDateEdgeTimes(date: string): [string, string] {
 /**
  * Returns the date added from the current date and a given duration
  *
- * @param duration The duration to add in seconds
+ * @param duration The duration to add in millseconds
  * @returns The projected date
  */
 export function addDurationFromNow(duration: number): Date {
-  return new Date(Date.now() + duration * 1000);
+  return new Date(Date.now() + duration);
 }
 
 // Regular expression for a time only string in a hh:mm format

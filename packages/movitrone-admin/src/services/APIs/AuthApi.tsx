@@ -2,7 +2,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiEndpoint } from '../ApiEndpoint';
 import axios, { AxiosRequestConfig } from 'axios';
-import { AuthState } from '@/types/user/iAdmin';
+import { RefreshTokenProps } from '../refreshToken';
 
 const url = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -11,18 +11,14 @@ export function useSignInMutation() {
   const setUserCredentials = useAuthStore((state) => state.setCredentials);
   return useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
-      ApiEndpoint<AuthState>(
-        {
-          method: 'post',
-          url: `${url}/api/auth-admin/signin`,
-          data: { email, password },
-        },
-        queryClient,
-      ),
+      ApiEndpoint<RefreshTokenProps>({
+        method: 'post',
+        url: `${url}/api/auth-admin/signin`,
+        data: { email, password },
+      }),
     onSuccess: async (data) => {
       await queryClient.cancelQueries({ queryKey: ['auth'] });
-      const { user, access_token } = data;
-      setUserCredentials(user, access_token);
+      // const { access_token } = data;
     },
   });
 }
@@ -43,7 +39,7 @@ export async function login({
       withCredentials: true,
     };
 
-    const response = await axios.post<AuthState>(
+    const response = await axios.post<RefreshTokenProps>(
       `${url}/api/auth-admin/signin`,
       { email, password },
       headers,
@@ -61,11 +57,10 @@ export function useLogOutMutation() {
 
   return useMutation({
     mutationFn: () =>
-      ApiEndpoint<{ message: string; status: number }>(
-        { method: 'post', url: `${url}/api/auth-admin/logout` },
-
-        queryClient,
-      ),
+      ApiEndpoint<{ message: string; status: number }>({
+        method: 'post',
+        url: `${url}/api/auth-admin/logout`,
+      }),
     onSuccess: () => {
       logOut();
       setTimeout(() => {

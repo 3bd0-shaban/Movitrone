@@ -28,8 +28,10 @@ const SeoCountryTable: FC = ({}) => {
     refetch();
   });
 
+  const [modal, contextHolder] = Modal.useModal();
+
   const HandleDeleteCountrySeo = () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Delete Seo Country',
       content: (
         <p>
@@ -52,7 +54,7 @@ const SeoCountryTable: FC = ({}) => {
     });
   };
   const HandleMAkeMainSeo = () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Delete Seo Country',
       content: (
         <p>
@@ -62,7 +64,6 @@ const SeoCountryTable: FC = ({}) => {
         </p>
       ),
       maskClosable: true,
-      okText: 'Mark As Main',
       onOk: (close) => {
         markAsMain({ countryCode: tableData?.country as string })
           .then(() => {
@@ -75,6 +76,7 @@ const SeoCountryTable: FC = ({}) => {
             toast.error(getError(error));
           });
       },
+      okText: 'Mark As Main',
     });
   };
   const items: MenuProps['items'] = [
@@ -82,7 +84,7 @@ const SeoCountryTable: FC = ({}) => {
       key: '1',
       label: (
         <Link
-          href={`/seo/country/pages/${tableData?.country}`}
+          href={`/seo/pages/${getCountryByCode(tableData?.country as string)?.country?.replace(' ', '-')}`}
           draggable={false}
           className='flex h-full w-full items-center justify-start gap-2 text-red-500'
         >
@@ -92,7 +94,7 @@ const SeoCountryTable: FC = ({}) => {
       ),
     },
     {
-      key: '4',
+      key: '2',
       danger: true,
       label: (
         <button
@@ -105,7 +107,7 @@ const SeoCountryTable: FC = ({}) => {
       ),
     },
     {
-      key: '4',
+      key: '3',
       danger: true,
       label: (
         <button
@@ -129,7 +131,7 @@ const SeoCountryTable: FC = ({}) => {
           overlayClassName='backdrop-blur-xl'
         >
           <Button
-            onClick={(e) => {
+            onMouseEnter={(e) => {
               e.preventDefault();
               setTableData(record);
             }}
@@ -145,6 +147,7 @@ const SeoCountryTable: FC = ({}) => {
   ];
   return (
     <div className='card-shadows-slate-300 overflow-hidden !p-0'>
+      {contextHolder}
       <Table
         columns={columns}
         rowKey={(record) => record.country as string}
@@ -157,10 +160,10 @@ const SeoCountryTable: FC = ({}) => {
         }}
         onChange={handleTableChange}
         scroll={{ x: 1000 }}
-        size='middle'
+        size='small'
       />
     </div>
   );
 };
-
+ 
 export default SeoCountryTable;

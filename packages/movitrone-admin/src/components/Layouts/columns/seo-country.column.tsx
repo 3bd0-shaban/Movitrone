@@ -12,7 +12,7 @@ const SeoCountryColumn: ColumnsType<iSeoCountry> = [
     render: (_, record) => (
       <CountryFlag
         country={getCountryByCode(record.country as string) as iCountry}
-      ></CountryFlag>
+      />
     ),
   },
   {

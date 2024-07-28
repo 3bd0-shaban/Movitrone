@@ -15,3 +15,18 @@ export function getCountryByCode(countryCode: string): iCountry | null {
   }
   return null;
 }
+
+/**
+ *
+ * @param {string} countryName
+ *
+ * @returns {iCountry} country data
+ */
+export function getCountryCode(countryName: string): iCountry | null {
+  for (const country of countries) {
+    if (country.country === countryName) {
+      return country as any;
+    }
+  }
+  return null;
+}
