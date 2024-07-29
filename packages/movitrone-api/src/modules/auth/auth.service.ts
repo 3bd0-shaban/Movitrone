@@ -8,12 +8,12 @@ import {
 import { SignInDto } from './dto/SignIn.dto';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../users/websiteUser/entities/user.entity';
+import { ClientEntity } from '../users/client/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ErrorEnum } from '~/constants/error-code.constant';
 import { Response } from 'express';
 import { RefreshREsult, UserJwtPayload } from './auth';
-import { DashboardUserEntity } from '../users/dashboardUser/entities/admin.entity';
+import { AdminEntity } from '../users/admin/entities/admin.entity';
 import { JwtService } from '@nestjs/jwt';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import { ACCESS_TOKEN_DURATION } from './auth.constant';
@@ -26,10 +26,10 @@ export class AuthService {
     private jwtService: JwtService,
     private phoneValidationService: PhoneValidationService,
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(DashboardUserEntity)
-    private readonly adminRepository: Repository<DashboardUserEntity>,
+    @InjectRepository(ClientEntity)
+    private readonly userRepository: Repository<ClientEntity>,
+    @InjectRepository(AdminEntity)
+    private readonly adminRepository: Repository<AdminEntity>,
   ) {}
 
   /**
@@ -98,10 +98,10 @@ export class AuthService {
    * get user who is authenticated
    *
    * @param {string} id - user ID
-   * @returns {Promise<UserEntity>} - Result UserEntity
+   * @returns {Promise<ClientEntity>} - Result ClientEntity
    * @memberof AuthService
    */
-  async getAuthUser(id: number): Promise<UserEntity> {
+  async getAuthUser(id: number): Promise<ClientEntity> {
     const user = await this.userRepository.findOneBy({ id });
 
     if (user) {
@@ -117,10 +117,10 @@ export class AuthService {
    * get admin who is authenticated
    *
    * @param {string} id - user ID
-   * @returns {Promise<DashboardUserEntity>} - Result Admin Entity
+   * @returns {Promise<AdminEntity>} - Result Admin Entity
    * @memberof AuthService
    */
-  async getAuthAdmin(id: number): Promise<DashboardUserEntity> {
+  async getAuthAdmin(id: number): Promise<AdminEntity> {
     const user = await this.adminRepository.findOneBy({ id });
 
     if (user) {

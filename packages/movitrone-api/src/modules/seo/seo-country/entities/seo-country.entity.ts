@@ -7,7 +7,7 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { SeoPageEntity } from '~/modules/seo/seo-page/entities/seo-page.entity';
-import { UserEntity } from '~/modules/users/websiteUser/entities/user.entity';
+import { AdminEntity } from '~/modules/users/admin/entities/admin.entity';
 
 @Entity({ name: 'seo_countries' })
 export class SeoCountryEntity {
@@ -17,8 +17,8 @@ export class SeoCountryEntity {
   @OneToMany((type) => SeoPageEntity, (page) => page.country)
   page: SeoPageEntity[];
 
-  @OneToOne((type) => UserEntity, (admin) => admin.id)
-  created_By?: UserEntity;
+  @OneToOne((type) => AdminEntity, (admin) => admin.id)
+  created_By?: AdminEntity;
 
   @Column('boolean', { default: true })
   is_Active?: boolean;

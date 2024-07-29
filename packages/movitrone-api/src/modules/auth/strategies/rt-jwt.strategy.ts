@@ -5,8 +5,8 @@ import { Request } from 'express';
 import { UserJwtPayload } from '../auth';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import { AuthStrategy } from '../auth.constant';
-import { WebsiteUserService } from '~/modules/users/websiteUser/user.service';
-import { DashboardUserService } from '~/modules/users/dashboardUser/admin.service';
+import { ClientService } from '~/modules/users/client/user.service';
+import { AdminService } from '~/modules/users/admin/admin.service';
 
 @Injectable()
 export class RTJwtWebsiteStrategy extends PassportStrategy(
@@ -15,7 +15,7 @@ export class RTJwtWebsiteStrategy extends PassportStrategy(
 ) {
   constructor(
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
-    private userService: WebsiteUserService,
+    private userService: ClientService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -45,7 +45,7 @@ export class RTJwtDashboardStrategy extends PassportStrategy(
 ) {
   constructor(
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
-    private adminService: DashboardUserService,
+    private adminService: AdminService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([

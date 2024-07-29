@@ -13,11 +13,11 @@ import {
 import { RefreshREsult } from '../auth';
 import { RTWebsiteCookie } from '../decorator/http-Cookies.decorator';
 import { addDurationFromNow } from '~/shared/utilities/date-time.utils';
-import { VerifyOTPDTOs } from '~/modules/users/websiteUser/dto/verify-otp.dto';
+import { VerifyOTPDTOs } from '~/modules/users/client/dto/verify-otp.dto';
 import { CurrentUser } from '../decorator/auth-user.decorator';
-import { UserEntity } from '~/modules/users/websiteUser/entities/user.entity';
-import { WebsiteUserService } from '~/modules/users/websiteUser/user.service';
+import { ClientService } from '~/modules/users/client/user.service';
 import { isDev } from '~/global/env';
+import { ClientEntity } from '~/modules/users/client/entities/user.entity';
 
 @ApiTags('Authentication - Website')
 @Controller('auth')
@@ -25,7 +25,7 @@ export class UserAuthController {
   constructor(
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
     private readonly authService: AuthService,
-    private readonly userService: WebsiteUserService,
+    private readonly userService: ClientService,
   ) {}
 
   @Post('register')
@@ -33,7 +33,10 @@ export class UserAuthController {
     return await this.userService.create(createUserDTO);
   }
   @Post('verify')
-  async Verify(@Body() inputs: VerifyOTPDTOs, @CurrentUser() user: UserEntity) {
+  async Verify(
+    @Body() inputs: VerifyOTPDTOs,
+    @CurrentUser() user: ClientEntity,
+  ) {
     return await this.userService.VerifyOTP(user.id, inputs);
   }
 

@@ -9,11 +9,11 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { WebsiteUserService } from './user.service';
+import { ClientService } from './user.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
-import { UserEntity } from './entities/user.entity';
+import { ClientEntity } from './entities/user.entity';
 import { JwtAdminGuard, JwtUserGuard } from '../../auth/guards/jwt-auth.guard';
 import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
 import { DashboardGuard } from '../../auth/guards/dashboard.guard';
@@ -24,23 +24,23 @@ import { LogService } from '../../log/log.service';
 @ApiTags('Website Users - Website Manpulation')
 @ApiBearerAuth()
 @Controller('user')
-export class WebsiteUserController {
+export class ClientController {
   constructor(
-    private readonly userService: WebsiteUserService,
+    private readonly userService: ClientService,
     private readonly logService: LogService,
   ) {}
 
   //Self Users API methods ( for website )
   @Get('get/self')
   @UseGuards(JwtUserGuard)
-  findSelf(@CurrentUser() user: UserEntity): Promise<UserEntity> {
+  findSelf(@CurrentUser() user: ClientEntity): Promise<ClientEntity> {
     return this.userService.findOne(user.id);
   }
 
   @Put('update/self')
   @UseGuards(JwtUserGuard)
   async updateSelf(
-    @CurrentUser() user: UserEntity,
+    @CurrentUser() user: ClientEntity,
     @Body() updateUserDto: updateUserDTO,
   ): Promise<string> {
     await this.userService.update(user.id, updateUserDto);
@@ -50,7 +50,7 @@ export class WebsiteUserController {
   @Put('update/self/password')
   @UseGuards(JwtUserGuard)
   async updateSelfPassword(
-    @CurrentUser() user: UserEntity,
+    @CurrentUser() user: ClientEntity,
     @Body() inputs: PasswordUpdateDto,
   ): Promise<string> {
     await this.userService.updatePasswordById(user.id, inputs);
@@ -68,13 +68,13 @@ export class WebsiteUserController {
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async findAll(
     @Query() query: PaginationArgs,
-  ): Promise<{ users: UserEntity[]; total: number }> {
+  ): Promise<{ users: ClientEntity[]; total: number }> {
     return await this.userService.findAll(query);
   }
 
   @Get('get-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
-  findOne(@Param('id') id: number): Promise<UserEntity> {
+  findOne(@Param('id') id: number): Promise<ClientEntity> {
     return this.userService.findOne(id);
   }
 

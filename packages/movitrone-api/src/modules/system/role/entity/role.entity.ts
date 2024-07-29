@@ -3,8 +3,8 @@ import { Column, Entity, JoinTable, ManyToMany, Relation } from 'typeorm';
 
 import { CompleteEntity } from '~/common/entity/common.entity';
 
-import { DashboardUserEntity } from '~/modules/users/dashboardUser/entities/admin.entity';
 import { MenuEntity } from '../../menu/entity/menu.entity';
+import { AdminEntity } from '~/modules/users/admin/entities/admin.entity';
 
 @Entity({ name: 'sys_role' })
 export class RoleEntity extends CompleteEntity {
@@ -29,8 +29,8 @@ export class RoleEntity extends CompleteEntity {
   default: boolean;
 
   @ApiHideProperty()
-  @ManyToMany(() => DashboardUserEntity, (user) => user.roles)
-  users: Relation<DashboardUserEntity[]>;
+  @ManyToMany(() => AdminEntity, (user) => user.roles)
+  users: Relation<AdminEntity[]>;
 
   @ApiHideProperty()
   @ManyToMany(() => MenuEntity, (menu) => menu.roles, {})

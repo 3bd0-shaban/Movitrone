@@ -11,8 +11,8 @@ import {
 } from 'typeorm';
 import { RoleEntity } from '~/modules/system/role/entity/role.entity';
 
-@Entity({ name: 'dashboard_users' })
-export class DashboardUserEntity extends UserShared {
+@Entity({ name: 'sys_user' })
+export class AdminEntity extends UserShared {
   @Column({
     type: 'enum',
     enum: ['Super Admin', 'Admin'],

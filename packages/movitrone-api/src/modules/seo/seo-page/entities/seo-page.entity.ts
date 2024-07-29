@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 import { CommonEntity } from '~/common/entity/common.entity';
 import { SeoCountryEntity } from '~/modules/seo/seo-country/entities/seo-country.entity';
-import { UserEntity } from '~/modules/users/websiteUser/entities/user.entity';
 import { SEO_PAGES_ENUM, SEO_STATUS_ENUM } from '../seo-page.constant';
+import { AdminEntity } from '~/modules/users/admin/entities/admin.entity';
 
 @Entity({ name: 'seo_pages' })
 export class SeoPageEntity extends CommonEntity {
@@ -18,8 +18,8 @@ export class SeoPageEntity extends CommonEntity {
   @Column({ type: 'enum', enum: SEO_PAGES_ENUM })
   page: SEO_PAGES_ENUM;
 
-  @OneToOne((type) => UserEntity, (admin) => admin.id)
-  created_By?: UserEntity;
+  @OneToOne((type) => AdminEntity, (admin) => admin.id)
+  created_By?: AdminEntity;
 
   @Column()
   canonical_Url: string;

@@ -5,7 +5,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from './entities/user.entity';
+import { ClientEntity } from './entities/user.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
 import { ErrorEnum } from '~/constants/error-code.constant';
@@ -19,10 +19,10 @@ import { EmailService } from '~/shared/mailer/mailer.service';
 import { VerifyOTPDTOs } from './dto/verify-otp.dto';
 
 @Injectable()
-export class WebsiteUserService {
+export class ClientService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(ClientEntity)
+    private readonly userRepository: Repository<ClientEntity>,
     private readonly authService: AuthService,
     private readonly mailerService: EmailService,
   ) {}
@@ -31,10 +31,10 @@ export class WebsiteUserService {
    * Compare entered and database passwords
    *
    * @param {CreateUserDTO} createUserDto - enterted inputs
-   * @returns {Promise<UserEntity>} - Password match result
+   * @returns {Promise<ClientEntity>} - Password match result
    * @memberof UserService
    */
-  async create(createUserDto: CreateUserDTO): Promise<UserEntity> {
+  async create(createUserDto: CreateUserDTO): Promise<ClientEntity> {
     const { email, phone, code } = createUserDto;
     const exists = await this.userRepository.findOneBy({
       email,
@@ -67,12 +67,12 @@ export class WebsiteUserService {
    * Compare entered and database passwords
    *
    * @param {PaginationArgs} pagination - pagination inputs
-   * @returns {Promise<{ users: UserEntity[]; results: number; total: number }>} - Paginated users
+   * @returns {Promise<{ users: ClientEntity[]; results: number; total: number }>} - Paginated users
    * @memberof UserService
    */
   async findAll(
     pagination: PaginationArgs,
-  ): Promise<{ users: UserEntity[]; results: number; total: number }> {
+  ): Promise<{ users: ClientEntity[]; results: number; total: number }> {
     const { page = 1, limit = 10 } = pagination;
     const skip = (page - 1) * limit;
     const [users, total] = await this.userRepository.findAndCount({
@@ -86,10 +86,10 @@ export class WebsiteUserService {
    * Find a user by ID
    *
    * @param {number} id - User ID
-   * @returns {Promise<UserEntity>} - The found user
+   * @returns {Promise<ClientEntity>} - The found user
    * @throws {NotFoundException} - If the user with the provided ID is not found
    */
-  async findOne(id: number): Promise<UserEntity> {
+  async findOne(id: number): Promise<ClientEntity> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -154,7 +154,7 @@ export class WebsiteUserService {
    *
    * @param {number} userId - User ID (assuming it's the authenticated user's ID)
    * @param {UpdateUserDTO} updateUserDto - Updated user data
-   * @returns {Promise<UserEntity>} - The updated user
+   * @returns {Promise<ClientEntity>} - The updated user
    */
   async update(
     userId: number,

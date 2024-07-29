@@ -20,7 +20,7 @@ import { SeoAnalyticsService } from '../../analytics/seo-analytics/seo-analytics
 import { SeoCountryEntity } from './entities/seo-country.entity';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { SeoPageService } from '../seo-page/seo-page.service';
-import { DashboardUserEntity } from '../../users/dashboardUser/entities/admin.entity';
+import { AdminEntity } from '../../users/admin/entities/admin.entity';
 
 @ApiTags('Seo Countries')
 @ApiBearerAuth()
@@ -37,7 +37,7 @@ export class SeoCountryController {
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async create(
     @Body() inputs: CreateSeoCountryDto,
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
   ) {
     const seo = await this.seoCountryService.create(inputs);
     await this.logService.create(
@@ -64,7 +64,7 @@ export class SeoCountryController {
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async Main(
     @Param('country') country: string,
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
   ): Promise<void> {
     const seo = await this.seoCountryService.MarkMain(country);
     await this.logService.create(
@@ -77,7 +77,7 @@ export class SeoCountryController {
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async remove(
     @Param('country') country: string,
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
   ): Promise<void> {
     const seoCountry = await this.seoCountryService.findOneByCountry(country);
     await this.seoPageService.removeAllByCountry(seoCountry);

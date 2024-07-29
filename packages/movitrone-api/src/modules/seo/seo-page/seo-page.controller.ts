@@ -21,7 +21,7 @@ import { SeoAnalyticsService } from '../../analytics/seo-analytics/seo-analytics
 import { JwtAdminGuard } from '../../auth/guards/jwt-auth.guard';
 import { SeoPageEntity } from './entities/seo-page.entity';
 import { SeoCountryService } from '../seo-country/seo-country.service';
-import { DashboardUserEntity } from '../../users/dashboardUser/entities/admin.entity';
+import { AdminEntity } from '../../users/admin/entities/admin.entity';
 import { DashboardGuard } from '../../auth/guards/dashboard.guard';
 
 @ApiTags('Seo Page')
@@ -41,7 +41,7 @@ export class SeoPageController {
   async create(
     @Body() CreateMovieDto: CreateSeoPageDto,
     @Param('country') country: string,
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
   ) {
     const countrySeo = await this.seoCountryService.findOneByCountry(country);
 
@@ -103,7 +103,7 @@ export class SeoPageController {
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async update(
     @Param('id') id: number,
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
     @Body() inputs: UpdateSeoPageDto,
   ) {
     await this.seoService.update(id, inputs);
@@ -116,7 +116,7 @@ export class SeoPageController {
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async remove(
     @Param('id') id: number,
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
   ): Promise<void> {
     await this.seoService.removeById(id);
     await this.logService.create(`deleted seo record`, user);

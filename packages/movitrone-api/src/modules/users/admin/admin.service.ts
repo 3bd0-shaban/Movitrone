@@ -11,16 +11,16 @@ import { isEmpty } from 'lodash';
 import { AuthService } from '../../auth/auth.service';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
-import { DashboardUserEntity } from './entities/admin.entity';
+import { AdminEntity } from './entities/admin.entity';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
 import { ADMIN_ROLES_ENUMS } from './admin.constant';
 
 @Injectable()
-export class DashboardUserService {
+export class AdminService {
   constructor(
-    @InjectRepository(DashboardUserEntity)
-    private readonly adminRepository: Repository<DashboardUserEntity>,
+    @InjectRepository(AdminEntity)
+    private readonly adminRepository: Repository<AdminEntity>,
     private readonly authService: AuthService,
   ) {}
 
@@ -28,10 +28,10 @@ export class DashboardUserService {
    * create new admin user
    *
    * @param {CreateAdminDto} inputs - enterted inputs
-   * @returns {Promise<DashboardUserEntity>} - Password match result
+   * @returns {Promise<AdminEntity>} - Password match result
    * @memberof UserService
    */
-  async create(inputs: CreateAdminDto): Promise<DashboardUserEntity> {
+  async create(inputs: CreateAdminDto): Promise<AdminEntity> {
     const { email, phone, code } = inputs;
     const exists = await this.adminRepository.findOneBy({
       email,
@@ -59,13 +59,13 @@ export class DashboardUserService {
    *
    * @param {PaginationArgs} pagination - pagination inputs
    * @param {ADMIN_ROLES_ENUMS} role - pagination inputs
-   * @returns {Promise<{ users: DashboardUserEntity[]; results: number; total: number }>} - Paginated users
+   * @returns {Promise<{ users: AdminEntity[]; results: number; total: number }>} - Paginated users
    * @memberof UserService
    */
   async findAll(
     pagination: PaginationArgs,
     role: ADMIN_ROLES_ENUMS,
-  ): Promise<{ users: DashboardUserEntity[]; results: number; total: number }> {
+  ): Promise<{ users: AdminEntity[]; results: number; total: number }> {
     const { page = 1, limit = 10 } = pagination;
     const skip = (page - 1) * limit;
     const [users, total] = await this.adminRepository.findAndCount({
@@ -80,10 +80,10 @@ export class DashboardUserService {
    * Find admin by ID
    *
    * @param {number} id - admin ID
-   * @returns {Promise<DashboardUserEntity>} - The found user
+   * @returns {Promise<AdminEntity>} - The found user
    * @throws {NotFoundException} - If the user with the provided ID is not found
    */
-  async findOne(id: number): Promise<DashboardUserEntity> {
+  async findOne(id: number): Promise<AdminEntity> {
     const user = await this.adminRepository.findOneBy({ id });
     if (!user) {
       throw new NotFoundException(`dasboard user with ID ${id} not found`);
@@ -148,7 +148,7 @@ export class DashboardUserService {
    *
    * @param {number} userId - User ID (assuming it's the authenticated user's ID)
    * @param {UpdateUserDTO} updateUserDto - Updated user data
-   * @returns {Promise<DashboardUserEntity>} - The updated user
+   * @returns {Promise<AdminEntity>} - The updated user
    */
   async update(
     userId: number,

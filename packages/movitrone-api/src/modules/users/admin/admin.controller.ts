@@ -16,8 +16,8 @@ import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
 import { DashboardGuard } from '../../auth/guards/dashboard.guard';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
 import { CreateAdminDto } from './dto/create-admin.dto';
-import { DashboardUserService } from './admin.service';
-import { DashboardUserEntity } from './entities/admin.entity';
+import { AdminService } from './admin.service';
+import { AdminEntity } from './entities/admin.entity';
 import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
 import { LogService } from '../../log/log.service';
 import { ADMIN_ROLES_ENUMS } from './admin.constant';
@@ -26,25 +26,23 @@ import { AdminsRoleArgs } from './dto/args/admins-role.args';
 @ApiTags('Admin - Dashboard Manpulation')
 @ApiBearerAuth()
 @Controller('admin')
-export class DashboardUserController {
+export class AdminController {
   constructor(
-    private readonly adminService: DashboardUserService,
+    private readonly adminService: AdminService,
     private readonly logService: LogService,
   ) {}
 
   //Self Users API methods ( for website )
   @Get('get/self')
   @UseGuards(JwtAdminGuard)
-  findSelf(
-    @CurrentUser() user: DashboardUserEntity,
-  ): Promise<DashboardUserEntity> {
+  findSelf(@CurrentUser() user: AdminEntity): Promise<AdminEntity> {
     return this.adminService.findOne(user.id);
   }
 
   @Put('update/self')
   @UseGuards(JwtAdminGuard)
   async updateSelf(
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
     @Body() updateUserDto: updateUserDTO,
   ): Promise<string> {
     await this.adminService.update(user.id, updateUserDto);
@@ -55,7 +53,7 @@ export class DashboardUserController {
   @Put('update/self/password')
   @UseGuards(JwtAdminGuard)
   async updateSelfPassword(
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
     @Body() inputs: PasswordUpdateDto,
   ): Promise<string> {
     await this.adminService.updatePasswordById(user.id, inputs);
@@ -67,7 +65,7 @@ export class DashboardUserController {
   @Post('create-user')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async create(
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
     @Body() inputs: CreateAdminDto,
   ) {
     const admin = await this.adminService.create(inputs);
@@ -83,13 +81,13 @@ export class DashboardUserController {
   async findAll(
     @Query() query: PaginationArgs,
     @Param('role') role: ADMIN_ROLES_ENUMS,
-  ): Promise<{ users: DashboardUserEntity[]; total: number }> {
+  ): Promise<{ users: AdminEntity[]; total: number }> {
     return await this.adminService.findAll(query, role);
   }
 
   @Get('get-by-id/:id')
   @UseGuards(JwtAdminGuard, DashboardGuard)
-  findOne(@Param('id') id: number): Promise<DashboardUserEntity> {
+  findOne(@Param('id') id: number): Promise<AdminEntity> {
     return this.adminService.findOne(id);
   }
 
@@ -97,7 +95,7 @@ export class DashboardUserController {
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async update(
     @Param('id') id: number,
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
     @Body() updateUserDto: updateUserDTO,
   ): Promise<string> {
     await this.adminService.update(id, updateUserDto);
@@ -109,7 +107,7 @@ export class DashboardUserController {
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async updatePassword(
     @Param('id') id: number,
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
     @Body() inputs: PasswordUpdateDto,
   ): Promise<string> {
     await this.adminService.updatePasswordById(id, inputs);
@@ -122,7 +120,7 @@ export class DashboardUserController {
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async remove(
     @Param('id') id: number,
-    @CurrentUser() user: DashboardUserEntity,
+    @CurrentUser() user: AdminEntity,
   ): Promise<void> {
     const removed = await this.adminService.removeById(id);
     await this.logService.create('updated his account details', user);

@@ -12,8 +12,8 @@ import { addDurationFromNow } from '~/shared/utilities/date-time.utils';
 import { Response } from 'express';
 import { RefreshREsult } from '../auth';
 import { RTDashboardCookie } from '../decorator/http-Cookies.decorator';
-import { DashboardUserService } from '~/modules/users/dashboardUser/admin.service';
-import { CreateAdminDto } from '~/modules/users/dashboardUser/dto/create-admin.dto';
+import { AdminService } from '~/modules/users/admin/admin.service';
+import { CreateAdminDto } from '~/modules/users/admin/dto/create-admin.dto';
 import { isDev } from '~/global/env';
 
 @ApiTags('Authentication - Dashboard')
@@ -22,7 +22,7 @@ export class AdminAuthController {
   constructor(
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
     private readonly authService: AuthService,
-    private readonly adminService: DashboardUserService,
+    private readonly adminService: AdminService,
   ) {}
 
   // @Post('register')
