@@ -25,10 +25,10 @@ export class AdminAuthController {
     private readonly adminService: AdminService,
   ) {}
 
-  // @Post('register')
-  // async Signup(@Body() createUserDTO: CreateAdminDto) {
-  //   return this.adminService.create(createUserDTO);
-  // }
+  @Post('register')
+  async Signup(@Body() createUserDTO: CreateAdminDto) {
+    return this.adminService.create(createUserDTO);
+  }
 
   @Post('signin')
   async Signin(@Body() inputs: SignInDto, @Res() res: Response) {

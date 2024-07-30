@@ -66,6 +66,20 @@ const SideBar: FC<SideBarElementsProps> = ({ session }) => {
       ),
     ]),
   );
+    items.push(
+    getItem('System', '4', <FaUserSecret size={18} />, [
+      getItem(
+        <Link href='/system/roles'>Roles</Link>,
+        '4-2',
+        <FaStarHalf size={18} />,
+      ),
+      getItem(
+        <Link href='/system/menu'>Permissions</Link>,
+        '4-6',
+        <FaUserAltSlash size={18} />,
+      ),
+    ]),
+  );
   items.push(
     getItem(
       <Link href='/seo/country'>Seo Countries</Link>,

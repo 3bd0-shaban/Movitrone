@@ -28,20 +28,20 @@ export abstract class CompleteEntity extends CommonEntity {
 
   @ApiHideProperty()
   @Exclude()
-  @Column({ name: 'updated_by', comment: 'Updated by' })
-  updatedBy: number;
+  @Column({ name: 'updated_by', comment: 'Updated by', nullable: true })
+  updatedBy?: number;
 
   @ApiProperty({ description: 'Creator' })
   @VirtualColumn({
     query: (alias) =>
-      `SELECT username FROM sys_user WHERE id = ${alias}.created_by`,
+      `SELECT firstname FROM sys_user WHERE id = ${alias}.created_by`,
   })
   creator: string;
 
   @ApiProperty({ description: 'Updater' })
   @VirtualColumn({
     query: (alias) =>
-      `SELECT username FROM sys_user WHERE id = ${alias}.updated_by`,
+      `SELECT firstname FROM sys_user WHERE id = ${alias}.updated_by`,
   })
   updater: string;
 }
