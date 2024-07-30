@@ -1,3 +1,4 @@
+'use client'
 import React, { FC } from 'react';
 import { Table, type TableColumnsType } from 'antd';
 import { iMenu } from '../../../../types/system/iMenu';

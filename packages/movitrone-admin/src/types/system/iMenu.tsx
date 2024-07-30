@@ -1,6 +1,7 @@
 import { iAdmin } from '../user/iAdmin';
 export interface iMenu {
   id: number;
+  key:number;
   createdAt: Date;
   updatedAt: Date;
   createdBy: iAdmin;
@@ -19,6 +20,7 @@ export interface iMenu {
   show: number;
   activeMenu: string;
   status: number;
+  children: iMenu[];
 }
 
 export enum iMenuTypesEnum {

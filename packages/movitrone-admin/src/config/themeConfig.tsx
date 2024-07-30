@@ -12,6 +12,17 @@ export const LightTheme: ThemeConfig = {
       algorithm: true,
       activeBg: 'rgba(255, 255, 255, 0)',
     },
+    Cascader: {
+      colorBgContainer: 'rgba(255, 255, 255, 0)',
+      algorithm: true,
+      optionSelectedBg: 'rgba(230, 244, 255, 0.12)',
+      colorPrimary: 'rgba(22, 119, 255, 0.02)',
+      colorPrimaryHover: 'rgba(64, 150, 255, 0.04)',
+    },
+    TreeSelect: {
+      colorBgContainer: 'rgba(255, 255, 255, 0)',
+      algorithm: true,
+    },
     Select: {
       algorithm: true,
       optionSelectedBg: 'rgb(2, 79, 139)',
@@ -44,6 +55,10 @@ export const LightTheme: ThemeConfig = {
     Dropdown: {
       colorPrimary: 'rgba(22, 119, 255, 0)',
       colorBgElevated: 'rgba(0, 18, 96, 0.9)',
+    },
+    Modal: {
+      colorPrimary: 'rgba(22, 119, 255, 0)',
+      contentBg: 'rgba(21, 31, 83, 0.9)',
     },
   },
 };

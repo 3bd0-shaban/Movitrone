@@ -27,6 +27,7 @@ export function useGetMenuPermissionQuery(menuId: number) {
     queryKey: ['Menu', menuId],
   });
 }
+
 export function useGetAllPermissionPathsQuery() {
   return useQuery({
     refetchOnWindowFocus: false,
@@ -39,6 +40,17 @@ export function useGetAllPermissionPathsQuery() {
   });
 }
 
+export function useGetAllNextJsAppPathsQuery() {
+  return useQuery({
+    refetchOnWindowFocus: false,
+    queryFn: () =>
+      ApiEndpoint<string[]>({
+        method: 'GET',
+        url: `/api/routes`,
+      }),
+    queryKey: ['routes'],
+  });
+}
 export function useCreateNewMenuMutation() {
   const queryClient = useQueryClient();
 
