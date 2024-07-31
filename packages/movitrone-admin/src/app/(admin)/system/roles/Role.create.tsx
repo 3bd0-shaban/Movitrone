@@ -14,14 +14,14 @@ import {
 import { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
-interface MenusCreateProps {
+interface RoleCreateProps {
   menus: iMenu[];
   control: UseFormReturn<iMenu>['control'];
   setValue: UseFormReturn<iMenu>['setValue'];
   watch: UseFormReturn<iMenu>['watch'];
 }
 
-const MenusCreate: FC<MenusCreateProps> = ({
+const RoleCreate: FC<RoleCreateProps> = ({
   menus,
   control,
   setValue,
@@ -100,4 +100,4 @@ const MenusCreate: FC<MenusCreateProps> = ({
   );
 };
 
-export default MenusCreate;
+export default RoleCreate;

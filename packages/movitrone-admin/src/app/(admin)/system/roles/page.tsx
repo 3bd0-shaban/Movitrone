@@ -1,5 +1,5 @@
 import React from 'react';
-import RolesTable from './Roles.table';
+import RoleTable from './Role.table';
 export default function page() {
-  return <RolesTable />;
+  return <RoleTable />;
 }

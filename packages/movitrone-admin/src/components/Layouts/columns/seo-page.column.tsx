@@ -17,16 +17,16 @@ const SeoPageColumn: ColumnsType<iSeoPage> = [
     title: 'Description',
     width: 100,
     render: (_, record) => (
-      <p className='ellipse-2'>{record.tag_Description}</p>
+      <p className="ellipse-2">{record.tag_Description}</p>
     ),
   },
   {
     title: 'Seo Status',
     render: (_, record) =>
       record.Seo_Status == 'Optimized' ? (
-        <Tag color='green'>Optimized</Tag>
+        <Tag color="green">Optimized</Tag>
       ) : (
-        <Tag color='red'>Not Optimized</Tag>
+        <Tag color="red">Not Optimized</Tag>
       ),
   },
   {

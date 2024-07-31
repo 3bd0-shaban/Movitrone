@@ -86,7 +86,7 @@ const SeoCountryTable: FC = ({}) => {
         <Link
           href={`/seo/pages/${getCountryByCode(tableData?.country as string)?.country?.replace(' ', '-')}`}
           draggable={false}
-          className='flex h-full w-full items-center justify-start gap-2 text-red-500'
+          className="flex h-full w-full items-center justify-start gap-2 text-red-500"
         >
           <PiEye size={17} />
           <p>View Pages</p>
@@ -99,7 +99,7 @@ const SeoCountryTable: FC = ({}) => {
       label: (
         <button
           onClick={HandleMAkeMainSeo}
-          className='flex gap-2 hover:text-white'
+          className="flex gap-2 hover:text-white"
         >
           <FaUserMinus size={20} />
           Mark As Main
@@ -112,7 +112,7 @@ const SeoCountryTable: FC = ({}) => {
       label: (
         <button
           onClick={HandleDeleteCountrySeo}
-          className='flex gap-2 hover:text-white'
+          className="flex gap-2 hover:text-white"
         >
           <FaUserMinus size={20} />
           Delete
@@ -128,7 +128,7 @@ const SeoCountryTable: FC = ({}) => {
         <Dropdown
           trigger={['click', 'hover']}
           menu={{ items }}
-          overlayClassName='backdrop-blur-xl'
+          overlayClassName="backdrop-blur-xl"
         >
           <Button
             onMouseEnter={(e) => {
@@ -146,7 +146,7 @@ const SeoCountryTable: FC = ({}) => {
     },
   ];
   return (
-    <div className='card-shadows-slate-300 overflow-hidden !p-0'>
+    <div className="card-shadows-slate-300 overflow-hidden !p-0">
       {contextHolder}
       <Table
         columns={columns}
@@ -160,10 +160,10 @@ const SeoCountryTable: FC = ({}) => {
         }}
         onChange={handleTableChange}
         scroll={{ x: 1000 }}
-        size='small'
+        size="small"
       />
     </div>
   );
 };
- 
+
 export default SeoCountryTable;

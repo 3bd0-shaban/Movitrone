@@ -1,27 +1,30 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
-  IsBoolean,
-  IsIn,
+  IsEnum,
   IsInt,
+  IsNotEmpty,
   IsOptional,
   IsString,
-  Min,
   MinLength,
   ValidateIf,
 } from 'class-validator';
 
 import { OperatorDto } from '~/common/dto/operator.dto';
+import { MENU_TYPES_ENUM } from '../menu.constant';
 
 export class MenuDto extends OperatorDto {
   @ApiProperty({ description: 'Menu type' })
-  @IsIn([0, 1, 2])
-  type: number;
+  @IsNotEmpty()
+  @IsEnum(MENU_TYPES_ENUM)
+  type: MENU_TYPES_ENUM;
 
   @ApiProperty({ description: 'Parent menu' })
-  @IsOptional()
+  @IsNotEmpty()
+  @IsInt()
   parentId: number;
 
   @ApiProperty({ description: 'Menu or permission name' })
+  @IsNotEmpty()
   @IsString()
   @MinLength(2)
   name: string;

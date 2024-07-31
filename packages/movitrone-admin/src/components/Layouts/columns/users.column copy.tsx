@@ -4,7 +4,7 @@ import moment from 'moment';
 import UserPhoto from '../../parts/UserPhoto';
 import ViewCountry from '../../parts/ViewCountry';
 
-const userColumns: ColumnsType<iAdmin> = [
+const MenuColumn: ColumnsType<iAdmin> = [
   {
     title: 'Basic Information',
     render: (_, record) => (

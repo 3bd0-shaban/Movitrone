@@ -10,8 +10,8 @@ const SelectCountry: FC<SelectCountryProps> = ({ onSelect }) => {
   return (
     <Select
       showSearch
-      placeholder='Select country ...'
-      className='w-full'
+      placeholder="Select country ..."
+      className="w-full"
       filterOption={filterOption}
       onSelect={(value) => onSelect(value)}
       options={Countries.map((item) => ({

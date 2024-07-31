@@ -1,0 +1,5 @@
+export enum MENU_TYPES_ENUM {
+  TABLEOFCONTENT = 0,
+  MENU = 1,
+  PERMISSION = 2,
+}

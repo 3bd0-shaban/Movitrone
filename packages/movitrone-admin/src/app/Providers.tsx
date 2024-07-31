@@ -26,30 +26,30 @@ export default function Providers({ children, session }: providersProps) {
 
   return (
     // <ThemeProvider attribute='class' defaultTheme='LightTheme'>
-      <AntdThemeMode>
-        <SessionProvider session={session}>
-          <AuthProvider>
-            <QueryClientProvider client={queryClient}>
-              <div className='min-h-screen overflow-x-hidden'>
-                <div
-                  className='fixed inset-0 bg-cover bg-center bg-no-repeat'
-                  style={{
-                    backgroundImage: "url('/Images/bg/23825.jpg')",
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center center',
-                  }}
-                />
+    <AntdThemeMode>
+      <SessionProvider session={session}>
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <div className="min-h-screen overflow-x-hidden">
+              <div
+                className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+                style={{
+                  backgroundImage: "url('/Images/bg/23825.jpg')",
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'center center',
+                }}
+              />
 
-                <div className='backdrop-blur-md'>
-                  <Toast />
-                  {children}
-                </div>
+              <div className="backdrop-blur-md">
+                <Toast />
+                {children}
               </div>
-            </QueryClientProvider>
-          </AuthProvider>
-        </SessionProvider>
-      </AntdThemeMode>
+            </div>
+          </QueryClientProvider>
+        </AuthProvider>
+      </SessionProvider>
+    </AntdThemeMode>
     // </ThemeProvider>
   );
 }

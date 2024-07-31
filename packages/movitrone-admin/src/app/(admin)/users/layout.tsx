@@ -10,7 +10,7 @@ export default async function Layout({
 
   if (session?.role !== 'Super Admin') {
     return (
-      <div className='flex h-3 items-center justify-center text-xl font-semibold text-red-500'>
+      <div className="flex h-3 items-center justify-center text-xl font-semibold text-red-500">
         {"you don't have permssions to acceess this resorces"}
       </div>
     );

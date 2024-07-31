@@ -19,9 +19,9 @@ const SeoCountryColumn: ColumnsType<iSeoCountry> = [
     title: 'Is Main',
     render: (_, record) =>
       record.is_Main ? (
-        <Tag color='green'>True</Tag>
+        <Tag color="green">True</Tag>
       ) : (
-        <Tag color='red'>False</Tag>
+        <Tag color="red">False</Tag>
       ),
   },
   {

@@ -7,7 +7,6 @@ export interface RefreshTokenProps {
   expires_at: Date;
 }
 
-
 export async function refreshToken(): Promise<RefreshTokenProps> {
   try {
     const headers: AxiosRequestConfig = {

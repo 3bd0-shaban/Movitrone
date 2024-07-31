@@ -55,7 +55,7 @@ export default function AdminWraper({
           top: 15,
           bottom: 15,
         }}
-        breakpoint='lg'
+        breakpoint="lg"
         collapsedWidth={sideWidth}
         onBreakpoint={(broken: any) => {
           if (broken) {
@@ -64,27 +64,27 @@ export default function AdminWraper({
             setSideWidth(0);
           }
         }}
-        className='hideScrollBare'
+        className="hideScrollBare"
         collapsed={collapsed}
       >
-        <div className='demo-logo-vertical flex justify-center p-5'>
+        <div className="demo-logo-vertical flex justify-center p-5">
           <Image
             height={80}
             width={200}
-            className='h-14 w-44'
-            src='/Images/icons/FtlErates-Black.svg'
+            className="h-14 w-44"
+            src="/Images/icons/FtlErates-Black.svg"
             priority={true}
-            alt='ftlerates'
+            alt="ftlerates"
           />
         </div>
         <SideBar session={session} />
-        <div className='pt-20' />
+        <div className="pt-20" />
       </Layout.Sider>
       <Layout
-        className='site-layout duration-300'
+        className="site-layout duration-300"
         style={{ marginLeft: layoutWidth, background: 'none' }}
       >
-        <Layout.Header style={{ padding: 0, margin:'20px 0 20px 0' }} >
+        <Layout.Header style={{ padding: 0, margin: '20px 0 20px 0' }}>
           <div
             style={{
               padding: 0,
@@ -96,51 +96,50 @@ export default function AdminWraper({
               display: 'flex',
               alignItems: 'center',
             }}
-            className='card-shadows-slate-300 mb-5 flex items-center justify-between gap-2'
+            className="card-shadows-slate-300 mb-5 flex items-center justify-between gap-2"
           >
-            <div className='flex items-center gap-2'>
+            <div className="flex items-center gap-2">
               <Button
-                type='text'
+                type="text"
                 icon={collapsed ? <RiMenuUnfold2Line /> : <RiMenuFold2Fill />}
                 onClick={() => {
                   setCollapsed(collapsed === true ? false : true);
                   setWidth(collapsed ? 300 : 110);
                   setSideWidth(80);
                 }}
-                className='hidden rounded-xl md:block'
+                className="hidden rounded-xl md:block"
                 style={{
                   fontSize: '16px',
                   width: 64,
                   height: 64,
                 }}
               />
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <Input
-                  size='large'
-                  placeholder='Search'
-                  className='hidden rounded-lg md:flex'
+                  size="large"
+                  placeholder="Search"
+                  className="hidden rounded-lg md:flex"
                   prefix={
-                    <span className='text-gray-400'>
+                    <span className="text-gray-400">
                       <FaSearchPlus />
                     </span>
                   }
                 />
               </div>
             </div>
-            <div className='flex items-center gap-2 px-2'>
+            <div className="flex items-center gap-2 px-2">
               <MainDropdown user={user as iAdmin} />
             </div>
           </div>
-
         </Layout.Header>
-          <Layout.Content
-            style={{
-              minHeight: 280,
-            }}
-            className='rounded-lg'
-          >
-            {children}
-          </Layout.Content>
+        <Layout.Content
+          style={{
+            minHeight: 280,
+          }}
+          className="rounded-lg"
+        >
+          {children}
+        </Layout.Content>
       </Layout>
     </Layout>
   );

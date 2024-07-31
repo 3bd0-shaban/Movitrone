@@ -8,9 +8,10 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   forwardRef,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ApiResult } from '~/common/decorators/api-result.decorator';
 import { IdParam } from '~/common/decorators/id-param.decorator';
@@ -29,6 +30,7 @@ import {
   definePermission,
   Perm,
 } from '~/modules/auth/decorator/permission.decorator';
+import { JwtAdminGuard } from '~/modules/auth/guards/jwt-auth.guard';
 
 export const permissions = definePermission('system:role', {
   LIST: 'list',
@@ -39,7 +41,7 @@ export const permissions = definePermission('system:role', {
 } as const);
 
 @ApiTags('System - Role module')
-@ApiSecurityAuth()
+@ApiBearerAuth()
 @Controller('roles')
 export class RoleController {
   constructor(
@@ -52,6 +54,7 @@ export class RoleController {
   @Get()
   @ApiOperation({ summary: 'Get role list' })
   @ApiResult({ type: [RoleEntity], isPage: true })
+  @UseGuards(JwtAdminGuard)
   @Perm(permissions.LIST)
   async list(@Query() dto: RoleQueryDto) {
     return this.roleService.list(dto);
@@ -60,6 +63,7 @@ export class RoleController {
   @Get(':id')
   @ApiOperation({ summary: 'Get role information' })
   @ApiResult({ type: RoleInfo })
+  @UseGuards(JwtAdminGuard)
   @Perm(permissions.READ)
   async info(@IdParam() id: number) {
     return this.roleService.RoleById(id);
@@ -67,6 +71,7 @@ export class RoleController {
 
   @Post()
   @ApiOperation({ summary: 'Add new role' })
+  @UseGuards(JwtAdminGuard)
   @Perm(permissions.CREATE)
   async create(@Body() dto: RoleDto): Promise<void> {
     await this.roleService.create(dto);
@@ -74,6 +79,7 @@ export class RoleController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update role' })
+  @UseGuards(JwtAdminGuard)
   @Perm(permissions.UPDATE)
   async update(
     @IdParam() id: number,
@@ -81,11 +87,11 @@ export class RoleController {
   ): Promise<void> {
     await this.roleService.update(id, dto);
     await this.menuService.refreshOnlineUserPerms(false);
-    // this.sseService.noticeClientToUpdateMenusByRoleIds([id]);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete role' })
+  @UseGuards(JwtAdminGuard)
   @Perm(permissions.DELETE)
   async delete(@IdParam() id: number): Promise<void> {
     if (await this.roleService.checkUserByRoleId(id))
@@ -95,6 +101,5 @@ export class RoleController {
 
     await this.roleService.delete(id);
     await this.menuService.refreshOnlineUserPerms(false);
-    // this.sseService.noticeClientToUpdateMenusByRoleIds([id]);
   }
 }

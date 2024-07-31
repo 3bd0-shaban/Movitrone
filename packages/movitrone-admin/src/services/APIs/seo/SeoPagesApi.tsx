@@ -66,7 +66,6 @@ export function useUpdateSeoPageByIdMutation() {
   });
 }
 
-
 export function useDeleteSeoPageByIdMutation() {
   const queryClient = useQueryClient();
 

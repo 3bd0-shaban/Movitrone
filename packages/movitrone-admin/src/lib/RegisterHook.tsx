@@ -30,7 +30,7 @@ const RegisterHook = <TFieldValues extends FieldValues = FieldValues>({
 
         return (
           <Form.Item
-            className='text-sm text-black'
+            className="text-sm text-black"
             {...props}
             initialValue={field.value}
             normalize={handleNormalize}

@@ -39,33 +39,33 @@ const FormSignIn: FC = ({}) => {
   };
   const Items = [{ name: 'email' }, { name: 'password' }];
   return (
-    <Form onFinish={handleSubmit(SubmitSignIn)} layout='vertical'>
+    <Form onFinish={handleSubmit(SubmitSignIn)} layout="vertical">
       <div>
         {Items.map((item) => (
           <FormItem
             key={item.name}
             control={control}
-            label={<p className='text-xs uppercase'>{`your ${item.name}`}</p>}
+            label={<p className="text-xs uppercase">{`your ${item.name}`}</p>}
             name={item.name as keyof FormDataProps}
           >
             <Input
               type={item.name}
-              size='large'
+              size="large"
               placeholder={`Enter your ${
                 item.name.charAt(0).toUpperCase() +
                 item.name.slice(1).toLowerCase()
               } ...`}
-              variant='filled'
-              className='form-input'
+              variant="filled"
+              className="form-input"
             />
           </FormItem>
         ))}
       </div>
 
       <Button
-        htmlType='submit'
-        type='primary'
-        className='my-3 w-full'
+        htmlType="submit"
+        type="primary"
+        className="my-3 w-full"
         disabled={isPending}
         loading={isPending}
       >

@@ -1,7 +1,7 @@
 import { iAdmin } from '../user/iAdmin';
 export interface iMenu {
   id: number;
-  key:number;
+  key: number;
   createdAt: Date;
   updatedAt: Date;
   createdBy: iAdmin;
@@ -11,15 +11,6 @@ export interface iMenu {
   path: string;
   permission: string;
   type: iMenuTypesEnum;
-  icon: string;
-  orderNo: string;
-  component: string;
-  isExt: boolean;
-  extOpenMode: number;
-  keepAlive: number;
-  show: number;
-  activeMenu: string;
-  status: number;
   children: iMenu[];
 }
 

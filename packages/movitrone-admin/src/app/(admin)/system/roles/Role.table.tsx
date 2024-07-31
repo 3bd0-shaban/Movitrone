@@ -14,7 +14,7 @@ import {
   useDeleteMenuByIdMutation,
   useGetAllMenusQuery,
 } from '@/services/APIs/system/MenuApi';
-import MenusCreate from './Menus.create';
+import RoleCreate from './Role.create';
 import { getMenuType } from '@/utils/getMenuType';
 import { getError } from '@/Helpers/getError';
 import { useForm } from 'react-hook-form';
@@ -22,7 +22,7 @@ import { useFeaturesStore } from '@/store/useFeaturesStore';
 import MenuColumn from '@/components/Layouts/columns/menu.column';
 import toast from 'react-hot-toast';
 
-const MenusTable: FC = () => {
+const RoleTable: FC = () => {
   const { data, isFetching } = useGetAllMenusQuery();
   const { mutateAsync } = useCreateNewMenuMutation();
   const { mutateAsync: DeleteMenu } = useDeleteMenuByIdMutation();
@@ -117,7 +117,7 @@ const MenusTable: FC = () => {
         okText="Confirm"
         cancelText="Cancel"
       >
-        <MenusCreate
+        <RoleCreate
           menus={transformedData as any}
           control={control}
           setValue={setValue}
@@ -165,4 +165,4 @@ const MenusTable: FC = () => {
   );
 };
 
-export default MenusTable;
+export default RoleTable;

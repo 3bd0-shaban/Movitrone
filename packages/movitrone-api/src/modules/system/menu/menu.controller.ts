@@ -14,7 +14,6 @@ import { flattenDeep } from 'lodash';
 
 import { ApiResult } from '~/common/decorators/api-result.decorator';
 import { IdParam } from '~/common/decorators/id-param.decorator';
-import { ApiSecurityAuth } from '~/common/decorators/swagger.decorator';
 import { CreatorPipe } from '~/common/pipes/creator.pipe';
 import { UpdaterPipe } from '~/common/pipes/updater.pipe';
 import {
@@ -27,7 +26,6 @@ import { MenuDto, MenuQueryDto, MenuUpdateDto } from './dto/menu.dto';
 import { MenuItemInfo } from './model/menu.model';
 import { MenuService } from './menu.service';
 import { JwtAdminGuard } from '~/modules/auth/guards/jwt-auth.guard';
-import { DashboardGuard } from '~/modules/auth/guards/dashboard.guard';
 
 export const permissions = definePermission('system:menu', {
   LIST: 'list',
@@ -49,7 +47,6 @@ export class MenuController {
   @UseGuards(JwtAdminGuard)
   @Perm(permissions.LIST)
   async list(@Query() dto: MenuQueryDto) {
-    console.log('sssssss');
     return this.menuService.list(dto);
   }
 

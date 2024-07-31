@@ -39,7 +39,6 @@ export class MenuService {
         ...(path && { path: Like(`%${path}%`) }),
         ...(permission && { permission: Like(`%${permission}%`) }),
       },
-      order: { orderNo: 'ASC' },
     });
     const menuList = generatorMenu(menus);
 
@@ -72,7 +71,7 @@ export class MenuService {
     if (isEmpty(roleIds)) return generatorRouters([]);
 
     if (this.roleService.hasAdminRole(roleIds)) {
-      menus = await this.menuRepository.find({ order: { orderNo: 'ASC' } });
+      menus = await this.menuRepository.find();
     } else {
       menus = await this.menuRepository
         .createQueryBuilder('menu')

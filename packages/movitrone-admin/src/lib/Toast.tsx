@@ -7,10 +7,10 @@ const Toast: FC<ToastProps> = ({}) => {
   return (
     <div>
       <Toaster
-        position='bottom-center'
+        position="bottom-center"
         reverseOrder={false}
         gutter={8}
-        containerClassName=''
+        containerClassName=""
         containerStyle={{}}
         toastOptions={{
           // Define default options
