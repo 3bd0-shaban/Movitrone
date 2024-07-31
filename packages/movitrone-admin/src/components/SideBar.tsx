@@ -55,7 +55,7 @@ const SideBar: FC<SideBarElementsProps> = ({ session }) => {
           )
         : null,
       getItem(
-        <Link href="/users/admins">Admins</Link>,
+        <Link href="/users/dashboard">Admins</Link>,
         '3-2',
         <FaStarHalf size={18} />,
       ),

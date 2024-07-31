@@ -10,9 +10,11 @@ import {
   Relation,
 } from 'typeorm';
 import { RoleEntity } from '~/modules/system/role/entity/role.entity';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'sys_user' })
 export class AdminEntity extends UserShared {
+  @ApiProperty({ description: 'user roles' })
   @Column({
     type: 'enum',
     enum: ['Super Admin', 'Admin'],
@@ -20,6 +22,7 @@ export class AdminEntity extends UserShared {
   })
   role: string;
 
+  @ApiProperty({ description: 'Dashboard user roles' })
   @ManyToMany(() => RoleEntity, (role) => role.users)
   @JoinTable({
     name: 'sys_user_roles',
@@ -29,8 +32,11 @@ export class AdminEntity extends UserShared {
   roles: Relation<RoleEntity[]>;
 
   @OneToMany((type) => LogEntity, (log) => log.admin)
+  @ApiHideProperty()
+  @ApiProperty({ description: 'logs' })
   logs: LogEntity[];
 
   @OneToMany((type) => Episode, (episode) => episode.created_By)
+  @ApiHideProperty()
   episodes: Episode[];
 }

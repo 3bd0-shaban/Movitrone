@@ -8,8 +8,10 @@ import {
   Delete,
   Query,
   UseGuards,
+  UsePipes,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { JwtAdminGuard } from '../../auth/guards/jwt-auth.guard';
 import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
@@ -21,7 +23,19 @@ import { AdminEntity } from './entities/admin.entity';
 import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
 import { LogService } from '../../log/log.service';
 import { ADMIN_ROLES_ENUMS } from './admin.constant';
-import { AdminsRoleArgs } from './dto/args/admins-role.args';
+import { definePermission } from '~/modules/auth/decorator/permission.decorator';
+import { ApiResult } from '~/common/decorators/api-result.decorator';
+import { CreatorPipe } from '~/common/pipes/creator.pipe';
+import { LogMessage } from '~/common/decorators/log-message.decorator';
+import { LogInterceptor } from '~/common/interceptors/log.interceptor';
+
+export const permissions = definePermission('system:users:dashboard', {
+  LIST: 'list',
+  CREATE: 'create',
+  READ: 'read',
+  UPDATE: 'update',
+  DELETE: 'delete',
+} as const);
 
 @ApiTags('Admin - Dashboard Manpulation')
 @ApiBearerAuth()
@@ -32,51 +46,53 @@ export class AdminController {
     private readonly logService: LogService,
   ) {}
 
-  //Self Users API methods ( for website )
-  @Get('get/self')
+  @Get('self')
+  @ApiOperation({ summary: 'Get admin self details' })
+  @ApiResult({ type: AdminEntity })
   @UseGuards(JwtAdminGuard)
-  findSelf(@CurrentUser() user: AdminEntity): Promise<AdminEntity> {
+  async findSelf(@CurrentUser() user: AdminEntity): Promise<AdminEntity> {
     return this.adminService.findOne(user.id);
   }
 
-  @Put('update/self')
+  @Put('self')
+  @ApiOperation({ summary: 'update admin self details' })
   @UseGuards(JwtAdminGuard)
+  @LogMessage('updating self account details')
+  @UseInterceptors(LogInterceptor)
   async updateSelf(
     @CurrentUser() user: AdminEntity,
-    @Body() updateUserDto: updateUserDTO,
-  ): Promise<string> {
+    @Body(CreatorPipe) updateUserDto: updateUserDTO,
+  ): Promise<void> {
     await this.adminService.update(user.id, updateUserDto);
-    await this.logService.create('updated his account details', user);
-    return 'ok';
   }
 
-  @Put('update/self/password')
+  @Put('self/password')
+  @ApiOperation({ summary: 'update self account details' })
   @UseGuards(JwtAdminGuard)
+  @LogMessage('updating account password')
+  @UseInterceptors(LogInterceptor)
   async updateSelfPassword(
     @CurrentUser() user: AdminEntity,
     @Body() inputs: PasswordUpdateDto,
-  ): Promise<string> {
+  ): Promise<void> {
     await this.adminService.updatePasswordById(user.id, inputs);
-    await this.logService.create('updated his account password', user);
-    return 'ok';
   }
 
   //admin API methods to control users ( for dashbaord )
   @Post('create-user')
+  @ApiOperation({ summary: 'create user' })
+  @LogMessage('creating account')
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async create(
     @CurrentUser() user: AdminEntity,
     @Body() inputs: CreateAdminDto,
   ) {
-    const admin = await this.adminService.create(inputs);
-    await this.logService.create(
-      `created new dashboard user account with email ${inputs.email}`,
-      user,
-    );
-    return admin;
+    await this.adminService.create(inputs);
   }
 
   @Get('role/:role')
+  @ApiOperation({ summary: 'Get users by role' })
+  @ApiResult({ type: [AdminEntity], isPage: true })
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async findAll(
     @Query() query: PaginationArgs,
@@ -85,45 +101,42 @@ export class AdminController {
     return await this.adminService.findAll(query, role);
   }
 
-  @Get('get-by-id/:id')
+  @Get('user-id/:id')
+  @ApiOperation({ summary: 'Get user by id' })
+  @ApiResult({ type: AdminEntity })
   @UseGuards(JwtAdminGuard, DashboardGuard)
   findOne(@Param('id') id: number): Promise<AdminEntity> {
     return this.adminService.findOne(id);
   }
 
-  @Put('update-by-id/:id')
+  @Put('user-id/:id')
+  @ApiOperation({ summary: 'update user by id' })
   @UseGuards(JwtAdminGuard, DashboardGuard)
+  @LogMessage('updateing user details by id')
   async update(
     @Param('id') id: number,
-    @CurrentUser() user: AdminEntity,
-    @Body() updateUserDto: updateUserDTO,
-  ): Promise<string> {
+    @Body(CreatorPipe) updateUserDto: updateUserDTO,
+  ): Promise<void> {
     await this.adminService.update(id, updateUserDto);
-    await this.logService.create(`updated his account`, user);
-    return 'ok';
   }
 
-  @Put('update-by-id/:id/password')
+  @Put('userid/:id/password')
+  @ApiOperation({ summary: 'update user password' })
   @UseGuards(JwtAdminGuard, DashboardGuard)
+  @LogMessage('updating user password')
   async updatePassword(
     @Param('id') id: number,
-    @CurrentUser() user: AdminEntity,
-    @Body() inputs: PasswordUpdateDto,
-  ): Promise<string> {
+    @Body(CreatorPipe) inputs: PasswordUpdateDto,
+  ): Promise<void> {
     await this.adminService.updatePasswordById(id, inputs);
-    await this.logService.create('updated his account details', user);
-
-    return 'ok';
   }
 
-  @Delete('delete-by-id/:id')
+  @Delete('user-id/:id')
+  @ApiOperation({ summary: 'delete user account' })
+  @LogMessage('Deleting account')
+  @UseInterceptors(LogInterceptor)
   @UseGuards(JwtAdminGuard, DashboardGuard)
-  async remove(
-    @Param('id') id: number,
-    @CurrentUser() user: AdminEntity,
-  ): Promise<void> {
-    const removed = await this.adminService.removeById(id);
-    await this.logService.create('updated his account details', user);
-    return removed;
+  async remove(@Param('id') id: number): Promise<void> {
+    await this.adminService.removeById(id);
   }
 }

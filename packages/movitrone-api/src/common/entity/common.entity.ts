@@ -33,8 +33,10 @@ export abstract class CompleteEntity extends CommonEntity {
 
   @ApiProperty({ description: 'Creator' })
   @VirtualColumn({
-    query: (alias) =>
-      `SELECT firstname FROM sys_user WHERE id = ${alias}.created_by`,
+    query: (alias) => {
+      console.log('Alias for creator:', alias);
+      return `(SELECT * FROM sys_user WHERE id = ${alias}.created_by)`;
+    },
   })
   creator: string;
 

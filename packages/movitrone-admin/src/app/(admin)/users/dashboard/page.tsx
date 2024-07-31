@@ -1,11 +1,11 @@
 import React from 'react';
 import UsersTable from '../(components)/UsersTable';
-import { iRole } from '@/types/user/iAdmin';
+import { iRoleEnum } from '@/types/user/iAdmin';
 
 export default async function Users({
   params,
 }: {
-  params: { adminRole: iRole };
+  params: { adminRole: iRoleEnum };
 }) {
   const roles = [
     { params: 'admins', role: 'Admin' },
@@ -21,7 +21,9 @@ export default async function Users({
         {/* <NewClient /> */}
       </div>
       <UsersTable
-        role={roles.find((p) => p.params === params.adminRole)?.role as iRole}
+        role={
+          roles.find((p) => p.params === params.adminRole)?.role as iRoleEnum
+        }
       />
     </>
   );
