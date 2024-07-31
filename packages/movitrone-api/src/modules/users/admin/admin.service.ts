@@ -15,6 +15,9 @@ import { AdminEntity } from './entities/admin.entity';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
 import { ADMIN_ROLES_ENUMS } from './admin.constant';
+import { Pagination } from '~/helper/paginate/pagination';
+import { paginate } from '~/helper/paginate';
+import { PagerDto } from '~/common/dto/pager.dto';
 
 @Injectable()
 export class AdminService {
@@ -62,18 +65,19 @@ export class AdminService {
    * @returns {Promise<{ users: AdminEntity[]; results: number; total: number }>} - Paginated users
    * @memberof UserService
    */
-  async findAll(
-    pagination: PaginationArgs,
-    role: ADMIN_ROLES_ENUMS,
-  ): Promise<{ users: AdminEntity[]; results: number; total: number }> {
-    const { page = 1, limit = 10 } = pagination;
-    const skip = (page - 1) * limit;
-    const [users, total] = await this.adminRepository.findAndCount({
-      where: { role },
-      take: limit,
-      skip,
-    });
-    return { total, results: users.length, users };
+  async findAll({
+    page = 1,
+    pageSize = 10,
+    role,
+  }: PagerDto & { role: ADMIN_ROLES_ENUMS }): Promise<Pagination<AdminEntity>> {
+    const queryBuilder = this.adminRepository.createQueryBuilder('admin');
+
+    if (role) {
+      queryBuilder.andWhere('admin.role = :role', { role });
+    }
+
+    // Paginate using utility function
+    return paginate<AdminEntity>(queryBuilder, { page, pageSize });
   }
 
   /**

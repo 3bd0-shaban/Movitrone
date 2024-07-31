@@ -8,11 +8,9 @@ import {
   Delete,
   Query,
   UseGuards,
-  UsePipes,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { JwtAdminGuard } from '../../auth/guards/jwt-auth.guard';
 import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
 import { DashboardGuard } from '../../auth/guards/dashboard.guard';
@@ -28,6 +26,8 @@ import { ApiResult } from '~/common/decorators/api-result.decorator';
 import { CreatorPipe } from '~/common/pipes/creator.pipe';
 import { LogMessage } from '~/common/decorators/log-message.decorator';
 import { LogInterceptor } from '~/common/interceptors/log.interceptor';
+import { Pagination } from '~/helper/paginate/pagination';
+import { PagerDto } from '~/common/dto/pager.dto';
 
 export const permissions = definePermission('system:users:dashboard', {
   LIST: 'list',
@@ -81,8 +81,9 @@ export class AdminController {
   //admin API methods to control users ( for dashbaord )
   @Post('create-user')
   @ApiOperation({ summary: 'create user' })
-  @LogMessage('creating account')
   @UseGuards(JwtAdminGuard, DashboardGuard)
+  @LogMessage('creating account')
+  @UseInterceptors(LogInterceptor)
   async create(
     @CurrentUser() user: AdminEntity,
     @Body() inputs: CreateAdminDto,
@@ -95,10 +96,10 @@ export class AdminController {
   @ApiResult({ type: [AdminEntity], isPage: true })
   @UseGuards(JwtAdminGuard, DashboardGuard)
   async findAll(
-    @Query() query: PaginationArgs,
+    @Query() query: PagerDto,
     @Param('role') role: ADMIN_ROLES_ENUMS,
-  ): Promise<{ users: AdminEntity[]; total: number }> {
-    return await this.adminService.findAll(query, role);
+  ): Promise<Pagination<AdminEntity>> {
+    return await this.adminService.findAll({ ...query, role });
   }
 
   @Get('user-id/:id')
@@ -113,6 +114,7 @@ export class AdminController {
   @ApiOperation({ summary: 'update user by id' })
   @UseGuards(JwtAdminGuard, DashboardGuard)
   @LogMessage('updateing user details by id')
+  @UseInterceptors(LogInterceptor)
   async update(
     @Param('id') id: number,
     @Body(CreatorPipe) updateUserDto: updateUserDTO,
@@ -124,6 +126,7 @@ export class AdminController {
   @ApiOperation({ summary: 'update user password' })
   @UseGuards(JwtAdminGuard, DashboardGuard)
   @LogMessage('updating user password')
+  @UseInterceptors(LogInterceptor)
   async updatePassword(
     @Param('id') id: number,
     @Body(CreatorPipe) inputs: PasswordUpdateDto,

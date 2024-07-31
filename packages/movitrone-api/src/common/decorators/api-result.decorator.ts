@@ -7,18 +7,16 @@ import {
 import { METHOD_METADATA } from '@nestjs/common/constants';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 
-import { ResOp } from '~/common/model/response.model';
-
 const baseTypeNames = ['String', 'Number', 'Boolean'];
 
 function genBaseProp(type: Type<any>) {
   if (baseTypeNames.includes(type.name))
-    return { type: type.name.toLocaleLowerCase() };
+    return { type: type.name.toLowerCase() };
   else return { $ref: getSchemaPath(type) };
 }
 
 /**
- * @description: 生成返回结果装饰器
+ * @description: Generates a result response decorator
  */
 export function ApiResult<TModel extends Type<any>>({
   type,
@@ -38,7 +36,7 @@ export function ApiResult<TModel extends Type<any>>({
         properties: {
           items: {
             type: 'array',
-            items: { $ref: getSchemaPath(type[0]) },
+            items: genBaseProp(type[0]),
           },
           meta: {
             type: 'object',
@@ -64,10 +62,8 @@ export function ApiResult<TModel extends Type<any>>({
     prop = { type: 'null', default: null };
   }
 
-  const model = Array.isArray(type) ? type[0] : type;
-
   return applyDecorators(
-    ApiExtraModels(model),
+    ApiExtraModels(type ? (Array.isArray(type) ? type[0] : type) : undefined),
     (
       target: object,
       key: string | symbol,
@@ -81,14 +77,23 @@ export function ApiResult<TModel extends Type<any>>({
         ApiResponse({
           status: status ?? (isPost ? HttpStatus.CREATED : HttpStatus.OK),
           schema: {
-            allOf: [
-              { $ref: getSchemaPath(ResOp) },
-              {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                items: genBaseProp(type instanceof Array ? type[0] : type),
+              },
+              meta: {
+                type: 'object',
                 properties: {
-                  data: prop,
+                  itemCount: { type: 'number', default: 0 },
+                  totalItems: { type: 'number', default: 0 },
+                  itemsPerPage: { type: 'number', default: 0 },
+                  totalPages: { type: 'number', default: 0 },
+                  currentPage: { type: 'number', default: 0 },
                 },
               },
-            ],
+            },
           },
         })(target, key, descriptor);
       });

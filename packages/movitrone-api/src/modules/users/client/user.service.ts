@@ -17,6 +17,9 @@ import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
 import { randomValue } from '~/utils/tool.util';
 import { EmailService } from '~/shared/mailer/mailer.service';
 import { VerifyOTPDTOs } from './dto/verify-otp.dto';
+import { paginate } from '~/helper/paginate';
+import { Pagination } from '~/helper/paginate/pagination';
+import { PagerDto } from '~/common/dto/pager.dto';
 
 @Injectable()
 export class ClientService {
@@ -70,16 +73,11 @@ export class ClientService {
    * @returns {Promise<{ users: ClientEntity[]; results: number; total: number }>} - Paginated users
    * @memberof UserService
    */
-  async findAll(
-    pagination: PaginationArgs,
-  ): Promise<{ users: ClientEntity[]; results: number; total: number }> {
-    const { page = 1, limit = 10 } = pagination;
-    const skip = (page - 1) * limit;
-    const [users, total] = await this.userRepository.findAndCount({
-      take: limit,
-      skip,
-    });
-    return { total, results: users.length, users };
+  async findAll({
+    page,
+    pageSize,
+  }: PagerDto): Promise<Pagination<ClientEntity>> {
+    return paginate(this.userRepository, { page, pageSize });
   }
 
   /**
