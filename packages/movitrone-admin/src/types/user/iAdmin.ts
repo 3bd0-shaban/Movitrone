@@ -9,7 +9,7 @@ export interface iAdmin {
   updatedAt?: Date;
   createdAt?: Date;
   country?: string;
-  role?: iRole;
+  role?: iRoleEnum;
 }
 
-export type iRole = 'Admin' | 'Super Admin';
+export type iRoleEnum = 'Admin' | 'Super Admin';

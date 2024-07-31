@@ -64,6 +64,14 @@ export const LightTheme: ThemeConfig = {
       colorPrimary: 'rgba(22, 119, 255, 0)',
       contentBg: 'rgba(21, 31, 83, 0.9)',
     },
+    Tree: {
+      directoryNodeSelectedBg: 'rgba(22, 119, 255, 0)',
+      colorPrimaryHover: 'rgba(64, 150, 255, 0.05)',
+      colorBgContainer: 'rgba(0, 18, 96, 0)',
+      nodeSelectedBg: 'rgba(230, 244, 255, 0.12)',
+      colorPrimary: 'rgba(22, 119, 255, 0.97)',
+      colorPrimaryBorder: 'rgba(145, 202, 255, 0.96)',
+    },
   },
 };
 export const DarkTheme: ThemeConfig = {

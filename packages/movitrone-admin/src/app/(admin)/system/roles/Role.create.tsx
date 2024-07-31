@@ -1,100 +1,94 @@
 'use client';
 import FormItem from '@/lib/FormItem';
-import { useGetAllPermissionPathsQuery } from '@/services/APIs/system/MenuApi';
-import { iMenu } from '@/types/system/iMenu';
-import { formatPermission } from '@/utils/formatPermission';
-import {
-  Cascader,
-  Form,
-  Input,
-  Radio,
-  TreeSelect,
-  type RadioChangeEvent,
-} from 'antd';
+import { useGetAllMenusQuery } from '@/services/APIs/system/MenuApi';
+import { iRole } from '@/types/system/iRole';
+import { Form, Input, Radio, Spin, Tree } from 'antd';
 import { FC } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 
 interface RoleCreateProps {
-  menus: iMenu[];
-  control: UseFormReturn<iMenu>['control'];
-  setValue: UseFormReturn<iMenu>['setValue'];
-  watch: UseFormReturn<iMenu>['watch'];
+  control: UseFormReturn<iRole>['control'];
+  setValue: UseFormReturn<iRole>['setValue'];
 }
 
-const RoleCreate: FC<RoleCreateProps> = ({
-  menus,
-  control,
-  setValue,
-  watch,
-}) => {
-  const { data: permissions, isFetching } = useGetAllPermissionPathsQuery();
+const RoleCreate: FC<RoleCreateProps> = ({ control, setValue }) => {
+  const { data, isFetching } = useGetAllMenusQuery();
 
-  const onRadioChange = (e: RadioChangeEvent) => {
-    setValue('type', e.target.value);
-  };
+  const transformedMenus = data?.map((item) => ({
+    title: item.name,
+    key: item.id,
+    children:
+      item.children?.map((child) => ({
+        title: child.name,
+        key: child.id,
+        children: child.children?.map((smallChild) => ({
+          title: smallChild.name,
+          key: smallChild.id,
+        })),
+      })) || [],
+  }));
 
-  const onTreeSelectChange = (value: any) => {
-    setValue('parentId', value);
+  const getLastLevelKeys = (
+    checkedKeys: (string | number)[],
+    treeData: any[],
+  ) => {
+    const lastLevelKeys: (string | number)[] = [];
+
+    const findLastLevelKeys = (nodes: any[]) => {
+      nodes.forEach((node) => {
+        if (node.children && node.children.length > 0) {
+          findLastLevelKeys(node.children);
+        } else {
+          if (checkedKeys.includes(node.key)) {
+            lastLevelKeys.push(node.key);
+          }
+        }
+      });
+    };
+
+    findLastLevelKeys(treeData);
+    return lastLevelKeys;
   };
-  const transformedMenus = [
-    {
-      title: 'Root Directory',
-      value: 0,
-      children: menus.map((item) => ({
-        title: item.name,
-        value: item.id,
-        children:
-          item.children?.map((child) => ({
-            title: child.name,
-            value: child.id,
-          })) || [],
-      })),
-    },
-  ];
 
   return (
     <Form layout="vertical">
       <p className="mb-3 text-lg font-mono">Create Menu or Permission</p>
       <div className="flex flex-col gap-3">
-        <Radio.Group onChange={onRadioChange} value={watch('type')}>
-          <Radio value={0}>Table Of Content</Radio>
-          <Radio value={1}>Menu</Radio>
-          <Radio value={2}>Permission</Radio>
-        </Radio.Group>
         <FormItem control={control} name="name" label="Node Name" required>
           <Input placeholder="Enter Node Name" />
         </FormItem>
-        <FormItem
-          control={control}
-          name="parentId"
-          label="Parent Menu"
-          required
-        >
-          <TreeSelect
-            style={{ width: '100%' }}
-            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-            treeData={transformedMenus}
-            placeholder="Select Parent Menu"
-            onChange={onTreeSelectChange}
-          />
+        <FormItem control={control} name="value" label="Node Name" required>
+          <Input placeholder="Enter Role Value" />
         </FormItem>
-        {watch('type') !== 0 && (
-          <>
-            <FormItem
-              control={control}
-              name="permission"
-              label="Permission Flag"
-              required
-            >
-              <Cascader
-                dropdownStyle={{ background: 'rgba(21, 31, 83, 0.5)' }}
-                options={formatPermission(permissions as string[])}
-                loading={isFetching}
-                placeholder="Select permission"
+        <FormItem control={control} name="status" label="Status" required>
+          <Radio.Group onChange={(e) => setValue('status', e.target.value)}>
+            <Radio value={1}>Enable</Radio>
+            <Radio value={0}>Deactivate</Radio>
+          </Radio.Group>
+        </FormItem>
+
+        <Form.Item name="menuIds" label="Menus Requireds" required>
+          <div className="border border-black rounded-xl p-5 ">
+            {isFetching ? (
+              <Spin />
+            ) : (
+              <Tree
+                checkable
+                onCheck={(checkedKeys) => {
+                  const lastLevelKeys = getLastLevelKeys(
+                    checkedKeys as (string | number)[],
+                    transformedMenus || [],
+                  );
+                  const checkedIds = lastLevelKeys.map((key) => Number(key));
+                  setValue('menuIds', checkedIds);
+                }}
+                defaultExpandAll
+                treeData={transformedMenus}
+                blockNode
               />
-            </FormItem>
-          </>
-        )}
+            )}
+          </div>
+        </Form.Item>
       </div>
     </Form>
   );

@@ -8,54 +8,43 @@ import {
   Table,
   type TableColumnsType,
 } from 'antd';
-import { iMenu } from '@/types/system/iMenu';
-import {
-  useCreateNewMenuMutation,
-  useDeleteMenuByIdMutation,
-  useGetAllMenusQuery,
-} from '@/services/APIs/system/MenuApi';
+import { iRole } from '@/types/system/iRole';
+
 import RoleCreate from './Role.create';
-import { getMenuType } from '@/utils/getMenuType';
 import { getError } from '@/Helpers/getError';
 import { useForm } from 'react-hook-form';
 import { useFeaturesStore } from '@/store/useFeaturesStore';
-import MenuColumn from '@/components/Layouts/columns/menu.column';
 import toast from 'react-hot-toast';
+import {
+  useCreateNewRoleMutation,
+  useDeleteRoleByIdMutation,
+  useGetAllRolesQuery,
+} from '@/services/APIs/system/RoleApi';
+import RoleMenu from '@/components/Layouts/columns/role.column';
 
 const RoleTable: FC = () => {
-  const { data, isFetching } = useGetAllMenusQuery();
-  const { mutateAsync } = useCreateNewMenuMutation();
-  const { mutateAsync: DeleteMenu } = useDeleteMenuByIdMutation();
+  const { data, isFetching } = useGetAllRolesQuery();
+  const { items } = data || {};
+  const { mutateAsync } = useCreateNewRoleMutation();
+  const { mutateAsync: DeleteMenu } = useDeleteRoleByIdMutation();
   const { set_Modal, isModal } = useFeaturesStore();
-  const { control, setValue, watch, handleSubmit } = useForm<iMenu>({
-    defaultValues: { type: 0 },
-  });
-  const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
-  const [modal, contextHook] = Modal.useModal();
-  const transformedData = data?.map((item) => ({
-    ...item,
-    key: item.id,
-    children: item.children?.map((child) => ({
-      ...child,
-      key: child.id,
-    })),
-  }));
+  const { control, setValue, handleSubmit } = useForm<iRole>({});
 
-  const OnSubmit = async (data: iMenu, parentId?: number) => {
-    const permission = (data?.permission as any)?.join(':');
-    const partentIdOfRow = parentId;
+  const [modal, contextHook] = Modal.useModal();
+
+  const OnSubmit = async (data: iRole) => {
     await mutateAsync({
-      data: { ...data, parentId: partentIdOfRow as number, permission },
+      data,
     })
       .then(() => {
-        toast.success(`New ${getMenuType(data.type)?.name} added Successully`);
+        toast.success(`Role is Successully`);
       })
       .catch((error) => {
         toast.error(getError(error));
       });
   };
 
-  const OnDelete = async (menuId: number) => {
+  const OnDelete = async (roleId: number) => {
     modal.confirm({
       title: 'Delete Menu',
       content:
@@ -64,7 +53,8 @@ const RoleTable: FC = () => {
       closeIcon: true,
       okText: 'Delete',
       onOk: async (close) => {
-        await DeleteMenu({ menuId })
+        console.log(roleId);
+        await DeleteMenu({ roleId })
           .then(() => {
             toast.success(`menu deleted successfully`);
             close();
@@ -76,21 +66,14 @@ const RoleTable: FC = () => {
     });
   };
 
-  const columns: TableColumnsType<iMenu> = [
-    ...MenuColumn,
+  const columns: TableColumnsType<iRole> = [
+    ...RoleMenu,
     {
       title: 'Operate',
       fixed: 'right',
       render: (_, record) => (
         <Space split={<Divider type="vertical" />} align="center">
           <Button type="link">edit</Button>
-          <Button
-            type="link"
-            onClick={() => set_Modal(true)}
-            disabled={record.type === 2}
-          >
-            Added
-          </Button>
           <Button type="link" onClick={() => OnDelete(record.id)}>
             delete
           </Button>
@@ -98,14 +81,6 @@ const RoleTable: FC = () => {
       ),
     },
   ];
-
-  const handleExpandAll = () => {
-    const allKeys = transformedData?.flatMap((item) => [
-      item.key,
-      ...(item.children?.map((child) => child.key) || []),
-    ]);
-    setExpandedRowKeys(allKeys || []);
-  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -117,25 +92,12 @@ const RoleTable: FC = () => {
         okText="Confirm"
         cancelText="Cancel"
       >
-        <RoleCreate
-          menus={transformedData as any}
-          control={control}
-          setValue={setValue}
-          watch={watch}
-        />
+        <RoleCreate control={control} setValue={setValue} />
       </Modal>
       <div className="blured-card"></div>
       <div className="blured-card">
         <div className="flex justify-between my-3">
-          <div className="flex gap-5">
-            <p>Menu Management</p>
-            <div className="flex gap-5">
-              <Button onClick={handleExpandAll}>Expand All</Button>
-              <Button onClick={() => setExpandedRowKeys([])}>
-                Collapse All
-              </Button>
-            </div>
-          </div>
+          <p>Menu Management</p>
           <div className="flex">
             <Button type="primary" onClick={() => set_Modal(true)}>
               Added
@@ -146,19 +108,9 @@ const RoleTable: FC = () => {
           columns={columns}
           loading={isFetching}
           pagination={false}
-          dataSource={transformedData}
+          dataSource={items}
           scroll={{ x: 1600 }}
           size="small"
-          expandable={{
-            expandedRowKeys: expandedRowKeys,
-            onExpand: (expanded, record) => {
-              setExpandedRowKeys(
-                expanded
-                  ? [...expandedRowKeys, record.key]
-                  : expandedRowKeys.filter((key) => key !== record.key),
-              );
-            },
-          }}
         />
       </div>
     </div>
