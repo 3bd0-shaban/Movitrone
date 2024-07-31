@@ -10,12 +10,12 @@ import { DataSource, ObjectType, Repository } from 'typeorm';
 
 interface Condition {
   entity: ObjectType<any>;
-  // 如果没有指定字段则使用当前验证的属性作为查询依据
+  // If no field is specified, use the current validation property as the query basis
   field?: string;
 }
 
 /**
- * 查询某个字段的值是否在数据表中存在
+ * Check if the value of a certain field exists in the data table
  */
 @ValidatorConstraint({ name: 'entityItemExist', async: true })
 @Injectable()
@@ -26,18 +26,18 @@ export class EntityExistConstraint implements ValidatorConstraintInterface {
     let repo: Repository<any>;
 
     if (!value) return true;
-    // 默认对比字段是id
+    // The default comparison field is id
     let field = 'id';
-    // 通过传入的 entity 获取其 repository
+    // Get the repository of the entity through the passed entity
     if ('entity' in args.constraints[0]) {
-      // 传入的是对象 可以指定对比字段
+      // The passed object can specify the comparison field
       field = args.constraints[0].field ?? 'id';
       repo = this.dataSource.getRepository(args.constraints[0].entity);
     } else {
-      // 传入的是实体类
+      // The passed object is an entity class
       repo = this.dataSource.getRepository(args.constraints[0]);
     }
-    // 通过查询记录是否存在进行验证
+    // Validate by checking if the record exists
     const item = await repo.findOne({ where: { [field]: value } });
     return !!item;
   }
@@ -45,13 +45,13 @@ export class EntityExistConstraint implements ValidatorConstraintInterface {
   defaultMessage(args: ValidationArguments) {
     if (!args.constraints[0]) return 'Model not been specified!';
 
-    return `All instance of ${args.constraints[0].name} must been exists in databse!`;
+    return `All instances of ${args.constraints[0].name} must exist in the database!`;
   }
 }
 
 /**
- * 数据存在性验证
- * @param entity Entity类或验证条件对象
+ * Data existence validation
+ * @param entity Entity class or validation condition object
  * @param validationOptions
  */
 function IsEntityExist(

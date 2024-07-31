@@ -25,10 +25,10 @@ export function list2Tree<T extends ListNode[]>(
 }
 
 /**
- * 过滤树，返回列表数据
+ * Filter tree and return list data
  * @param treeData
- * @param key 用于过滤的字段
- * @param value 用于过滤的值
+ * @param key The field used for filtering
+ * @param value The value used for filtering
  */
 export function filterTree2List(treeData, key, value) {
   const filterChildrenTree = (resTree, treeItem) => {
@@ -49,7 +49,7 @@ export function filterTree2List(treeData, key, value) {
 }
 
 /**
- * 过滤树，并保留原有的结构
+ * Filter tree and keep the original structure
  * @param treeData
  * @param predicate
  */

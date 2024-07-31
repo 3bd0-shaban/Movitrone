@@ -6,11 +6,11 @@ import { MultipartFile } from '@fastify/multipart';
 import dayjs from 'dayjs';
 
 enum Type {
-  IMAGE = '图片',
-  TXT = '文档',
-  MUSIC = '音乐',
-  VIDEO = '视频',
-  OTHER = '其他',
+  IMAGE = 'Image',
+  TXT = 'Document',
+  MUSIC = 'Music',
+  VIDEO = 'Video',
+  OTHER = 'Other',
 }
 
 export function getFileType(extName: string) {
@@ -77,10 +77,10 @@ export async function saveLocalFile(
     `${type}/`,
   );
   try {
-    // 判断是否有该文件夹
+    // Check if the directory exists
     await fs.promises.stat(filePath);
   } catch (error) {
-    // 没有该文件夹就创建
+    // Create the directory if it does not exist
     await fs.promises.mkdir(filePath, { recursive: true });
   }
   const writeStream = fs.createWriteStream(filePath + name);

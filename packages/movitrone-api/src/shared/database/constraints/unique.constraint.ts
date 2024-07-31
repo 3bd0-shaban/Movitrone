@@ -11,12 +11,12 @@ import { DataSource, ObjectType } from 'typeorm';
 
 interface Condition {
   entity: ObjectType<any>;
-  // 如果没有指定字段则使用当前验证的属性作为查询依据
+  // If no field is specified, use the current validation property as the query basis
   field?: string;
 }
 
 /**
- * 验证某个字段的唯一性
+ * Validate the uniqueness of a certain field
  */
 @ValidatorConstraint({ name: 'entityItemUnique', async: true })
 @Injectable()
@@ -24,7 +24,7 @@ export class UniqueConstraint implements ValidatorConstraintInterface {
   constructor(private dataSource: DataSource) {}
 
   async validate(value: any, args: ValidationArguments) {
-    // 获取要验证的模型和字段
+    // Get the model and field to validate
     const config: Omit<Condition, 'entity'> = {
       field: args.property,
     };
@@ -36,7 +36,7 @@ export class UniqueConstraint implements ValidatorConstraintInterface {
         }) as unknown as Required<Condition>;
     if (!condition.entity) return false;
     try {
-      // 查询是否存在数据,如果已经存在则验证失败
+      // Query if the data exists, if it already exists, validation fails
       const repo = this.dataSource.getRepository(condition.entity);
       return isNil(
         await repo.findOne({
@@ -44,7 +44,7 @@ export class UniqueConstraint implements ValidatorConstraintInterface {
         }),
       );
     } catch (err) {
-      // 如果数据库操作异常则验证失败
+      // If there's a database operation exception, validation fails
       return false;
     }
   }
@@ -57,13 +57,13 @@ export class UniqueConstraint implements ValidatorConstraintInterface {
 
     if (!entity) return 'Model not been specified!';
 
-    return `${queryProperty} of ${entity.name} must been unique!`;
+    return `${queryProperty} of ${entity.name} must be unique!`;
   }
 }
 
 /**
- * 数据唯一性验证
- * @param entity Entity类或验证条件对象
+ * Data uniqueness validation
+ * @param entity Entity class or validation condition object
  * @param validationOptions
  */
 function IsUnique(

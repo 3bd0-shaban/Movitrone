@@ -7,7 +7,7 @@ export class BusinessException extends HttpException {
   private errorCode: number;
 
   constructor(error: ErrorEnum | string) {
-    // 如果是非 ErrorEnum
+    //  If it is not ErrorEnum
     if (!error.includes(':')) {
       super(
         HttpException.createBody({
