@@ -22,6 +22,10 @@ export const LightTheme: ThemeConfig = {
     TreeSelect: {
       colorBgContainer: 'rgba(255, 255, 255, 0)',
       algorithm: true,
+      nodeSelectedBg: 'rgba(230, 244, 255, 0.13)',
+      colorPrimary: 'rgba(22, 119, 255, 0)',
+      colorPrimaryHover: 'rgba(64, 150, 255, 0.05)',
+      colorBgElevated: 'rgba(0, 18, 96, 0)',
     },
     Select: {
       algorithm: true,

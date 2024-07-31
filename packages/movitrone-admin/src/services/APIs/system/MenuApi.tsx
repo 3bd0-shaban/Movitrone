@@ -55,11 +55,11 @@ export function useCreateNewMenuMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ country }: { country: string }) =>
+    mutationFn: ({ data }: { data: iMenu }) =>
       ApiEndpoint<void>({
         method: 'POST',
         url: `${url}/api/system/menus`,
-        data: { country },
+        data,
       }),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['Menu'] });

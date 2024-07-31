@@ -14,15 +14,7 @@ export interface RouteRecordRaw {
   redirect?: string;
   meta: {
     title: string;
-    icon: string;
-    isExt: boolean;
-    extOpenMode: number;
     type: number;
-    orderNo: number;
-    show: number;
-    activeMenu: string;
-    status: number;
-    keepAlive: number;
   };
   children?: RouteRecordRaw[];
 }
@@ -30,15 +22,7 @@ export interface RouteRecordRaw {
 function createRoute(menu: MenuEntity, _isRoot): RouteRecordRaw {
   const commonMeta: RouteRecordRaw['meta'] = {
     title: menu.name,
-    icon: menu.icon,
-    isExt: menu.isExt,
-    extOpenMode: menu.extOpenMode,
     type: menu.type,
-    orderNo: menu.orderNo,
-    show: menu.show,
-    activeMenu: menu.activeMenu,
-    status: menu.status,
-    keepAlive: menu.keepAlive,
   };
 
   if (isExternal(menu.path)) {
@@ -56,7 +40,6 @@ function createRoute(menu: MenuEntity, _isRoot): RouteRecordRaw {
     return {
       id: menu.id,
       path: menu.path,
-      component: menu.component,
       name: menu.name,
       meta: { ...commonMeta },
     };
@@ -66,7 +49,6 @@ function createRoute(menu: MenuEntity, _isRoot): RouteRecordRaw {
     id: menu.id,
     path: menu.path,
     name: menu.name,
-    component: menu.component,
     meta: {
       ...commonMeta,
     },
@@ -80,7 +62,7 @@ function filterAsyncRoutes(
   const res: RouteRecordRaw[] = [];
 
   menus.forEach((menu) => {
-    if (menu.type === 2 || !menu.status) {
+    if (menu.type === 2) {
       // 如果是权限或禁用直接跳过
       return;
     }

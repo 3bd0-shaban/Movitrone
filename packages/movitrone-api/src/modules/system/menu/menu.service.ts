@@ -32,20 +32,12 @@ export class MenuService {
   /**
    * Get all menus and permissions
    */
-  async list({
-    name,
-    path,
-    permission,
-    component,
-    status,
-  }: MenuQueryDto): Promise<MenuEntity[]> {
+  async list({ name, path, permission }: MenuQueryDto): Promise<MenuEntity[]> {
     const menus = await this.menuRepository.find({
       where: {
         ...(name && { name: Like(`%${name}%`) }),
         ...(path && { path: Like(`%${path}%`) }),
         ...(permission && { permission: Like(`%${permission}%`) }),
-        ...(component && { component: Like(`%${component}%`) }),
-        ...(!isNil(status) ? { status } : null),
       },
       order: { orderNo: 'ASC' },
     });
