@@ -19,6 +19,7 @@ const Toast: FC<ToastProps> = ({}) => {
           style: {
             background: '#363636',
             color: '#fff',
+            zIndex: 99999,
           },
         }}
       />

@@ -21,6 +21,8 @@ import {
   useGetAllRolesQuery,
 } from '@/services/APIs/system/RoleApi';
 import RoleMenu from '@/components/Layouts/columns/role.column';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { RoleSystemValidations } from '@/validations/system/role.validations';
 
 const RoleTable: FC = () => {
   const { data, isFetching } = useGetAllRolesQuery();
@@ -28,16 +30,26 @@ const RoleTable: FC = () => {
   const { mutateAsync } = useCreateNewRoleMutation();
   const { mutateAsync: DeleteMenu } = useDeleteRoleByIdMutation();
   const { set_Modal, isModal } = useFeaturesStore();
-  const { control, setValue, handleSubmit } = useForm<iRole>({});
+  const {
+    control,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<iRole>({
+    resolver: joiResolver(RoleSystemValidations.CreateRole),
+  });
 
   const [modal, contextHook] = Modal.useModal();
-
+  console.log(errors);
   const OnSubmit = async (data: iRole) => {
     await mutateAsync({
       data,
     })
       .then(() => {
         toast.success(`Role is Successully`);
+        reset();
+        set_Modal(false);
       })
       .catch((error) => {
         toast.error(getError(error));
@@ -46,14 +58,13 @@ const RoleTable: FC = () => {
 
   const OnDelete = async (roleId: number) => {
     modal.confirm({
-      title: 'Delete Menu',
+      title: 'Delete Role',
       content:
-        'Menu Can not be deleted if it was associated to role, continue ?',
+        'Role Can not be deleted if there was associated users to this role, continue ?',
       maskClosable: true,
       closeIcon: true,
       okText: 'Delete',
       onOk: async (close) => {
-        console.log(roleId);
         await DeleteMenu({ roleId })
           .then(() => {
             toast.success(`menu deleted successfully`);
@@ -70,7 +81,7 @@ const RoleTable: FC = () => {
     ...RoleMenu,
     {
       title: 'Operate',
-      fixed: 'right',
+      width: 200,
       render: (_, record) => (
         <Space split={<Divider type="vertical" />} align="center">
           <Button type="link">edit</Button>
@@ -97,7 +108,7 @@ const RoleTable: FC = () => {
       <div className="blured-card"></div>
       <div className="blured-card">
         <div className="flex justify-between my-3">
-          <p>Menu Management</p>
+          <p>Roles Management</p>
           <div className="flex">
             <Button type="primary" onClick={() => set_Modal(true)}>
               Added
@@ -109,7 +120,6 @@ const RoleTable: FC = () => {
           loading={isFetching}
           pagination={false}
           dataSource={items}
-          scroll={{ x: 1600 }}
           size="small"
         />
       </div>

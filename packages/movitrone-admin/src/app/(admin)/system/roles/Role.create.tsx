@@ -51,13 +51,13 @@ const RoleCreate: FC<RoleCreateProps> = ({ control, setValue }) => {
   };
 
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" autoComplete="off">
       <p className="mb-3 text-lg font-mono">Create Menu or Permission</p>
       <div className="flex flex-col gap-3">
-        <FormItem control={control} name="name" label="Node Name" required>
+        <FormItem control={control} name="name" label="Role Name" required>
           <Input placeholder="Enter Node Name" />
         </FormItem>
-        <FormItem control={control} name="value" label="Node Name" required>
+        <FormItem control={control} name="value" label="Role Value" required>
           <Input placeholder="Enter Role Value" />
         </FormItem>
         <FormItem control={control} name="status" label="Status" required>
