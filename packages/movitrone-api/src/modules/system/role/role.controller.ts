@@ -4,26 +4,18 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
   Post,
   Put,
   Query,
   UseGuards,
-  forwardRef,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ApiResult } from '~/common/decorators/api-result.decorator';
 import { IdParam } from '~/common/decorators/id-param.decorator';
-import { ApiSecurityAuth } from '~/common/decorators/swagger.decorator';
 import { UpdaterPipe } from '~/common/pipes/updater.pipe';
-
-// import { SseService } from '~/modules/sse/sse.service';
 import { RoleEntity } from '~/modules/system/role/entity/role.entity';
-
 import { MenuService } from '../menu/menu.service';
-
-import { RoleDto, RoleQueryDto, RoleUpdateDto } from './dto/role.dto';
 import { RoleInfo } from './model/role.model';
 import { RoleService } from './role.service';
 import {
@@ -31,6 +23,8 @@ import {
   Perm,
 } from '~/modules/auth/decorator/permission.decorator';
 import { JwtAdminGuard } from '~/modules/auth/guards/jwt-auth.guard';
+import { RoleQueryDto, CreateRoleDto, UpdateRoleDto } from './dto';
+import { CreatorPipe } from '~/common/pipes/creator.pipe';
 
 export const permissions = definePermission('system:role', {
   LIST: 'list',
@@ -47,8 +41,6 @@ export class RoleController {
   constructor(
     private roleService: RoleService,
     private menuService: MenuService,
-    // @Inject(forwardRef(() => SseService))
-    // private sseService: SseService,
   ) {}
 
   @Get()
@@ -73,7 +65,7 @@ export class RoleController {
   @ApiOperation({ summary: 'Add new role' })
   @UseGuards(JwtAdminGuard)
   @Perm(permissions.CREATE)
-  async create(@Body() dto: RoleDto): Promise<void> {
+  async create(@Body(CreatorPipe) dto: CreateRoleDto): Promise<void> {
     await this.roleService.create(dto);
   }
 
@@ -83,7 +75,7 @@ export class RoleController {
   @Perm(permissions.UPDATE)
   async update(
     @IdParam() id: number,
-    @Body(UpdaterPipe) dto: RoleUpdateDto,
+    @Body(UpdaterPipe) dto: UpdateRoleDto,
   ): Promise<void> {
     await this.roleService.update(id, dto);
     await this.menuService.refreshOnlineUserPerms(false);

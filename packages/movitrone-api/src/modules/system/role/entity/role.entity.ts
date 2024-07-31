@@ -1,8 +1,6 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, JoinTable, ManyToMany, Relation } from 'typeorm';
-
 import { CompleteEntity } from '~/common/entity/common.entity';
-
 import { MenuEntity } from '../../menu/entity/menu.entity';
 import { AdminEntity } from '~/modules/users/admin/entities/admin.entity';
 
@@ -16,17 +14,9 @@ export class RoleEntity extends CompleteEntity {
   @ApiProperty({ description: 'Role Identifier' })
   value: string;
 
-  @Column({ nullable: true })
-  @ApiProperty({ description: 'Role Description' })
-  remark: string;
-
   @Column({ type: 'tinyint', nullable: true, default: 1 })
   @ApiProperty({ description: 'Status: 1 Enabled, 0 Disabled' })
   status: number;
-
-  @Column({ nullable: true })
-  @ApiProperty({ description: 'Default User' })
-  default: boolean;
 
   @ApiHideProperty()
   @ManyToMany(() => AdminEntity, (user) => user.roles)

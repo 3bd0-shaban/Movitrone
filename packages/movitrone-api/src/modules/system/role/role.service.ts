@@ -9,8 +9,8 @@ import { paginate } from '~/helper/paginate';
 import { Pagination } from '~/helper/paginate/pagination';
 import { RoleEntity } from '~/modules/system/role/entity/role.entity';
 
-import { RoleDto, RoleQueryDto, RoleUpdateDto } from './dto/role.dto';
 import { MenuEntity } from '../menu/entity/menu.entity';
+import { CreateRoleDto, UpdateRoleDto, RoleQueryDto } from './dto';
 
 @Injectable()
 export class RoleService {
@@ -37,7 +37,6 @@ export class RoleService {
     pageSize,
     name,
     value,
-    remark,
     status,
   }: RoleQueryDto): Promise<Pagination<RoleEntity>> {
     const queryBuilder = await this.roleRepository
@@ -45,7 +44,6 @@ export class RoleService {
       .where({
         ...(name ? { name: Like(`%${name}%`) } : null),
         ...(value ? { value: Like(`%${value}%`) } : null),
-        ...(remark ? { remark: Like(`%${remark}%`) } : null),
         ...(!isNil(status) ? { status } : null),
       });
 
@@ -84,7 +82,10 @@ export class RoleService {
   /**
    * Add role
    */
-  async create({ menuIds, ...data }: RoleDto): Promise<{ roleId: number }> {
+  async create({
+    menuIds,
+    ...data
+  }: CreateRoleDto): Promise<{ roleId: number }> {
     const role = await this.roleRepository.save({
       ...data,
       menus: menuIds
@@ -99,7 +100,7 @@ export class RoleService {
    * Update role information
    * If menuIds passed in is empty, clear the associated data stored in the sys_role_menus table, referring to the addition
    */
-  async update(id, { menuIds, ...data }: RoleUpdateDto): Promise<void> {
+  async update(id: number, { menuIds, ...data }: UpdateRoleDto): Promise<void> {
     await this.roleRepository.update(id, data);
     await this.entityManager.transaction(async (manager) => {
       const role = await this.roleRepository.findOne({ where: { id } });
