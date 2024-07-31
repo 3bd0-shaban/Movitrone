@@ -22,10 +22,10 @@ import {
   getDefinePermissions,
 } from '~/modules/auth/decorator/permission.decorator';
 
-import { MenuDto, MenuQueryDto, MenuUpdateDto } from './dto/menu.dto';
 import { MenuItemInfo } from './model/menu.model';
 import { MenuService } from './menu.service';
 import { JwtAdminGuard } from '~/modules/auth/guards/jwt-auth.guard';
+import { CreateMenuDto, MenuQueryDto, MenuUpdateDto } from './dto';
 
 export const permissions = definePermission('system:menu', {
   LIST: 'list',
@@ -62,7 +62,7 @@ export class MenuController {
   @ApiOperation({ summary: 'Add new menu or permission' })
   @UseGuards(JwtAdminGuard)
   @Perm(permissions.CREATE)
-  async create(@Body(CreatorPipe) dto: MenuDto): Promise<void> {
+  async create(@Body(CreatorPipe) dto: CreateMenuDto): Promise<void> {
     // check
     console.log(dto);
     await this.menuService.check(dto);

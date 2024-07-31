@@ -2,22 +2,19 @@ import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import Redis from 'ioredis';
-import { concat, isEmpty, isNil, uniq } from 'lodash';
-
+import { concat, isEmpty, uniq } from 'lodash';
 import { In, IsNull, Like, Not, Repository } from 'typeorm';
 
 import { BusinessException } from '~/common/exceptions/biz.exception';
 import { RedisKeys } from '~/constants/cache.constant';
 import { ErrorEnum } from '~/constants/error-code.constant';
 import { genAuthPermKey, genAuthTokenKey } from '~/helper/genRedisKey';
-// import { SseService } from '~/modules/sse/sse.service';
 import { MenuEntity } from './entity/menu.entity';
 
 import { deleteEmptyChildren, generatorMenu, generatorRouters } from '~/utils';
 
 import { RoleService } from '../role/role.service';
-
-import { MenuDto, MenuQueryDto, MenuUpdateDto } from './dto/menu.dto';
+import { CreateMenuDto, MenuQueryDto, MenuUpdateDto } from './dto';
 
 @Injectable()
 export class MenuService {
@@ -50,7 +47,7 @@ export class MenuService {
     return menus;
   }
 
-  async create(menu: MenuDto): Promise<void> {
+  async create(menu: CreateMenuDto): Promise<void> {
     const result = await this.menuRepository.save(menu);
     console.log(result);
     // this.sseService.noticeClientToUpdateMenusByMenuIds([result.id]);
@@ -88,7 +85,7 @@ export class MenuService {
   /**
    * Check if menu creation rules are met
    */
-  async check(dto: Partial<MenuDto>): Promise<void | never> {
+  async check(dto: Partial<CreateMenuDto>): Promise<void | never> {
     if (dto.type === 2 && !dto.parentId) {
       // Cannot create permissions directly; must have a parent
       throw new BusinessException(ErrorEnum.PERMISSION_REQUIRES_PARENT);
