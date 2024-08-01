@@ -12,7 +12,7 @@ import { AdminModule } from './modules/users/admin/admin.module';
 import { UserModule } from './modules/users/client/user.module';
 import { BannerModule } from './modules/banner/banner.module';
 import { CommentModule } from './modules/comment/comment.module';
-import { ThrottlerModule, seconds } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModule, seconds } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { SeoAnalyticsModule } from './modules/analytics/seo-analytics/seo-analytics.module';
@@ -25,6 +25,8 @@ import config from './config';
 import { VideoProxyMiddleware } from './proxy.middleware';
 import { SystemModule } from './modules/system/system.module';
 import { SharedModule } from './shared/shared.module';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 
 @Module({
   imports: [
@@ -41,8 +43,9 @@ import { SharedModule } from './shared/shared.module';
     }),
     ThrottlerModule.forRootAsync({
       useFactory: () => ({
-        errorMessage: '当前操作过于频繁，请稍后再试！',
-        throttlers: [{ ttl: seconds(10), limit: 7 }],
+        errorMessage:
+          '"Current operation is too frequent, please try again later!"',
+        throttlers: [{ ttl: seconds(10), limit: 20 }],
       }),
     }),
     EventEmitterModule.forRoot({
@@ -72,7 +75,14 @@ import { SharedModule } from './shared/shared.module';
     SeoAnalyticsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: () => new TimeoutInterceptor(15 * 1000),
+    },
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

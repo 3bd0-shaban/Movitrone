@@ -14,7 +14,6 @@ import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { GenreEntity } from './entities/genre.entity';
 import { JwtAdminGuard } from '../auth/guards/jwt-auth.guard';
-import { DashboardGuard } from '../auth/guards/dashboard.guard';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
@@ -25,13 +24,13 @@ export class GenreController {
   constructor(private readonly genreService: GenreService) {}
 
   @Post('create-genre')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   create(@Body() CreateGenreDto: CreateGenreDto) {
     return this.genreService.create(CreateGenreDto);
   }
 
   @Get('all-genres')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async findAll(
     @Query() query: PaginationArgs,
   ): Promise<{ genres: GenreEntity[]; total: number }> {
@@ -39,13 +38,13 @@ export class GenreController {
   }
 
   @Get('get/:id')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   findOne(@Param('id') id: number): Promise<GenreEntity> {
     return this.genreService.findOne(id);
   }
 
   @Put('update/:id')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async update(
     @Param('id') id: number,
     @Body() UpdateGenreDto: UpdateGenreDto,
@@ -55,7 +54,7 @@ export class GenreController {
   }
 
   @Delete('delete/:id')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   remove(@Param('id') id: number): Promise<void> {
     return this.genreService.removeById(id);
   }

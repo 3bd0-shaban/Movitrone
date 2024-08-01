@@ -13,7 +13,6 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAdminGuard } from '../../auth/guards/jwt-auth.guard';
 import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
-import { DashboardGuard } from '../../auth/guards/dashboard.guard';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { AdminService } from './admin.service';
@@ -28,6 +27,7 @@ import { LogMessage } from '~/common/decorators/log-message.decorator';
 import { LogInterceptor } from '~/common/interceptors/log.interceptor';
 import { Pagination } from '~/helper/paginate/pagination';
 import { PagerDto } from '~/common/dto/pager.dto';
+import { AccountMenus } from './dto/menus.args';
 
 export const permissions = definePermission('system:users:dashboard', {
   LIST: 'list',
@@ -78,10 +78,24 @@ export class AdminController {
     await this.adminService.updatePasswordById(user.id, inputs);
   }
 
+  @Get('menus')
+  @ApiOperation({ summary: 'Get menu list' })
+  @ApiResult({ type: [AccountMenus] })
+  async menu(@CurrentUser() user: AdminEntity) {
+    return this.adminService.getMenus(user.id);
+  }
+
+  @Get('permissions')
+  @ApiOperation({ summary: 'Get permission list' })
+  @ApiResult({ type: [String] })
+  async permissions(@CurrentUser() user: AdminEntity): Promise<string[]> {
+    return this.adminService.getPermissions(user.id);
+  }
+
   //admin API methods to control users ( for dashbaord )
   @Post('create-user')
   @ApiOperation({ summary: 'create user' })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   @LogMessage('creating account')
   @UseInterceptors(LogInterceptor)
   async create(
@@ -94,7 +108,7 @@ export class AdminController {
   @Get('role/:role')
   @ApiOperation({ summary: 'Get users by role' })
   @ApiResult({ type: [AdminEntity], isPage: true })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async findAll(
     @Query() query: PagerDto,
     @Param('role') role: ADMIN_ROLES_ENUMS,
@@ -105,14 +119,14 @@ export class AdminController {
   @Get('user-id/:id')
   @ApiOperation({ summary: 'Get user by id' })
   @ApiResult({ type: AdminEntity })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   findOne(@Param('id') id: number): Promise<AdminEntity> {
     return this.adminService.findOne(id);
   }
 
   @Put('user-id/:id')
   @ApiOperation({ summary: 'update user by id' })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   @LogMessage('updateing user details by id')
   @UseInterceptors(LogInterceptor)
   async update(
@@ -124,7 +138,7 @@ export class AdminController {
 
   @Put('userid/:id/password')
   @ApiOperation({ summary: 'update user password' })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   @LogMessage('updating user password')
   @UseInterceptors(LogInterceptor)
   async updatePassword(
@@ -138,7 +152,7 @@ export class AdminController {
   @ApiOperation({ summary: 'delete user account' })
   @LogMessage('Deleting account')
   @UseInterceptors(LogInterceptor)
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async remove(@Param('id') id: number): Promise<void> {
     await this.adminService.removeById(id);
   }

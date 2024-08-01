@@ -16,7 +16,6 @@ import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
 import { ClientEntity } from './entities/user.entity';
 import { JwtAdminGuard, JwtUserGuard } from '../../auth/guards/jwt-auth.guard';
 import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
-import { DashboardGuard } from '../../auth/guards/dashboard.guard';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
 import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
 import { LogService } from '../../log/log.service';
@@ -81,7 +80,7 @@ export class ClientController {
   //admin API methods to control users ( for dashbaord )
   @Post('create-user')
   @ApiOperation({ summary: 'Get admin self details' })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   @LogMessage('creating account')
   @UseInterceptors(LogInterceptor)
   create(@Body() createUserDto: CreateUserDTO) {
@@ -91,7 +90,7 @@ export class ClientController {
   @Get('all-users')
   @ApiOperation({ summary: 'Get admin self details' })
   @ApiResult({ type: [ClientEntity], isPage: true })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async findAll(@Query() query: PagerDto): Promise<Pagination<ClientEntity>> {
     return await this.userService.findAll(query);
   }
@@ -99,14 +98,14 @@ export class ClientController {
   @Get('user-id/:id')
   @ApiOperation({ summary: 'Get admin self details' })
   @ApiResult({ type: ClientEntity })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   findOne(@Param('id') id: number): Promise<ClientEntity> {
     return this.userService.findOne(id);
   }
 
   @Put('user-id/:id')
   @ApiOperation({ summary: 'Get admin self details' })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   @LogMessage('updateing user details by id')
   @UseInterceptors(LogInterceptor)
   async update(
@@ -118,7 +117,7 @@ export class ClientController {
 
   @Put('user-id/:id/password')
   @ApiOperation({ summary: 'Get admin self details' })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   @LogMessage('updating user password')
   @UseInterceptors(LogInterceptor)
   async updatePassword(
@@ -130,7 +129,7 @@ export class ClientController {
 
   @Delete('user-id/:id')
   @ApiOperation({ summary: 'Get admin self details' })
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   @LogMessage('Deleting account')
   @UseInterceptors(LogInterceptor)
   remove(@Param('id') id: number): Promise<void> {

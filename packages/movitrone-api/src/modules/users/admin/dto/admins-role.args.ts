@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ADMIN_ROLES_ENUMS } from '../../admin.constant';
 import { IsEnum, IsNotEmpty } from 'class-validator';
+import { ADMIN_ROLES_ENUMS } from '../admin.constant';
 
 export class AdminsRoleArgs {
   @ApiProperty({

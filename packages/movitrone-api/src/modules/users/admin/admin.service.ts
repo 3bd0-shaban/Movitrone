@@ -18,6 +18,7 @@ import { ADMIN_ROLES_ENUMS } from './admin.constant';
 import { Pagination } from '~/helper/paginate/pagination';
 import { paginate } from '~/helper/paginate';
 import { PagerDto } from '~/common/dto/pager.dto';
+import { MenuService } from '~/modules/system/menu/menu.service';
 
 @Injectable()
 export class AdminService {
@@ -25,6 +26,7 @@ export class AdminService {
     @InjectRepository(AdminEntity)
     private readonly adminRepository: Repository<AdminEntity>,
     private readonly authService: AuthService,
+    private readonly menuService: MenuService,
   ) {}
 
   /**
@@ -159,5 +161,13 @@ export class AdminService {
     updateUserDto: updateUserDTO,
   ): Promise<UpdateResult> {
     return await this.adminRepository.update(userId, updateUserDto);
+  }
+
+  async getPermissions(uid: number): Promise<string[]> {
+    return this.menuService.getPermissions(uid);
+  }
+
+  async getMenus(uid: number) {
+    return this.menuService.getMenus(uid);
   }
 }

@@ -13,7 +13,6 @@ import { SeoCountryService } from './seo-country.service';
 import { CreateSeoCountryDto } from './dto/create-seo-country.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAdminGuard, JwtUserGuard } from '../../auth/guards/jwt-auth.guard';
-import { DashboardGuard } from '../../auth/guards/dashboard.guard';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
 import { LogService } from '../../log/log.service';
 import { SeoAnalyticsService } from '../../analytics/seo-analytics/seo-analytics.service';
@@ -34,7 +33,7 @@ export class SeoCountryController {
   ) {}
 
   @Post()
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async create(
     @Body() inputs: CreateSeoCountryDto,
     @CurrentUser() user: AdminEntity,
@@ -47,7 +46,7 @@ export class SeoCountryController {
   }
 
   @Get()
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async findAll(
     @Query() query: PaginationArgs,
   ): Promise<{ seos: SeoCountryEntity[]; results: number; total: number }> {
@@ -55,13 +54,13 @@ export class SeoCountryController {
   }
 
   @Get('get/:country')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async findOne(@Param('country') country: string): Promise<SeoCountryEntity> {
     return await this.seoCountryService.findOneByCountry(country);
   }
 
   @Put('main/:country')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async Main(
     @Param('country') country: string,
     @CurrentUser() user: AdminEntity,
@@ -74,7 +73,7 @@ export class SeoCountryController {
   }
 
   @Delete('delete/:country')
-  @UseGuards(JwtAdminGuard, DashboardGuard)
+  @UseGuards(JwtAdminGuard)
   async remove(
     @Param('country') country: string,
     @CurrentUser() user: AdminEntity,
