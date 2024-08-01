@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ApiResult } from '~/common/decorators/api-result.decorator';
 import { IdParam } from '~/common/decorators/id-param.decorator';
@@ -35,8 +35,8 @@ export const permissions = definePermission('system:role', {
 } as const);
 
 @ApiTags('System - Role module')
-@ApiBearerAuth()
 @Controller('roles')
+@UseGuards(JwtAdminGuard)
 export class RoleController {
   constructor(
     private roleService: RoleService,
@@ -46,7 +46,6 @@ export class RoleController {
   @Get()
   @ApiOperation({ summary: 'Get role list' })
   @ApiResult({ type: [RoleEntity], isPage: true })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.LIST)
   async list(@Query() dto: RoleQueryDto) {
     return this.roleService.list(dto);
@@ -55,7 +54,6 @@ export class RoleController {
   @Get(':id')
   @ApiOperation({ summary: 'Get role information' })
   @ApiResult({ type: RoleInfo })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.READ)
   async info(@IdParam() id: number) {
     return this.roleService.RoleById(id);
@@ -63,7 +61,6 @@ export class RoleController {
 
   @Post()
   @ApiOperation({ summary: 'Add new role' })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.CREATE)
   async create(@Body(CreatorPipe) dto: CreateRoleDto): Promise<void> {
     await this.roleService.create(dto);
@@ -71,7 +68,6 @@ export class RoleController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update role' })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.UPDATE)
   async update(
     @IdParam() id: number,
@@ -83,7 +79,6 @@ export class RoleController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete role' })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.DELETE)
   async delete(@IdParam() id: number): Promise<void> {
     if (await this.roleService.checkUserByRoleId(id))

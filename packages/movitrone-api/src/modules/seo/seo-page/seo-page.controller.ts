@@ -13,7 +13,7 @@ import { SeoPageService } from './seo-page.service';
 import { CreateSeoPageDto } from './dto/create-seo.dto';
 import { UpdateSeoPageDto } from './dto/update-seo.dto';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LogService } from '../../log/log.service';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
 import { SeoWebsitePages } from './dto/args/seo-query.args';
@@ -22,9 +22,11 @@ import { JwtAdminGuard } from '../../auth/guards/jwt-auth.guard';
 import { SeoPageEntity } from './entities/seo-page.entity';
 import { SeoCountryService } from '../seo-country/seo-country.service';
 import { AdminEntity } from '../../users/admin/entities/admin.entity';
+import { Public } from '~/modules/auth/decorator/public.decorator';
 
 @ApiTags('Seo Page')
 @Controller('seo-page')
+@UseGuards(JwtAdminGuard)
 export class SeoPageController {
   constructor(
     private readonly seoService: SeoPageService,
@@ -34,9 +36,7 @@ export class SeoPageController {
   ) {}
 
   @Post('/:country')
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'Creating Seo page by Country code refrence' })
-  @UseGuards(JwtAdminGuard)
   async create(
     @Body() CreateMovieDto: CreateSeoPageDto,
     @Param('country') country: string,
@@ -52,9 +52,7 @@ export class SeoPageController {
   }
 
   @Get()
-  @ApiBearerAuth()
   @ApiOperation({ summary: 'get all seo pages in database with pagination' })
-  @UseGuards(JwtAdminGuard)
   async findAll(
     @Query() query: PaginationArgs,
   ): Promise<{ seos: SeoPageEntity[]; results: number; total: number }> {
@@ -62,12 +60,10 @@ export class SeoPageController {
   }
 
   @Get('country/:country')
-  @ApiBearerAuth()
   @ApiOperation({
     summary:
       'get all pages by passing related to specific country by country code refrence with paginations',
   })
-  @UseGuards(JwtAdminGuard)
   async findAllByCountry(
     @Query() query: PaginationArgs,
     @Param('country') country: string,
@@ -76,9 +72,7 @@ export class SeoPageController {
   }
 
   @Get('get/:id')
-  @ApiBearerAuth()
   @ApiOperation({ summary: "return seo page documnet by it's id" })
-  @UseGuards(JwtAdminGuard)
   async findOne(@Param('id') id: number): Promise<SeoPageEntity> {
     return await this.seoService.findOneByID(id);
   }
@@ -87,6 +81,7 @@ export class SeoPageController {
   @ApiOperation({
     summary: 'get seo for website pages by the attribute  ( country, page )',
   })
+  @Public()
   async findByCountryPage(
     @Query() query: SeoWebsitePages,
   ): Promise<SeoPageEntity> {
@@ -97,9 +92,7 @@ export class SeoPageController {
   }
 
   @Put('update/:id')
-  @ApiBearerAuth()
   @ApiOperation({ summary: "update country seo page document by it's id" })
-  @UseGuards(JwtAdminGuard)
   async update(
     @Param('id') id: number,
     @CurrentUser() user: AdminEntity,
@@ -110,9 +103,7 @@ export class SeoPageController {
   }
 
   @Delete('delete/:id')
-  @ApiBearerAuth()
   @ApiOperation({ summary: "delete country seo page documnet by it's id" })
-  @UseGuards(JwtAdminGuard)
   async remove(
     @Param('id') id: number,
     @CurrentUser() user: AdminEntity,

@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { flattenDeep } from 'lodash';
 
 import { ApiResult } from '~/common/decorators/api-result.decorator';
@@ -26,6 +26,7 @@ import { MenuItemInfo } from './model/menu.model';
 import { MenuService } from './menu.service';
 import { JwtAdminGuard } from '~/modules/auth/guards/jwt-auth.guard';
 import { CreateMenuDto, MenuQueryDto, MenuUpdateDto } from './dto';
+import { Public } from '~/modules/auth/decorator/public.decorator';
 
 export const permissions = definePermission('system:menu', {
   LIST: 'list',
@@ -36,15 +37,14 @@ export const permissions = definePermission('system:menu', {
 } as const);
 
 @ApiTags('System - Menu permissions module')
-@ApiBearerAuth()
 @Controller('menus')
+@UseGuards(JwtAdminGuard)
 export class MenuController {
   constructor(private menuService: MenuService) {}
 
   @Get()
   @ApiOperation({ summary: 'Get all menu list' })
   @ApiResult({ type: [MenuItemInfo] })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.LIST)
   async list(@Query() dto: MenuQueryDto) {
     return this.menuService.list(dto);
@@ -52,7 +52,6 @@ export class MenuController {
 
   @Get('get/:id')
   @ApiOperation({ summary: 'Get menu or permission information' })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.READ)
   async info(@IdParam() id: number) {
     return this.menuService.getMenuItemAndParentInfo(id);
@@ -60,7 +59,6 @@ export class MenuController {
 
   @Post()
   @ApiOperation({ summary: 'Add new menu or permission' })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.CREATE)
   async create(@Body(CreatorPipe) dto: CreateMenuDto): Promise<void> {
     // check
@@ -76,9 +74,7 @@ export class MenuController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAdminGuard)
   @ApiOperation({ summary: 'Update menu or permission' })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.UPDATE)
   async update(
     @IdParam() id: number,
@@ -97,7 +93,6 @@ export class MenuController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete menu or permission' })
-  @UseGuards(JwtAdminGuard)
   @Perm(permissions.DELETE)
   async delete(@IdParam() id: number): Promise<void> {
     if (await this.menuService.checkRoleByMenuId(id))
@@ -113,6 +108,7 @@ export class MenuController {
   }
 
   @Get('permissions')
+  @Public()
   @ApiOperation({ summary: 'Get all backend-defined permission sets' })
   async getPermissions(): Promise<string[]> {
     return getDefinePermissions();

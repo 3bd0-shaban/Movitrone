@@ -10,7 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAdminGuard } from '../../auth/guards/jwt-auth.guard';
 import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
@@ -28,6 +28,7 @@ import { LogInterceptor } from '~/common/interceptors/log.interceptor';
 import { Pagination } from '~/helper/paginate/pagination';
 import { PagerDto } from '~/common/dto/pager.dto';
 import { AccountMenus } from './dto/menus.args';
+import { Public } from '~/modules/auth/decorator/public.decorator';
 
 export const permissions = definePermission('system:users:dashboard', {
   LIST: 'list',
@@ -38,8 +39,8 @@ export const permissions = definePermission('system:users:dashboard', {
 } as const);
 
 @ApiTags('Admin - Dashboard Manpulation')
-@ApiBearerAuth()
 @Controller('admin')
+@UseGuards(JwtAdminGuard)
 export class AdminController {
   constructor(
     private readonly adminService: AdminService,
@@ -49,14 +50,12 @@ export class AdminController {
   @Get('self')
   @ApiOperation({ summary: 'Get admin self details' })
   @ApiResult({ type: AdminEntity })
-  @UseGuards(JwtAdminGuard)
   async findSelf(@CurrentUser() user: AdminEntity): Promise<AdminEntity> {
     return this.adminService.findOne(user.id);
   }
 
   @Put('self')
   @ApiOperation({ summary: 'update admin self details' })
-  @UseGuards(JwtAdminGuard)
   @LogMessage('updating self account details')
   @UseInterceptors(LogInterceptor)
   async updateSelf(
@@ -68,7 +67,6 @@ export class AdminController {
 
   @Put('self/password')
   @ApiOperation({ summary: 'update self account details' })
-  @UseGuards(JwtAdminGuard)
   @LogMessage('updating account password')
   @UseInterceptors(LogInterceptor)
   async updateSelfPassword(
@@ -95,7 +93,6 @@ export class AdminController {
   //admin API methods to control users ( for dashbaord )
   @Post('create-user')
   @ApiOperation({ summary: 'create user' })
-  @UseGuards(JwtAdminGuard)
   @LogMessage('creating account')
   @UseInterceptors(LogInterceptor)
   async create(
@@ -108,7 +105,6 @@ export class AdminController {
   @Get('role/:role')
   @ApiOperation({ summary: 'Get users by role' })
   @ApiResult({ type: [AdminEntity], isPage: true })
-  @UseGuards(JwtAdminGuard)
   async findAll(
     @Query() query: PagerDto,
     @Param('role') role: ADMIN_ROLES_ENUMS,
@@ -119,14 +115,12 @@ export class AdminController {
   @Get('user-id/:id')
   @ApiOperation({ summary: 'Get user by id' })
   @ApiResult({ type: AdminEntity })
-  @UseGuards(JwtAdminGuard)
   findOne(@Param('id') id: number): Promise<AdminEntity> {
     return this.adminService.findOne(id);
   }
 
   @Put('user-id/:id')
   @ApiOperation({ summary: 'update user by id' })
-  @UseGuards(JwtAdminGuard)
   @LogMessage('updateing user details by id')
   @UseInterceptors(LogInterceptor)
   async update(
@@ -138,7 +132,6 @@ export class AdminController {
 
   @Put('userid/:id/password')
   @ApiOperation({ summary: 'update user password' })
-  @UseGuards(JwtAdminGuard)
   @LogMessage('updating user password')
   @UseInterceptors(LogInterceptor)
   async updatePassword(
@@ -152,7 +145,6 @@ export class AdminController {
   @ApiOperation({ summary: 'delete user account' })
   @LogMessage('Deleting account')
   @UseInterceptors(LogInterceptor)
-  @UseGuards(JwtAdminGuard)
   async remove(@Param('id') id: number): Promise<void> {
     await this.adminService.removeById(id);
   }

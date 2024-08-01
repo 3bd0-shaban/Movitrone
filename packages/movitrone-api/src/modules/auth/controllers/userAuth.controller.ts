@@ -1,6 +1,14 @@
-import { Controller, Post, Body, Inject, Res, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Inject,
+  Res,
+  Get,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from '~/config';
@@ -18,6 +26,7 @@ import { CurrentUser } from '../decorator/auth-user.decorator';
 import { ClientService } from '~/modules/users/client/user.service';
 import { isDev } from '~/global/env';
 import { ClientEntity } from '~/modules/users/client/entities/user.entity';
+import { JwtUserGuard } from '../guards/jwt-auth.guard';
 
 @ApiTags('Authentication - Website')
 @Controller('auth')
@@ -29,10 +38,12 @@ export class UserAuthController {
   ) {}
 
   @Post('register')
+  @ApiBearerAuth('public')
   async Signup(@Body() createUserDTO: CreateUserDTO) {
     return await this.userService.create(createUserDTO);
   }
   @Post('verify')
+  @UseGuards(JwtUserGuard)
   async Verify(
     @Body() inputs: VerifyOTPDTOs,
     @CurrentUser() user: ClientEntity,
@@ -41,6 +52,7 @@ export class UserAuthController {
   }
 
   @Post('signin')
+  @ApiBearerAuth('public')
   async Signin(@Body() inputs: SignInDto, @Res() res: Response) {
     const user = await this.authService.ValidateWebsiteUser(inputs);
     const jwtPayload = {

@@ -15,10 +15,9 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { JwtAdminGuard } from '../auth/guards/jwt-auth.guard';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { MovieEntity } from './entities/movie.entity';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Movies')
-@ApiBearerAuth()
 @Controller('movie')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}

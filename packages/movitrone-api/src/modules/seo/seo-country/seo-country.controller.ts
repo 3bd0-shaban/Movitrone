@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { SeoCountryService } from './seo-country.service';
 import { CreateSeoCountryDto } from './dto/create-seo-country.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAdminGuard, JwtUserGuard } from '../../auth/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
+import { JwtAdminGuard } from '../../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
 import { LogService } from '../../log/log.service';
 import { SeoAnalyticsService } from '../../analytics/seo-analytics/seo-analytics.service';
@@ -22,7 +22,6 @@ import { SeoPageService } from '../seo-page/seo-page.service';
 import { AdminEntity } from '../../users/admin/entities/admin.entity';
 
 @ApiTags('Seo Countries')
-@ApiBearerAuth()
 @Controller('seo-country')
 export class SeoCountryController {
   constructor(

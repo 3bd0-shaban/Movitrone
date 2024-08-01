@@ -4,13 +4,28 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthStrategy } from '../auth.constant';
+import { AuthStrategy, PUBLIC_KEY } from '../auth.constant';
+import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class JwtUserGuard extends AuthGuard(AuthStrategy.JWT) {
-  getRequest(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    return request;
+  constructor(private reflector: Reflector) {
+    super();
+  }
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Check if the route is marked as public
+    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (isPublic) {
+      return true; // Allow access to public routes
+    }
+
+    // If not public, use the default AuthGuard logic
+    return super.canActivate(context) as boolean;
   }
 
   handleRequest(err: any, user: any, info: any, context: ExecutionContext) {
@@ -23,9 +38,23 @@ export class JwtUserGuard extends AuthGuard(AuthStrategy.JWT) {
 
 @Injectable()
 export class JwtAdminGuard extends AuthGuard(AuthStrategy.ADMIN_JWT) {
-  getRequest(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    return request;
+  constructor(private reflector: Reflector) {
+    super();
+  }
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Check if the route is marked as public
+    const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (isPublic) {
+      return true; // Allow access to public routes
+    }
+
+    // If not public, use the default AuthGuard logic
+    return super.canActivate(context) as boolean;
   }
 
   handleRequest(err: any, user: any, info: any, context: ExecutionContext) {

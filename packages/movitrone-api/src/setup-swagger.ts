@@ -1,13 +1,13 @@
-import { INestApplication, Logger, NestMiddleware } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { API_SECURITY_AUTH } from './common/decorators/swagger.decorator';
 import { CommonEntity } from './common/entity/common.entity';
 import { ResOp, TreeResult } from './common/model/response.model';
 import { ConfigKeyPaths, IAppConfig, ISwaggerConfig } from './config';
 import { Pagination } from './helper/paginate/pagination';
-import { NextFunction } from 'express';
+import { Reflector } from '@nestjs/core';
+import { ApiFixEmptySecurity } from './utils/ApiFixEmptySecurity';
 
 export function setupSwagger(
   app: INestApplication,
@@ -22,21 +22,13 @@ export function setupSwagger(
     .setDescription(`${name} API document`)
     .setVersion('1.0');
 
-  // auth security
-  // documentBuilder.addSecurity(API_SECURITY_AUTH, {
-  //   description: 'Enter the token with ( Bearer token )',
-  //   type: 'http',
-  //   scheme: 'bearer',
-  //   bearerFormat: 'JWT',
-  // });
-
-  documentBuilder.addBearerAuth();
+  documentBuilder.addBearerAuth().addSecurityRequirements('bearer');
 
   const document = SwaggerModule.createDocument(app, documentBuilder.build(), {
     ignoreGlobalPrefix: false,
     extraModels: [CommonEntity, ResOp, Pagination, TreeResult],
   });
-
+  ApiFixEmptySecurity(document);
   SwaggerModule.setup(path, app, document, {
     swaggerOptions: {
       persistAuthorization: true, // Keep me logged in
