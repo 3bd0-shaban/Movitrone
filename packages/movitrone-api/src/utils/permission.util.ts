@@ -169,9 +169,3 @@ function filterMenuToTable(menus: MenuEntity[], parentMenu) {
 export function generatorMenu(menu: MenuEntity[]) {
   return filterMenuToTable(menu, null);
 }
-
-/** Check if it's a demo environment. If it is, deny the operation */
-export function checkIsDemoMode() {
-  if (envBoolean('IS_DEMO'))
-    throw new ForbiddenException('Operation not allowed in demo mode');
-}

@@ -27,6 +27,7 @@ import { SystemModule } from './modules/system/system.module';
 import { SharedModule } from './shared/shared.module';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
+import { CheckDemoGuard } from './common/guards/check-demo.guard';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
       provide: APP_INTERCEPTOR,
       useFactory: () => new TimeoutInterceptor(15 * 1000),
     },
+    { provide: APP_GUARD, useClass: CheckDemoGuard },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })
