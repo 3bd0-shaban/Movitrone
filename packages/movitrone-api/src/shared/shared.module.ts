@@ -6,6 +6,7 @@ import { MailerModule } from './mailer/mailer.module';
 import { isDev } from '~/global/env';
 import { RedisModule } from './redis/redis.module';
 import { DatabaseModule } from './database/database.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Global()
 @Module({
@@ -25,6 +26,7 @@ import { DatabaseModule } from './database/database.module';
       verboseMemoryLeak: isDev,
       ignoreErrors: false,
     }),
+    LoggerModule,
     DatabaseModule,
     MailerModule,
     RedisModule,

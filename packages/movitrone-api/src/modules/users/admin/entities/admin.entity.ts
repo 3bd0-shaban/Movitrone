@@ -33,7 +33,6 @@ export class AdminEntity extends UserShared {
 
   @OneToMany((type) => LogEntity, (log) => log.admin)
   @ApiHideProperty()
-  @ApiProperty({ description: 'logs' })
   logs: LogEntity[];
 
   @OneToMany((type) => Episode, (episode) => episode.created_By)

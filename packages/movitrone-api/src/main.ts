@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { NestFastifyApplication } from '@nestjs/platform-fastify';
 
 import { useContainer } from 'class-validator';
 
@@ -20,12 +19,13 @@ import type { ConfigKeyPaths } from './config';
 import { isDev } from './global/env';
 import { setupSwagger } from './setup-swagger';
 import * as cookieParser from 'cookie-parser';
+import { NestExpressApplication } from '@nestjs/platform-express';
 // import * as morgan from 'morgan';
 
 declare const module: any;
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
     snapshot: true,
     // forceCloseConnections: true,

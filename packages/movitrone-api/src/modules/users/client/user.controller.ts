@@ -13,7 +13,6 @@ import {
 import { ClientService } from './user.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { ClientEntity } from './entities/user.entity';
 import { JwtAdminGuard, JwtUserGuard } from '../../auth/guards/jwt-auth.guard';
 import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';

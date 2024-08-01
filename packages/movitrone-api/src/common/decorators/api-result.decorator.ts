@@ -10,9 +10,11 @@ import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 const baseTypeNames = ['String', 'Number', 'Boolean'];
 
 function genBaseProp(type: Type<any>) {
-  if (baseTypeNames.includes(type.name))
+  if (baseTypeNames.includes(type.name)) {
     return { type: type.name.toLowerCase() };
-  else return { $ref: getSchemaPath(type) };
+  } else {
+    return { $ref: getSchemaPath(type) };
+  }
 }
 
 /**
@@ -27,11 +29,11 @@ export function ApiResult<TModel extends Type<any>>({
   isPage?: boolean;
   status?: HttpStatus;
 }) {
-  let prop = null;
+  let schema: any;
 
   if (Array.isArray(type)) {
     if (isPage) {
-      prop = {
+      schema = {
         type: 'object',
         properties: {
           items: {
@@ -51,52 +53,35 @@ export function ApiResult<TModel extends Type<any>>({
         },
       };
     } else {
-      prop = {
+      schema = {
         type: 'array',
         items: genBaseProp(type[0]),
       };
     }
   } else if (type) {
-    prop = genBaseProp(type);
+    schema = genBaseProp(type);
   } else {
-    prop = { type: 'null', default: null };
+    schema = { type: 'null', default: null };
   }
 
   return applyDecorators(
-    ApiExtraModels(type ? (Array.isArray(type) ? type[0] : type) : undefined),
+    // Register extra models with Swagger
+    ApiExtraModels(Array.isArray(type) ? type[0] : type),
     (
       target: object,
       key: string | symbol,
       descriptor: TypedPropertyDescriptor<any>,
     ) => {
-      queueMicrotask(() => {
-        const isPost =
-          Reflect.getMetadata(METHOD_METADATA, descriptor.value) ===
-          RequestMethod.POST;
-
-        ApiResponse({
-          status: status ?? (isPost ? HttpStatus.CREATED : HttpStatus.OK),
-          schema: {
-            type: 'object',
-            properties: {
-              items: {
-                type: 'array',
-                items: genBaseProp(type instanceof Array ? type[0] : type),
-              },
-              meta: {
-                type: 'object',
-                properties: {
-                  itemCount: { type: 'number', default: 0 },
-                  totalItems: { type: 'number', default: 0 },
-                  itemsPerPage: { type: 'number', default: 0 },
-                  totalPages: { type: 'number', default: 0 },
-                  currentPage: { type: 'number', default: 0 },
-                },
-              },
-            },
-          },
-        })(target, key, descriptor);
-      });
+      // Apply the ApiResponse decorator with the appropriate schema
+      ApiResponse({
+        status:
+          status ??
+          (Reflect.getMetadata(METHOD_METADATA, descriptor.value) ===
+          RequestMethod.POST
+            ? HttpStatus.CREATED
+            : HttpStatus.OK),
+        schema: schema,
+      })(target, key, descriptor);
     },
   );
 }
