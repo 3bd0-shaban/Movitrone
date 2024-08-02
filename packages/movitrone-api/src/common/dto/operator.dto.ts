@@ -4,9 +4,9 @@ import { Exclude } from 'class-transformer';
 export class OperatorDto {
   @ApiHideProperty()
   @Exclude()
-  createdBy: number;
+  createBy: number;
 
   @ApiHideProperty()
   @Exclude()
-  updatedBy: number;
+  updateBy: number;
 }

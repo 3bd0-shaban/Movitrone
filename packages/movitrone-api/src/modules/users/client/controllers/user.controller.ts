@@ -28,7 +28,7 @@ export const permissions = definePermission('system:users:dashboard', {
   DELETE: 'delete',
 } as const);
 
-@ApiTags('Website Users - Website Manpulation')
+@ApiTags('Website Users - Admin Control')
 @Controller('user')
 @UseGuards(JwtUserGuard)
 export class ClientController {
@@ -37,14 +37,14 @@ export class ClientController {
     private readonly logService: LogService,
   ) {}
 
-  @Get('self')
+  @Get()
   @ApiOperation({ summary: 'Get admin self details' })
   @ApiResult({ type: ClientEntity })
   findSelf(@CurrentUser() user: ClientEntity): Promise<ClientEntity> {
     return this.userService.findOne(user.id);
   }
 
-  @Put('self')
+  @Put()
   @ApiOperation({ summary: 'Get admin self details' })
   @LogMessage('updating self account details')
   @UseInterceptors(LogInterceptor)
@@ -55,7 +55,7 @@ export class ClientController {
     await this.userService.update(user.id, updateUserDto);
   }
 
-  @Put('self/password')
+  @Put('password')
   @ApiOperation({ summary: 'Get admin self details' })
   @LogMessage('updating account password')
   @UseInterceptors(LogInterceptor)

@@ -19,7 +19,7 @@ export class CreateMenuDto extends OperatorDto {
   type: MENU_TYPES_ENUM;
 
   @ApiProperty({ description: 'Parent menu' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
   parentId: number;
 

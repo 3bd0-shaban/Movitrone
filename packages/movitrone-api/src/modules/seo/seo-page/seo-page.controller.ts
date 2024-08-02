@@ -13,7 +13,7 @@ import { SeoPageService } from './seo-page.service';
 import { CreateSeoPageDto } from './dto/create-seo.dto';
 import { UpdateSeoPageDto } from './dto/update-seo.dto';
 import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LogService } from '../../log/log.service';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
 import { SeoWebsitePages } from './dto/args/seo-query.args';
@@ -82,6 +82,7 @@ export class SeoPageController {
     summary: 'get seo for website pages by the attribute  ( country, page )',
   })
   @Public()
+  @ApiBearerAuth('public')
   async findByCountryPage(
     @Query() query: SeoWebsitePages,
   ): Promise<SeoPageEntity> {

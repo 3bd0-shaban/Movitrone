@@ -34,15 +34,15 @@ export const permissions = definePermission('system:users:dashboard', {
 } as const);
 
 @ApiTags('Website Users - Website Manpulation')
-@Controller('user')
+@Controller('a-user')
 @UseGuards(JwtAdminGuard)
-export class ClientController {
+export class ClientAdminController {
   constructor(
     private readonly userService: ClientService,
     private readonly logService: LogService,
   ) {}
 
-  @Post('create-user')
+  @Post()
   @ApiOperation({ summary: 'Get admin self details' })
   @LogMessage('creating account')
   @UseInterceptors(LogInterceptor)
@@ -50,21 +50,21 @@ export class ClientController {
     return this.userService.create(createUserDto);
   }
 
-  @Get('all-users')
+  @Get()
   @ApiOperation({ summary: 'Get admin self details' })
   @ApiResult({ type: [ClientEntity], isPage: true })
   async findAll(@Query() query: PagerDto): Promise<Pagination<ClientEntity>> {
     return await this.userService.findAll(query);
   }
 
-  @Get('user-id/:id')
+  @Get(':id')
   @ApiOperation({ summary: 'Get admin self details' })
   @ApiResult({ type: ClientEntity })
   findOne(@Param('id') id: number): Promise<ClientEntity> {
     return this.userService.findOne(id);
   }
 
-  @Put('user-id/:id')
+  @Put(':id')
   @ApiOperation({ summary: 'Get admin self details' })
   @LogMessage('updateing user details by id')
   @UseInterceptors(LogInterceptor)
@@ -75,7 +75,7 @@ export class ClientController {
     await this.userService.update(id, updateUserDto);
   }
 
-  @Put('user-id/:id/password')
+  @Put(':id/password')
   @ApiOperation({ summary: 'Get admin self details' })
   @LogMessage('updating user password')
   @UseInterceptors(LogInterceptor)
@@ -86,7 +86,7 @@ export class ClientController {
     await this.userService.updatePasswordById(id, inputs);
   }
 
-  @Delete('user-id/:id')
+  @Delete(':id')
   @ApiOperation({ summary: 'Get admin self details' })
   @LogMessage('Deleting account')
   @UseInterceptors(LogInterceptor)

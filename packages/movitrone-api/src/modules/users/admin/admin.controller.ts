@@ -47,14 +47,14 @@ export class AdminController {
     private readonly logService: LogService,
   ) {}
 
-  @Get('self')
+  @Get()
   @ApiOperation({ summary: 'Get admin self details' })
   @ApiResult({ type: AdminEntity })
   async findSelf(@CurrentUser() user: AdminEntity): Promise<AdminEntity> {
     return this.adminService.findOne(user.id);
   }
 
-  @Put('self')
+  @Put()
   @ApiOperation({ summary: 'update admin self details' })
   @LogMessage('updating self account details')
   @UseInterceptors(LogInterceptor)
@@ -65,7 +65,7 @@ export class AdminController {
     await this.adminService.update(user.id, updateUserDto);
   }
 
-  @Put('self/password')
+  @Put('account/password')
   @ApiOperation({ summary: 'update self account details' })
   @LogMessage('updating account password')
   @UseInterceptors(LogInterceptor)
@@ -76,14 +76,14 @@ export class AdminController {
     await this.adminService.updatePasswordById(user.id, inputs);
   }
 
-  @Get('menus')
+  @Get('account/menus')
   @ApiOperation({ summary: 'Get menu list' })
   @ApiResult({ type: [AccountMenus] })
   async menu(@CurrentUser() user: AdminEntity) {
     return this.adminService.getMenus(user.id);
   }
 
-  @Get('permissions')
+  @Get('account/permissions')
   @ApiOperation({ summary: 'Get permission list' })
   @ApiResult({ type: [String] })
   async permissions(@CurrentUser() user: AdminEntity): Promise<string[]> {
@@ -91,7 +91,7 @@ export class AdminController {
   }
 
   //admin API methods to control users ( for dashbaord )
-  @Post('create-user')
+  @Post()
   @ApiOperation({ summary: 'create user' })
   @LogMessage('creating account')
   @UseInterceptors(LogInterceptor)
@@ -112,14 +112,14 @@ export class AdminController {
     return await this.adminService.findAll({ ...query, role });
   }
 
-  @Get('user-id/:id')
+  @Get(':id')
   @ApiOperation({ summary: 'Get user by id' })
   @ApiResult({ type: AdminEntity })
   findOne(@Param('id') id: number): Promise<AdminEntity> {
     return this.adminService.findOne(id);
   }
 
-  @Put('user-id/:id')
+  @Put(':id')
   @ApiOperation({ summary: 'update user by id' })
   @LogMessage('updateing user details by id')
   @UseInterceptors(LogInterceptor)
@@ -130,7 +130,7 @@ export class AdminController {
     await this.adminService.update(id, updateUserDto);
   }
 
-  @Put('userid/:id/password')
+  @Put(':id/password')
   @ApiOperation({ summary: 'update user password' })
   @LogMessage('updating user password')
   @UseInterceptors(LogInterceptor)
@@ -141,7 +141,7 @@ export class AdminController {
     await this.adminService.updatePasswordById(id, inputs);
   }
 
-  @Delete('user-id/:id')
+  @Delete(':id')
   @ApiOperation({ summary: 'delete user account' })
   @LogMessage('Deleting account')
   @UseInterceptors(LogInterceptor)

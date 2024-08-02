@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { isEmpty, isNil } from 'lodash';
 import { EntityManager, In, Like, Repository } from 'typeorm';
@@ -75,7 +75,9 @@ export class RoleService {
 
   async delete(id: number): Promise<void> {
     if (id === ROOT_ROLE_ID)
-      throw new Error('Cannot delete super administrator');
+      throw new UnprocessableEntityException(
+        'Cannot delete super administrator',
+      );
     await this.roleRepository.delete(id);
   }
 

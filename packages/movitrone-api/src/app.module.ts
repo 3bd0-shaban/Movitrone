@@ -42,11 +42,15 @@ import { CheckDemoGuard } from './common/guards/check-demo.guard';
       rootPath: join(__dirname, '../../../', 'uploads'),
       serveRoot: '/uploads/', //last slash was important
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../', 'public'),
+      serveRoot: '/public/',
+    }),
     ThrottlerModule.forRootAsync({
       useFactory: () => ({
         errorMessage:
           '"Current operation is too frequent, please try again later!"',
-        throttlers: [{ ttl: seconds(10), limit: 20 }],
+        throttlers: [{ ttl: seconds(5), limit: 20 }],
       }),
     }),
     EventEmitterModule.forRoot({

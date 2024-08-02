@@ -14,8 +14,7 @@ export class CreatorPipe implements PipeTransform {
   constructor(@Inject(REQUEST) private readonly request: Request) {}
   transform(value: OperatorDto, metadata: ArgumentMetadata) {
     const user = this.request.user as any;
-
-    value.createdBy = user.id;
+    value.createBy = user.id;
 
     return value;
   }

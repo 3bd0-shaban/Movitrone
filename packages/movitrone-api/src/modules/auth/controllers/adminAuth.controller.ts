@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Res, Inject, Get } from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import {
@@ -26,11 +26,13 @@ export class AdminAuthController {
   ) {}
 
   @Post('register')
+  @ApiBearerAuth('public')
   async Signup(@Body() createUserDTO: CreateAdminDto) {
     return this.adminService.create(createUserDTO);
   }
 
   @Post('signin')
+  @ApiBearerAuth('public')
   async Signin(@Body() inputs: SignInDto, @Res() res: Response) {
     const user = await this.authService.ValidateAdminUser(inputs);
     const jwtPayload = {
