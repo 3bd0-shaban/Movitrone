@@ -14,8 +14,9 @@ import { CreateGenreDto } from './dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { GenreEntity } from './entities/genre.entity';
 import { JwtAdminGuard } from '../auth/guards/jwt-auth.guard';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { ApiTags } from '@nestjs/swagger';
+import { PagerDto } from '~/common/dto/pager.dto';
+import { Pagination } from '~/helper/paginate/pagination';
 
 @ApiTags('Genre')
 @Controller('genre')
@@ -30,9 +31,7 @@ export class GenreController {
 
   @Get('all-genres')
   @UseGuards(JwtAdminGuard)
-  async findAll(
-    @Query() query: PaginationArgs,
-  ): Promise<{ genres: GenreEntity[]; total: number }> {
+  async findAll(@Query() query: PagerDto): Promise<Pagination<GenreEntity>> {
     return await this.genreService.findAll(query);
   }
 

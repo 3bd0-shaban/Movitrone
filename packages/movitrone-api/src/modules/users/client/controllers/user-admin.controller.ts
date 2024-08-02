@@ -12,11 +12,11 @@ import {
 } from '@nestjs/common';
 import { ClientService } from '../user.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
+import { CreateUserDTO } from '~/shared/dto/create-user.dto';
 import { ClientEntity } from '../entities/user.entity';
 import { JwtAdminGuard } from '../../../auth/guards/jwt-auth.guard';
-import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
-import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
+import { updateUserDTO } from '~/shared/dto/update-user.dto';
+import { PasswordUpdateDto } from '~/shared/dto/password.dto';
 import { LogService } from '../../../log/log.service';
 import { definePermission } from '~/modules/auth/decorator/permission.decorator';
 import { ApiResult } from '~/common/decorators/api-result.decorator';

@@ -6,7 +6,6 @@ import {
 import { CreateSeoPageDto } from './dto/create-seo.dto';
 import { UpdateSeoPageDto } from './dto/update-seo.dto';
 import { ErrorEnum } from '~/constants/error-code.constant';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { isEmpty } from 'lodash';
@@ -14,6 +13,9 @@ import { SeoPageEntity } from './entities/seo-page.entity';
 import { SeoCountryEntity } from '../seo-country/entities/seo-country.entity';
 import { SeoCountryService } from '../seo-country/seo-country.service';
 import { SEO_PAGES_ENUM } from './seo-page.constant';
+import { Pagination } from '~/helper/paginate/pagination';
+import { PagerDto } from '~/common/dto/pager.dto';
+import { paginate } from '~/helper/paginate';
 
 @Injectable()
 export class SeoPageService {
@@ -49,49 +51,36 @@ export class SeoPageService {
   }
 
   /**
-   * Get All seo pages with pagination
+   * Get All SEO pages with pagination
    *
-   * @param {PaginationArgs} pagination - pagination inputs
-   * @returns {Promise<{ seos: SeoPageEntity[]; results: number; total: number }>} - Paginated seos
-   * @memberof seoservice
+   * @param {PagerDto} pagination - pagination inputs
+   * @returns {Promise<Pagination<SeoPageEntity>>} - Paginated SEO pages
    */
-  async findAll(
-    pagination: PaginationArgs,
-  ): Promise<{ seos: SeoPageEntity[]; results: number; total: number }> {
-    const { page = 1, limit = 10 } = pagination;
-    const skip = (page - 1) * limit;
-    const [seos, total] = await this.seoPageRepository.findAndCount({
-      take: limit,
-      skip,
-    });
-    return { total, results: seos.length, seos };
+  async findAll({
+    page,
+    pageSize,
+  }: PagerDto): Promise<Pagination<SeoPageEntity>> {
+    const queryBuilder = this.seoPageRepository.createQueryBuilder('seoPage');
+
+    return paginate<SeoPageEntity>(queryBuilder, { page, pageSize });
   }
 
   /**
-   * Get All seo for country
+   * Get All SEO pages for a specific country with pagination
    *
-   * @param {PaginationArgs} pagination - pagination inputs
+   * @param {PagerDto} pagination - pagination inputs
    * @param {string} country - country filter
-   * @returns {Promise<{ seos: SeoPageEntity[]; results: number; total: number }>} - Paginated seos
-   * @memberof seoservice
    */
   async findSeoPagesByCountry(
-    pagination: PaginationArgs,
+    { page, pageSize }: PagerDto,
     country: string,
-  ): Promise<{ seos: SeoPageEntity[]; results: number; total: number }> {
-    const { page = 1, limit = 10 } = pagination;
-    const skip = (page - 1) * limit;
-
+  ): Promise<Pagination<SeoPageEntity>> {
     const queryBuilder = this.seoPageRepository
-      .createQueryBuilder('seo')
-      .leftJoinAndSelect('seo.country', 'country')
-      .where('country.country = :country', { country: country })
-      .take(limit)
-      .skip(skip);
+      .createQueryBuilder('seoPage')
+      .leftJoinAndSelect('seoPage.country', 'country')
+      .where('country.country = :country', { country });
 
-    const [seos, total] = await queryBuilder.getManyAndCount();
-
-    return { total, results: seos.length, seos };
+    return paginate<SeoPageEntity>(queryBuilder, { page, pageSize });
   }
 
   /**

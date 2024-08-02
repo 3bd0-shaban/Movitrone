@@ -12,12 +12,12 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAdminGuard } from '../../auth/guards/jwt-auth.guard';
-import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
+import { updateUserDTO } from '~/shared/dto/update-user.dto';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { AdminService } from './admin.service';
 import { AdminEntity } from './entities/admin.entity';
-import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
+import { PasswordUpdateDto } from '~/shared/dto/password.dto';
 import { LogService } from '../../log/log.service';
 import { ADMIN_ROLES_ENUMS } from './admin.constant';
 import { definePermission } from '~/modules/auth/decorator/permission.decorator';
@@ -28,7 +28,6 @@ import { LogInterceptor } from '~/common/interceptors/log.interceptor';
 import { Pagination } from '~/helper/paginate/pagination';
 import { PagerDto } from '~/common/dto/pager.dto';
 import { AccountMenus } from './dto/menus.args';
-import { Public } from '~/modules/auth/decorator/public.decorator';
 
 export const permissions = definePermission('system:users:dashboard', {
   LIST: 'list',

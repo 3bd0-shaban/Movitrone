@@ -13,9 +13,10 @@ import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { JwtAdminGuard } from '../auth/guards/jwt-auth.guard';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { MovieEntity } from './entities/movie.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { PagerDto } from '~/common/dto/pager.dto';
+import { Pagination } from '~/helper/paginate/pagination';
 
 @ApiTags('Movies')
 @Controller('movie')
@@ -30,9 +31,7 @@ export class MovieController {
 
   @Get('all-movies')
   @UseGuards(JwtAdminGuard)
-  async findAll(
-    @Query() query: PaginationArgs,
-  ): Promise<{ movies: MovieEntity[]; total: number }> {
+  async findAll(@Query() query: PagerDto): Promise<Pagination<MovieEntity>> {
     return await this.movieService.findAll(query);
   }
 

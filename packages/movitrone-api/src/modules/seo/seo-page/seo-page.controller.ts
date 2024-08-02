@@ -12,7 +12,6 @@ import {
 import { SeoPageService } from './seo-page.service';
 import { CreateSeoPageDto } from './dto/create-seo.dto';
 import { UpdateSeoPageDto } from './dto/update-seo.dto';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LogService } from '../../log/log.service';
 import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
@@ -23,6 +22,8 @@ import { SeoPageEntity } from './entities/seo-page.entity';
 import { SeoCountryService } from '../seo-country/seo-country.service';
 import { AdminEntity } from '../../users/admin/entities/admin.entity';
 import { Public } from '~/modules/auth/decorator/public.decorator';
+import { PagerDto } from '~/common/dto/pager.dto';
+import { Pagination } from '~/helper/paginate/pagination';
 
 @ApiTags('Seo Page')
 @Controller('seo-page')
@@ -53,9 +54,7 @@ export class SeoPageController {
 
   @Get()
   @ApiOperation({ summary: 'get all seo pages in database with pagination' })
-  async findAll(
-    @Query() query: PaginationArgs,
-  ): Promise<{ seos: SeoPageEntity[]; results: number; total: number }> {
+  async findAll(@Query() query: PagerDto): Promise<Pagination<SeoPageEntity>> {
     return await this.seoService.findAll(query);
   }
 
@@ -65,9 +64,9 @@ export class SeoPageController {
       'get all pages by passing related to specific country by country code refrence with paginations',
   })
   async findAllByCountry(
-    @Query() query: PaginationArgs,
+    @Query() query: PagerDto,
     @Param('country') country: string,
-  ): Promise<{ seos: SeoPageEntity[]; results: number; total: number }> {
+  ): Promise<Pagination<SeoPageEntity>> {
     return await this.seoService.findSeoPagesByCountry(query, country);
   }
 

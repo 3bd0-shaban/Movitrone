@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
+import { CreateUserDTO } from '~/shared/dto/create-user.dto';
 import { SignInDto } from '../dto/SignIn.dto';
 import { ISecurityConfig, SecurityConfig } from '~/config';
 import { Response } from 'express';

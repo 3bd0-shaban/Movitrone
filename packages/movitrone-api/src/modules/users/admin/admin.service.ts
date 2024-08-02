@@ -9,11 +9,10 @@ import { Repository, UpdateResult } from 'typeorm';
 import { ErrorEnum } from '~/constants/error-code.constant';
 import { isEmpty } from 'lodash';
 import { AuthService } from '../../auth/auth.service';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
-import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
+import { updateUserDTO } from '~/shared/dto/update-user.dto';
 import { AdminEntity } from './entities/admin.entity';
 import { CreateAdminDto } from './dto/create-admin.dto';
-import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
+import { PasswordUpdateDto } from '~/shared/dto/password.dto';
 import { ADMIN_ROLES_ENUMS } from './admin.constant';
 import { Pagination } from '~/helper/paginate/pagination';
 import { paginate } from '~/helper/paginate';
@@ -63,10 +62,8 @@ export class AdminService {
   /**
    * find all users in dashboard by role
    *
-   * @param {PaginationArgs} pagination - pagination inputs
+   * @param {PagerDto} pagination - pagination inputs
    * @param {ADMIN_ROLES_ENUMS} role - pagination inputs
-   * @returns {Promise<{ users: AdminEntity[]; results: number; total: number }>} - Paginated users
-   * @memberof UserService
    */
   async findAll({
     page = 1,
@@ -87,7 +84,6 @@ export class AdminService {
    * Find admin by ID
    *
    * @param {number} id - admin ID
-   * @returns {Promise<AdminEntity>} - The found user
    * @throws {NotFoundException} - If the user with the provided ID is not found
    */
   async findOne(id: number): Promise<AdminEntity> {
@@ -103,7 +99,6 @@ export class AdminService {
    *
    * @param {number} id - User ID
    * @param {PasswordUpdateDto} inputs - Updated user data
-   * @returns {Promise<boolean>} - Indicates whether the password update was successful
    * @throws {NotFoundException} - If the user with the provided ID is not found
    * @throws {UnprocessableEntityException} - If the old password doesn't match
    */
@@ -155,7 +150,6 @@ export class AdminService {
    *
    * @param {number} userId - User ID (assuming it's the authenticated user's ID)
    * @param {UpdateUserDTO} updateUserDto - Updated user data
-   * @returns {Promise<AdminEntity>} - The updated user
    */
   async update(
     userId: number,

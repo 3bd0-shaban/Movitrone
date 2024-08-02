@@ -9,8 +9,10 @@ import { GenreEntity } from './entities/genre.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { ErrorEnum } from '~/constants/error-code.constant';
 import { isEmpty } from 'lodash';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { UpdateGenreDto } from './dto/update-genre.dto';
+import { PagerDto } from '~/common/dto/pager.dto';
+import { paginate } from '~/helper/paginate';
+import { Pagination } from '~/helper/paginate/pagination';
 
 @Injectable()
 export class GenreService {
@@ -43,20 +45,14 @@ export class GenreService {
   /**
    * Get All Genres with pagination
    *
-   * @param {PaginationArgs} pagination - pagination inputs
-   * @returns {Promise<{ genres: GenreEntity[]; results: number; total: number }>} - Paginated genres
-   * @memberof GenreService
+   * @param {PagerDto} pagination - pagination inputs
    */
-  async findAll(
-    pagination: PaginationArgs,
-  ): Promise<{ genres: GenreEntity[]; results: number; total: number }> {
-    const { page = 1, limit = 10 } = pagination;
-    const skip = (page - 1) * limit;
-    const [genres, total] = await this.genreRepository.findAndCount({
-      take: limit,
-      skip,
-    });
-    return { total, results: genres.length, genres };
+  async findAll({
+    page,
+    pageSize,
+  }: PagerDto): Promise<Pagination<GenreEntity>> {
+    const queryBuilder = this.genreRepository.createQueryBuilder('admin');
+    return paginate<GenreEntity>(queryBuilder, { page, pageSize });
   }
 
   /**

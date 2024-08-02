@@ -9,7 +9,9 @@ import { isEmpty } from 'lodash';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SeoCountryEntity } from './entities/seo-country.entity';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
+import { Pagination } from '~/helper/paginate/pagination';
+import { PagerDto } from '~/common/dto/pager.dto';
+import { paginate } from '~/helper/paginate';
 
 @Injectable()
 export class SeoCountryService {
@@ -37,24 +39,21 @@ export class SeoCountryService {
   }
 
   /**
-   * Get All seo countries with pagination
+   * Get All SEO countries with pagination
    *
-   * @param {PaginationArgs} pagination - pagination inputs
-   * @returns {Promise<{ seos: SeoCountryEntity[]; results: number; total: number }>} - Paginated seos
-   * @memberof seoservice
+   * @param {PagerDto} pagination - pagination inputs
+   * @returns {Promise<Pagination<SeoCountryEntity>>} - Paginated SEO countries
+   * @memberof SeoService
    */
-  async findAll(
-    pagination: PaginationArgs,
-  ): Promise<{ seos: SeoCountryEntity[]; results: number; total: number }> {
-    const { page = 1, limit = 10 } = pagination;
-    const skip = (page - 1) * limit;
-    const [seos, total] = await this.seoCountryRepository.findAndCount({
-      take: limit,
-      skip,
-    });
-    return { total, results: seos.length, seos };
-  }
+  async findAll({
+    page,
+    pageSize,
+  }: PagerDto): Promise<Pagination<SeoCountryEntity>> {
+    const queryBuilder =
+      this.seoCountryRepository.createQueryBuilder('seoCountry');
 
+    return paginate<SeoCountryEntity>(queryBuilder, { page, pageSize });
+  }
   /**
    * Find a seo by country code
    *

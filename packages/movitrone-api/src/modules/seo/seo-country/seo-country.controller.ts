@@ -17,9 +17,10 @@ import { CurrentUser } from '../../auth/decorator/auth-user.decorator';
 import { LogService } from '../../log/log.service';
 import { SeoAnalyticsService } from '../../analytics/seo-analytics/seo-analytics.service';
 import { SeoCountryEntity } from './entities/seo-country.entity';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { SeoPageService } from '../seo-page/seo-page.service';
 import { AdminEntity } from '../../users/admin/entities/admin.entity';
+import { PagerDto } from '~/common/dto/pager.dto';
+import { Pagination } from '~/helper/paginate/pagination';
 
 @ApiTags('Seo Countries')
 @Controller('seo-country')
@@ -47,8 +48,8 @@ export class SeoCountryController {
   @Get()
   @UseGuards(JwtAdminGuard)
   async findAll(
-    @Query() query: PaginationArgs,
-  ): Promise<{ seos: SeoCountryEntity[]; results: number; total: number }> {
+    @Query() query: PagerDto,
+  ): Promise<Pagination<SeoCountryEntity>> {
     return await this.seoCountryService.findAll(query);
   }
 

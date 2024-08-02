@@ -7,13 +7,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClientEntity } from './entities/user.entity';
 import { Repository, UpdateResult } from 'typeorm';
-import { CreateUserDTO } from '~/shared/dto/inputs/create-user.dto';
+import { CreateUserDTO } from '~/shared/dto/create-user.dto';
 import { ErrorEnum } from '~/constants/error-code.constant';
 import { isEmpty } from 'lodash';
 import { AuthService } from '../../auth/auth.service';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
-import { updateUserDTO } from '~/shared/dto/inputs/update-user.dto';
-import { PasswordUpdateDto } from '~/shared/dto/inputs/password.dto';
+import { updateUserDTO } from '~/shared/dto/update-user.dto';
+import { PasswordUpdateDto } from '~/shared/dto/password.dto';
 import { randomValue } from '~/utils/tool.util';
 import { EmailService } from '~/shared/mailer/mailer.service';
 import { VerifyOTPDTOs } from './dto/verify-otp.dto';
@@ -70,7 +69,7 @@ export class ClientService {
   /**
    * Compare entered and database passwords
    *
-   * @param {PaginationArgs} pagination - pagination inputs
+   * @param {PagerDto} pagination - pagination inputs
    * @returns {Promise<{ users: ClientEntity[]; results: number; total: number }>} - Paginated users
    * @memberof UserService
    */

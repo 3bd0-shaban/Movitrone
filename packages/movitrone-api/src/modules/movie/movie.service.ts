@@ -7,11 +7,12 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieEntity } from './entities/movie.entity';
 import { ErrorEnum } from '~/constants/error-code.constant';
-import { isEmpty } from 'lodash';
 import { In, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { GenreEntity } from '../genre/entities/genre.entity';
+import { Pagination } from '~/helper/paginate/pagination';
+import { PagerDto } from '~/common/dto/pager.dto';
+import { paginate } from '~/helper/paginate';
 
 @Injectable()
 export class MovieService {
@@ -55,21 +56,19 @@ export class MovieService {
   /**
    * Get All Movies with pagination
    *
-   * @param {PaginationArgs} pagination - pagination inputs
-   * @returns {Promise<{ Movies: MovieEntity[]; results: number; total: number }>} - Paginated Movies
+   * @param {PagerDto} pagination - pagination inputs
+   * @returns {Promise<Pagination<MovieEntity>>} - Paginated Movies
    * @memberof Movieservice
    */
-  async findAll(
-    pagination: PaginationArgs,
-  ): Promise<{ movies: MovieEntity[]; results: number; total: number }> {
-    const { page = 1, limit = 10 } = pagination;
-    const skip = (page - 1) * limit;
-    const [movies, total] = await this.movieRepository.findAndCount({
-      relations: ['genres'],
-      take: limit,
-      skip,
-    });
-    return { total, results: movies.length, movies };
+  async findAll({
+    page,
+    pageSize,
+  }: PagerDto): Promise<Pagination<MovieEntity>> {
+    const queryBuilder = this.movieRepository
+      .createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.genres', 'genre');
+
+    return paginate<MovieEntity>(queryBuilder, { page, pageSize });
   }
 
   /**

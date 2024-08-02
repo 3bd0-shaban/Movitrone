@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LogEntity } from './entities/log.entity';
 import { Repository } from 'typeorm';
-import { PaginationArgs } from '~/shared/dto/args/pagination-query.args';
 import { AdminEntity } from '../users/admin/entities/admin.entity';
+import { paginate } from '~/helper/paginate';
+import { PagerDto } from '~/common/dto/pager.dto';
+import { Pagination } from '~/helper/paginate/pagination';
 
 @Injectable()
 export class LogService {
@@ -27,20 +29,10 @@ export class LogService {
   /**
    * find all logs action
    *
-   * @param {PaginationArgs} pagination - pagination inputs
-   * @returns {Promise<{ users: LogEntity[]; results: number; total: number }>} - Paginated Logs
-   * @memberof LogService
+   * @param {PagerDto} pagination - pagination inputs
    */
-  async findAll(
-    pagination: PaginationArgs,
-  ): Promise<{ logs: LogEntity[]; results: number; total: number }> {
-    const { page = 1, limit = 10 } = pagination;
-    const skip = (page - 1) * limit;
-    const [logs, total] = await this.logRepository.findAndCount({
-      relations: ['admin'],
-      take: limit,
-      skip,
-    });
-    return { total, results: logs.length, logs };
+  async findAll({ page, pageSize }: PagerDto): Promise<Pagination<LogEntity>> {
+    const queryBuilder = this.logRepository.createQueryBuilder('admin');
+    return paginate<LogEntity>(queryBuilder, { page, pageSize });
   }
 }
