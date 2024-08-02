@@ -53,6 +53,7 @@ export class AdminService {
 
     const user = this.adminRepository.create({
       ...inputs,
+      avatar: '/public/images/default-admin.png',
       password: hashedPassword,
       phone: formattedPhoneNumber,
     });

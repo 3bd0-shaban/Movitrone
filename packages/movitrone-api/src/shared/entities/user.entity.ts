@@ -24,4 +24,8 @@ export class UserShared extends CompleteEntity {
   @ApiProperty({ description: 'user password' })
   @Column({ select: false })
   password: string;
+
+  @ApiProperty({ description: 'user avatar link' })
+  @Column()
+  avatar: string;
 }

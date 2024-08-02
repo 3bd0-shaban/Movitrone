@@ -60,6 +60,7 @@ export class ClientService {
     const user = this.userRepository.create({
       ...createUserDto,
       otp,
+      avatar: '/public/images/default-user.jpg',
       password: hashedPassword,
       phone: formattedPhoneNumber,
     });
