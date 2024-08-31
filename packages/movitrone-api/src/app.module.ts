@@ -87,7 +87,7 @@ import { CheckDemoGuard } from './common/guards/check-demo.guard';
       useFactory: () => new TimeoutInterceptor(15 * 1000),
     },
     { provide: APP_GUARD, useClass: CheckDemoGuard },
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    // { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })
 export class AppModule {

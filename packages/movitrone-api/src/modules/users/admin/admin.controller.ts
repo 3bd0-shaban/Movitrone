@@ -29,7 +29,7 @@ import { Pagination } from '~/helper/paginate/pagination';
 import { PagerDto } from '~/common/dto/pager.dto';
 import { AccountMenus } from './dto/menus.args';
 
-export const permissions = definePermission('system:users:dashboard', {
+export const permissions = definePermission('system:users', {
   LIST: 'list',
   CREATE: 'create',
   READ: 'read',
@@ -94,10 +94,7 @@ export class AdminController {
   @ApiOperation({ summary: 'create user' })
   @LogMessage('creating account')
   @UseInterceptors(LogInterceptor)
-  async create(
-    @CurrentUser() user: AdminEntity,
-    @Body() inputs: CreateAdminDto,
-  ) {
+  async create(@Body(CreatorPipe) inputs: CreateAdminDto) {
     await this.adminService.create(inputs);
   }
 

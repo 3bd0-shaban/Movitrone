@@ -18,13 +18,13 @@ const UserPhoto: FC<UserPhotoProps> = ({
 }) => {
   return (
     <span className={`w-${aspect} h-${aspect} relative flex`}>
-      {user?.photo && (
+      {user?.avatar && (
         <Image
           height={height}
           width={width}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="h-full w-full rounded-full object-cover"
-          src={`${process.env.NEXT_PUBLIC_API_KEY}/${user.photo}`}
+          src={`${process.env.NEXT_PUBLIC_API_KEY}${user.avatar}`}
           alt={user.firstname as string}
         />
       )}

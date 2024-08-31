@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi, { when } from 'joi';
 
 export const RoleName = Joi.string().min(2).max(30).required().messages({
   'string.empty': 'Role name cannot be left empty',
@@ -19,10 +19,31 @@ export const RoleValue = Joi.string()
     'any.required': 'Role value is a required field',
   });
 
+export const parentId = Joi.number().required().messages({
+  'any.empty': 'Select parentId',
+  'any.required': 'parentID is a required field',
+});
 export const status = Joi.number().valid(0, 1).required().messages({
   'any.only': 'Status must be either 0 (Deactivate) or 1 (Activate)',
   'any.required': 'Status is a required field',
 });
+export const Menu_type = Joi.number().valid(0, 1, 2).required().messages({
+  'any.empty': 'must select menu type',
+  'any.required': 'menu type is a required field',
+});
+export const permission = Joi.string().when('type', {
+  is: Joi.number().valid(1, 2),
+  then: Joi.string().required().messages({
+    'any.empty': 'permission must be filled',
+    'any.required': 'permission is a required field',
+  }),
+  otherwise: Joi.forbidden(),
+});
+export const Menu_Name = Joi.string().required().messages({
+  'any.empty': 'Menu Name must be filled',
+  'any.required': 'Menu Name is a required field',
+});
+
 export const menuIds = Joi.array()
   .items(Joi.number().required())
   .required()

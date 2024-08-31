@@ -21,14 +21,17 @@ import { useForm } from 'react-hook-form';
 import { useFeaturesStore } from '@/store/useFeaturesStore';
 import MenuColumn from '@/components/Layouts/columns/menu.column';
 import toast from 'react-hot-toast';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { MenuSystemValidations } from '@/validations/system/menu.validations';
 
 const MenusTable: FC = () => {
   const { data, isFetching } = useGetAllMenusQuery();
   const { mutateAsync } = useCreateNewMenuMutation();
   const { mutateAsync: DeleteMenu } = useDeleteMenuByIdMutation();
   const { set_Modal, isModal } = useFeaturesStore();
-  const { control, setValue, watch, handleSubmit } = useForm<iMenu>({
+  const { control, setValue, watch, reset, handleSubmit } = useForm<iMenu>({
     defaultValues: { type: 0 },
+    resolver: joiResolver(MenuSystemValidations.CreateMenu),
   });
   const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
   const [modal, contextHook] = Modal.useModal();
@@ -41,13 +44,11 @@ const MenusTable: FC = () => {
     })),
   }));
 
-  const OnSubmit = async (data: iMenu, parentId?: number) => {
-    const permission = (data?.permission as any)?.join(':');
-    const partentIdOfRow = parentId;
-    await mutateAsync({
-      data: { ...data, parentId: partentIdOfRow as number, permission },
-    })
+  const OnSubmit = async (data: iMenu) => {
+    await mutateAsync({ data })
       .then(() => {
+        reset();
+        set_Modal(false);
         toast.success(`New ${getMenuType(data.type)?.name} added Successully`);
       })
       .catch((error) => {

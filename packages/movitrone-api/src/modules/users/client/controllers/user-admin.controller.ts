@@ -25,7 +25,7 @@ import { Pagination } from '~/helper/paginate/pagination';
 import { PagerDto } from '~/common/dto/pager.dto';
 import { LogInterceptor } from '~/common/interceptors/log.interceptor';
 
-export const permissions = definePermission('system:users:dashboard', {
+export const permissions = definePermission('system:client', {
   LIST: 'list',
   CREATE: 'create',
   READ: 'read',

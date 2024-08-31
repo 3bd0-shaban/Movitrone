@@ -24,7 +24,7 @@ export abstract class CompleteEntity extends CommonEntity {
   @ApiHideProperty()
   @Exclude()
   @Column({
-    name: 'create_by',
+    name: 'created_by',
     update: false,
     comment: 'Created By',
     nullable: true,
@@ -33,20 +33,21 @@ export abstract class CompleteEntity extends CommonEntity {
 
   @ApiHideProperty()
   @Exclude()
-  @Column({ name: 'update_by', comment: 'Updated By', nullable: true })
+  @Column({ name: 'updated_by', comment: 'updator', nullable: true })
   updateBy: number;
 
-  @ApiProperty({ description: 'Creator' })
   @VirtualColumn({
-    query: (alias) =>
-      `SELECT firstname FROM sys_user WHERE id = ${alias}.create_by`,
+    query: (alias) => {
+      console.log(`Alias used in VirtualColumn: ${alias}`);
+      return `SELECT (SELECT email FROM sys_user WHERE id = ${alias}.create_by) AS creator FROM sys_user ${alias}`;
+    },
   })
   creator: string;
 
-  @ApiProperty({ description: 'Updator' })
+  @ApiProperty({ description: 'updator' })
   @VirtualColumn({
     query: (alias) =>
-      `SELECT firstname FROM sys_user WHERE id = ${alias}.update_by`,
+      `SELECT email FROM sys_user WHERE id = ${alias}.update_by`,
   })
   updater: string;
 }

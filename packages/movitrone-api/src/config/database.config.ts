@@ -1,14 +1,9 @@
 import { ConfigType, registerAs } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { env, envBoolean, envNumber } from '~/global/env';
 import dotenv from 'dotenv';
 
 dotenv?.config({ path: `.env.${process.env.NODE_ENV}` });
 
-// The current command executed via npm scripts
-
-const currentScript = process.env.npm_lifecycle_event;
-console.log(env('DB_HOST'));
 const dataSourceOptions: DataSourceOptions = {
   // type: 'mysql',
   // host: env('DB_HOST', 'localhost'),
@@ -26,7 +21,7 @@ const dataSourceOptions: DataSourceOptions = {
   database: 'movitrone',
   entities: ['dist/**/*.entity.js'],
   synchronize: true,
-  logging: false,
+  logging: true,
 
   // To resolve the error encountered when initializing data through 'pnpm migration:run', such as the error with statements like 'SET FOREIGN_KEY_CHECKS = 0;', set this to true only during the execution of data migration operations.  multipleStatements: currentScript === 'typeorm',
   // entities: ['dist/modules/**/*.entity{.ts,.js}'],

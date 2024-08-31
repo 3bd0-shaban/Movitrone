@@ -33,9 +33,6 @@ const MenusCreate: FC<MenusCreateProps> = ({
     setValue('type', e.target.value);
   };
 
-  const onTreeSelectChange = (value: any) => {
-    setValue('parentId', value);
-  };
   const transformedMenus = [
     {
       title: 'Root Directory',
@@ -75,7 +72,7 @@ const MenusCreate: FC<MenusCreateProps> = ({
             dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
             treeData={transformedMenus}
             placeholder="Select Parent Menu"
-            onChange={onTreeSelectChange}
+            onChange={(value) => setValue('parentId', value)}
           />
         </FormItem>
         {watch('type') !== 0 && (
@@ -84,6 +81,7 @@ const MenusCreate: FC<MenusCreateProps> = ({
               control={control}
               name="permission"
               label="Permission Flag"
+              onChange={(value) => setValue('permission', value.join(':'))}
               required
             >
               <Cascader

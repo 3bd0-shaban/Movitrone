@@ -4,7 +4,7 @@ export interface iAdmin {
   firstname?: string;
   password?: string;
   lastname?: string;
-  photo?: string;
+  avatar?: string;
   phone?: string;
   updatedAt?: Date;
   createdAt?: Date;

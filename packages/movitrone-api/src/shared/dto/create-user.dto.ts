@@ -23,6 +23,11 @@ export class CreateUserDTO {
 
   @ApiProperty({ description: 'Email', example: 'bqy.dev@qq.com' })
   @IsEmail()
+  // //@ts-ignore
+  // @IsUnique({
+  //   entity: AdminEntity,
+  //   message: ErrorEnum.SYSTEM_USER_EXISTS,
+  // })
   @ValidateIf((o) => !isEmpty(o.email))
   email: string;
 

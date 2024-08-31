@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { CompleteEntity } from '~/common/entity/common.entity';
-import { Column } from 'typeorm';
+import { Column, VirtualColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UserShared extends CompleteEntity {
@@ -19,6 +19,12 @@ export class UserShared extends CompleteEntity {
   @Column()
   @ApiProperty({ description: 'user email' })
   email: string;
+
+  @VirtualColumn({
+    query: (alias) =>
+      `SELECT CONCAT(${alias}.first_name, ' ', ${alias}.last_name)`,
+  })
+  fullName!: string;
 
   @Exclude()
   @ApiProperty({ description: 'user password' })

@@ -7,7 +7,7 @@ const MenuColumn: TableColumnsType<iMenu> = [
   {
     title: 'Node Name',
     fixed: 'left',
-    width: 200,
+    width: 300,
     render: (_, record) => <p>{record.name}</p>,
   },
   {

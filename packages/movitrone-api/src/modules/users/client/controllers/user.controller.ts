@@ -14,19 +14,11 @@ import { updateUserDTO } from '~/shared/dto/update-user.dto';
 import { CurrentUser } from '../../../auth/decorator/auth-user.decorator';
 import { PasswordUpdateDto } from '~/shared/dto/password.dto';
 import { LogService } from '../../../log/log.service';
-import { definePermission } from '~/modules/auth/decorator/permission.decorator';
 import { ApiResult } from '~/common/decorators/api-result.decorator';
 import { LogMessage } from '~/common/decorators/log-message.decorator';
 
 import { LogInterceptor } from '~/common/interceptors/log.interceptor';
 
-export const permissions = definePermission('system:users:dashboard', {
-  LIST: 'list',
-  CREATE: 'create',
-  READ: 'read',
-  UPDATE: 'update',
-  DELETE: 'delete',
-} as const);
 
 @ApiTags('Website Users - Admin Control')
 @Controller('user')

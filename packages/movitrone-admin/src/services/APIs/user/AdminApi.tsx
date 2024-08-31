@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApiEndpoint } from '../../ApiEndpoint';
-import { iAdmin, iRole } from '@/types/user/iAdmin';
+import { iAdmin, iRoleEnum } from '@/types/user/iAdmin';
 import { useTableParamsStore } from '@/store/useTableParamsStore';
 
 const url = process.env.NEXT_PUBLIC_API_KEY;
 
-export function useGetAllAdminsQuery({ role }: { role: iRole }) {
+export function useGetAllAdminsQuery({ role }: { role: iRoleEnum }) {
   const { pagination } = useTableParamsStore();
 
   return useQuery({
@@ -25,7 +25,7 @@ export function useGetSelfAccountQuery() {
     queryFn: () =>
       ApiEndpoint<iAdmin>({
         method: 'GET',
-        url: `${url}/api/admin/get/self`,
+        url: `${url}/api/admin`,
       }),
     queryKey: ['Admin'],
   });
