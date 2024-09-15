@@ -1,6 +1,6 @@
 import { Select } from 'antd';
 import React, { FC } from 'react';
-import Countries from '../../../public/data/countries.json';
+import Countries from '../../../../movitrone-admin1/public/data/countries.json';
 import { filterOption } from '../../Helpers/filterOptions';
 interface SelectCountryProps {
   onSelect: (value: string) => void;

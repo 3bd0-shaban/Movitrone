@@ -9,7 +9,7 @@ pipeline {
         PROJECT_DIR = "/var/www/${PROJECT_NAME}"
         GIT_CREDENTIALS = 'Github'
         EMAIL_NOTIFICATION = 'abdulra7manshaban@gmail.com'
-        SITE_DOMAIN = 'v1.foxcloud.site'
+        SITE_DOMAIN = 'v1.movitrone.site'
         BACKUP_DIR = "/var/backups/${PROJECT_NAME}"
     }
 
@@ -22,7 +22,7 @@ pipeline {
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [], 
                         userRemoteConfigs: [[
-                            url: 'https://github.com/Ftl-Erates/Erates-server-express.git',
+                            url: 'https://github.com/3bd0-shaban/Movitrone.git',
                             credentialsId: env.GIT_CREDENTIALS
                         ]]
                     ])

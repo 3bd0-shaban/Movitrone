@@ -6,7 +6,7 @@ type Permission = {
 export function formatPermission(permissions: string[]): Permission[] {
   const result: Permission[] = [];
 
-  permissions.forEach((permission) => {
+  permissions?.forEach((permission) => {
     const [parentValue, childValue, subChildValue] = permission.split(':');
 
     // Find or create the top-level parent

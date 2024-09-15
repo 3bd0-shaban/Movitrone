@@ -1,4 +1,4 @@
-import countries from '../../public/data/countries.json';
+import countries from '../../../movitrone-admin1/public/data/countries.json';
 import { iCountry } from '../types/iCountry';
 
 /**

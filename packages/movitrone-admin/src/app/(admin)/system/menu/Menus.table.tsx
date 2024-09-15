@@ -87,7 +87,7 @@ const MenusTable: FC = () => {
           <Button type="link">edit</Button>
           <Button
             type="link"
-            onClick={() => set_Modal(true)}
+            onClick={() => { set_Modal(true); setValue('type', record.type + 1) }}
             disabled={record.type === 2}
           >
             Added
