@@ -1,3 +1,4 @@
+import axios from 'axios';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { cookies } from 'next/headers';
@@ -18,37 +19,59 @@ export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
+      type: 'credentials',
       credentials: {
         email: { label: 'email', type: 'text' },
         password: { label: 'password', type: 'password' },
       },
 
-      async authorize(credentials?: Record<'email' | 'password', string>) {
-        if (!credentials?.email || !credentials.password) {
-          throw new Error('invalid credentials');
-        }
-        const { email, password } = credentials;
-        const res = await fetch(`${url}/api/auth-admin/signin`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Credentials': 'true',
-            'Access-Control-Allow-Origin': 'true',
-          },
-          body: JSON.stringify({ email, password }),
-        });
-        const result = await res.json();
-        cookies().set('access_token', result.access_token);
-        cookies().set('refresh_token', result.refresh_token);
+      async authorize(credentials) {
+        const { email, password, remember } = credentials as {
+          email: string;
+          password: string;
+          remember: string;
+        };
 
-        if (res.ok && result) {
-          return result;
-        }
+        try {
+          const res = await axios.post(
+            `${url}/api/auth-admin/signin`,
+            { email, password },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              withCredentials: true,
+            },
+          );
+          const reponse = res.data;
 
-        // Return null if user data could not be retrieved
-        return null;
+          if (res.status === 201) {
+            console.log(reponse);
+            cookies().set('access_token', reponse.access_token);
+            // cookies().set('refresh_token_admin', reponse.refresh_token);
+            cookies().set('refresh_token', reponse.refresh_token);
+
+            // Attach token to JWT
+            return reponse;
+          }
+
+          return null;
+        } catch (error: any) {
+          if (error.response) {
+            // Server responded with a status other than 2xx
+            throw new Error(
+              error.response.data.message || 'Invalid email or password.',
+            );
+          } else if (error.request) {
+            // Request was made, but no response was received
+            throw new Error('No response from server. Please try again later.');
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            throw new Error(
+              'An error occurred while setting up the request. Please try again.',
+            );
+          }
+        }
       },
     }),
   ],

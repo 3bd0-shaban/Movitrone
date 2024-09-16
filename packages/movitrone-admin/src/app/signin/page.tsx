@@ -1,14 +1,12 @@
-'use client';
-
 import Image from 'next/image';
 
 import FormSignIn from './FormSignIn';
 
 export default function SignIn() {
   return (
-    <div className="relative flex h-screen items-center justify-start p-5 duration-300">
+    <div className="relative container flex h-screen items-center justify-start p-5 duration-300">
       <div className="container relative max-w-md rounded-xl p-5 shadow shadow-blue-800 backdrop-blur-md duration-300 md:p-10">
-        <div className="contianerAfter containerBefore z-20 h-full w-full duration-300">
+        <div className="z-20 h-full w-full duration-300">
           <div className="flex w-full items-center justify-center">
             <Image
               height={100}

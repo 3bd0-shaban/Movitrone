@@ -59,6 +59,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
       stopAtFirstError: true,
+
       exceptionFactory: (errors) =>
         new UnprocessableEntityException(
           errors.map((e) => {
