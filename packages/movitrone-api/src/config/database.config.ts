@@ -1,27 +1,21 @@
 import { ConfigType, registerAs } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import dotenv from 'dotenv';
+import { env, envNumber } from '~/global/env';
 
-dotenv?.config({ path: `.env.${process.env.NODE_ENV}` });
+import { config } from 'dotenv';
+
+config({ path: `.env.${process.env.NODE_ENV}` });
 
 const dataSourceOptions: DataSourceOptions = {
-  // type: 'mysql',
-  // host: env('DB_HOST', 'localhost'),
-  // port: envNumber('DB_PORT', 3306),
-  // username: env('DB_USERNAME'),
-  // password: env('DB_PASSWORD'),
-  // database: env('DB_DATABASE'),
-  // synchronize: envBoolean('DB_SYNCHRONIZE', false),
-  // entities: ['dist/**/*.entity.js'],
   type: 'mysql',
-  host: 'localhost',
-  port: 3306,
-  username: 'root',
-  password: 'root',
-  database: 'movitrone',
-  entities: ['dist/**/*.entity.js'],
+  host: env('DB_HOST'),
+  port: envNumber('DB_PORT'),
+  username: env('DB_USERNAME'),
+  password: env('DB_USERNAME'),
+  database: env('DB_DATABASE'),
+  entities: ['dist/modules/**/*.entity.js'],
   synchronize: true,
-  logging: true,
+  logging: ['error'],
 
   // To resolve the error encountered when initializing data through 'pnpm migration:run', such as the error with statements like 'SET FOREIGN_KEY_CHECKS = 0;', set this to true only during the execution of data migration operations.  multipleStatements: currentScript === 'typeorm',
   // entities: ['dist/modules/**/*.entity{.ts,.js}'],

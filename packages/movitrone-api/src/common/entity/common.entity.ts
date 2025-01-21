@@ -36,15 +36,13 @@ export abstract class CompleteEntity extends CommonEntity {
   @Column({ name: 'updated_by', comment: 'updator', nullable: true })
   updateBy: number;
 
+  @ApiProperty({ description: '创建者' })
   @VirtualColumn({
-    query: (alias) => {
-      console.log(`Alias used in VirtualColumn: ${alias}`);
-      return `SELECT (SELECT email FROM sys_user WHERE id = ${alias}.create_by) AS creator FROM sys_user ${alias}`;
-    },
+    query: (alias) => `SELECT email FROM sys_user WHERE id = 1`,
   })
   creator: string;
 
-  @ApiProperty({ description: 'updator' })
+  @ApiProperty({ description: '更新者' })
   @VirtualColumn({
     query: (alias) =>
       `SELECT email FROM sys_user WHERE id = ${alias}.update_by`,

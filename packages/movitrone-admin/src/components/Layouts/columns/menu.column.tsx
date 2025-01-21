@@ -7,6 +7,7 @@ const MenuColumn: TableColumnsType<iMenu> = [
   {
     title: 'Node Name',
     fixed: 'left',
+    className: '!bg-[#132471]',
     width: 300,
     render: (_, record) => <p>{record.name}</p>,
   },

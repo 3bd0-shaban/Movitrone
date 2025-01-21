@@ -82,12 +82,16 @@ const MenusTable: FC = () => {
     {
       title: 'Operate',
       fixed: 'right',
+      className: '!bg-[#132471]',
       render: (_, record) => (
         <Space split={<Divider type="vertical" />} align="center">
           <Button type="link">edit</Button>
           <Button
             type="link"
-            onClick={() => { set_Modal(true); setValue('type', record.type + 1) }}
+            onClick={() => {
+              set_Modal(true);
+              setValue('type', record.type + 1);
+            }}
             disabled={record.type === 2}
           >
             Added
@@ -109,7 +113,7 @@ const MenusTable: FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 ">
       {contextHook}
       <Modal
         open={isModal}
